@@ -10,30 +10,42 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {  ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
+import PropTypes from "prop-types";
 
-
-
-
-
-export default function SignUp() {
+export default function SignUp({ toggleForm }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       email: data.get("email"),
+      mobileNumber: data.get("mobileNumber"),
       password: data.get("password"),
+      confirmPassword: data.get("confirmPassword"),
+      dob: data.get("dob"),
+      gender: data.get("gender"),
+      receiveEmails: data.get("receiveEmails"),
     });
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth="xs"
+        className="card"
+        sx={{
+          marginTop: 11,
+        }}
+      >
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 3,
+            marginBottom: 3,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -73,7 +85,7 @@ export default function SignUp() {
                   autoComplete="family-name"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -83,7 +95,48 @@ export default function SignUp() {
                   autoComplete="email"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="mobileNumber"
+                  label="Mobile Number"
+                  id="mobileNumber"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="dob"
+                  label="Date of Birth"
+                  type="date"
+                  id="dob"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  select
+                  required
+                  fullWidth
+                  name="gender"
+                  label="Gender"
+                  id="gender"
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  <option value="" />
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -94,12 +147,22 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                />
+              </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
+                  control={<Checkbox value="receiveEmails" color="primary" />}
                   label="I want to receive inspiration, marketing promotions and updates via email."
+                  name="receiveEmails"
                 />
               </Grid>
             </Grid>
@@ -113,7 +176,11 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  onClick={toggleForm}
+                  variant="body2"
+                  sx={{ cursor: "pointer" }}
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -124,3 +191,7 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+SignUp.propTypes = {
+  toggleForm: PropTypes.func.isRequired,
+};

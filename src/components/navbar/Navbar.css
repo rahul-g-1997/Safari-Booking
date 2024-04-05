@@ -95,10 +95,10 @@ body {
     .nav-elements {
         position: absolute;
         right: 0;
-        top: 50px;
+        top: 70px;
         background-color: #9DB2BF;
         width: 0px;
-        height: calc(100vh - 60px);
+        height: calc(100vh);
         transition: all 0.3s ease-in;
         overflow: hidden;
     }
