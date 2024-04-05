@@ -1,0 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #ffffff;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar {
+    height: 70px;
+    background-color: #9DB2BF;
+    position: fixed;
+    width: 100%;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 1);
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+
+}
+
+.logo-name {
+    font-size: 30px;
+    font-weight: bold;
+    color: #27374D;
+    margin-left: 10px;
+}
+
+.menu-icon {
+    display: none;
+}
+
+
+.nav-elements ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.nav-elements ul li a {
+    display: flex;
+}
+
+.nav-elements ul li:not(:last-child) {
+    margin-right: 30px;
+}
+
+.nav-elements ul a {
+    font-size: 16px;
+    font-weight: 400;
+    color: #27374D;
+    text-decoration: none;
+}
+
+.nav-elements ul a.active {
+    color: #27374D;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-elements ul a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #27374D;
+}
+
+
+
+@media (max-width: 970px) {
+    .nav-elements ul li:not(:last-child) {
+        margin-right: 30px;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+
+    .nav-elements {
+        position: absolute;
+        right: 0;
+        top: 50px;
+        background-color: #9DB2BF;
+        width: 0px;
+        height: calc(100vh - 60px);
+        transition: all 0.3s ease-in;
+        overflow: hidden;
+    }
+
+    .nav-elements.active {
+        width: 270px;
+    }
+
+    .nav-elements ul {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-elements ul li {
+        margin-right: unset;
+        margin-top: 22px;
+    }
+}
+
+@media (max-width: 600px) {}
+
+.nav-elements ul li ul {
+    margin-top: 10px;
+    display: none;
+    /* Hide dropdown by default */
+    position: absolute;
+    background-color: #DDE6ED;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.777);
+}
+
+.nav-elements ul li {
+    display: block;
+    /* Show dropdown on hover */
+}
+
+.nav-elements ul li ul li {
+    margin-top: 10px;
+}
+
+/* Adjust styling of dropdown links as needed */
+.nav-elements ul li ul li a {
+    color: #27374D;
+    text-decoration: none;
+}
