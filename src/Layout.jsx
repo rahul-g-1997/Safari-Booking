@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { Copyright, Navbar } from "./components";
+import {  Navbar } from "./components";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
@@ -16,7 +16,6 @@ const Layout = () => {
           <ToastContainer />
 
           <Outlet />
-          {!isLogin && <Copyright />}
         </Box>
         {/* 👇️ scroll to top on button click */}
         {/* <div>

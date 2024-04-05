@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
+import "./SignIn.css";
 
 export default function SignIn() {
   const handleSubmit = (event) => {
@@ -22,10 +23,9 @@ export default function SignIn() {
       password: data.get("password"),
     });
   };
-
   return (
     <ThemeProvider theme={theme}>
-      <Container  maxWidth="xs">
+      <Container maxWidth="xs" className="card">
         <CssBaseline />
         <Box
           sx={{
