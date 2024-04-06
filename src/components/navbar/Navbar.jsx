@@ -35,7 +35,7 @@ export default function Navbar() {
         {/* Menu icon for mobile */}
         <div className="menu-icon" onClick={handleShowNavbar}>
           <MenuIcon
-            style={{ cursor: "pointer", color: "black", fontSize: 40 }}
+            style={{ cursor: "pointer", color: "#DDE6ED", fontSize: 40 }}
           />
         </div>
         {/* Navigation elements */}
@@ -44,7 +44,7 @@ export default function Navbar() {
             {/* Home link */}
             <li>
               <NavLink to="/">
-                <HomeIcon style={{ color: "black", marginRight: "10px" }} />
+                <HomeIcon style={{ color: "#DDE6ED", marginRight: "10px" }} />
                 Home
               </NavLink>
             </li>
@@ -52,14 +52,16 @@ export default function Navbar() {
             {/* About link */}
             <li>
               <NavLink to="/about">
-                <InfoIcon style={{ color: "black", marginRight: "10px" }} />
+                <InfoIcon style={{ color: "#DDE6ED", marginRight: "10px" }} />
                 About
               </NavLink>
             </li>
             {/* Contacts link */}
             <li>
               <NavLink to="/contacts">
-                <ContactIcon style={{ color: "black", marginRight: "10px" }} />
+                <ContactIcon
+                  style={{ color: "#DDE6ED", marginRight: "10px" }}
+                />
                 contacts
               </NavLink>
             </li>

@@ -35,6 +35,7 @@ const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  marginTop: 5,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -59,6 +60,8 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   "& .MuiDrawer-paper": {
+    marginTop: 10,
+    height: "98%",
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
@@ -153,8 +156,8 @@ export default function Dashboard() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
+            <IconButton onClick={toggleDrawer} color="inherit">
+              <ChevronLeftIcon style={{ color: "#DDE6ED" }} />
             </IconButton>
           </Toolbar>
           <Divider />
@@ -166,9 +169,12 @@ export default function Dashboard() {
               }}
             >
               <ListItemIcon>
-                <EventNoteIcon />
+                <EventNoteIcon style={{ color: "#DDE6ED" }} />
               </ListItemIcon>
-              <ListItemText primary="Senctuary Details" />
+              <ListItemText
+                primary="Senctuary Details"
+                style={{ color: "#DDE6ED" }}
+              />
             </ListItemButton>
             <ListItemButton
               onClick={() => {
@@ -177,16 +183,16 @@ export default function Dashboard() {
               }}
             >
               <ListItemIcon>
-                <EditCalendarIcon />
+                <EditCalendarIcon style={{ color: "#DDE6ED" }} />
               </ListItemIcon>
-              <ListItemText primary="Booking" />
+              <ListItemText primary="Booking" style={{ color: "#DDE6ED" }} />
             </ListItemButton>
 
             <ListItemButton onClick={logOut}>
               <ListItemIcon>
-                <LogoutIcon />
+                <LogoutIcon style={{ color: "#DDE6ED" }} />
               </ListItemIcon>
-              <ListItemText primary="Log Out" />
+              <ListItemText primary="Log Out" style={{ color: "#DDE6ED" }} />
             </ListItemButton>
           </List>
         </Drawer>
@@ -201,7 +207,7 @@ export default function Dashboard() {
         >
           <Toolbar />
           <Container
-            maxWidth="xl"
+            maxWidth="100"
             sx={{
               p: "30px",
               width: "auto",

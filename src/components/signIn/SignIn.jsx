@@ -31,7 +31,10 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       email: data.get("email"),
       password: data.get("password"),
     });
-    if (data.get("email") === "admin" && data.get("password") === "admin") {
+    if (
+      data.get("email") === "professor" &&
+      data.get("password") === "professor"
+    ) {
       dispatch(toggleLogin());
       data.get("email") === "";
       data.get("password") === "";
@@ -63,7 +66,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: ".main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

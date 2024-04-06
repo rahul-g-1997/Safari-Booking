@@ -17,6 +17,7 @@ body {
 }
 
 .navbar {
+    top: 5px;
     height: 70px;
     position: fixed;
     width: 100%;
@@ -36,9 +37,9 @@ body {
 }
 
 .logo-name {
-    font-size: 30px;
+    font-size: 2rem;
     font-weight: bold;
-    color: #000000;
+    color: #DDE6ED;
     margin-left: 10px;
 }
 
@@ -64,12 +65,12 @@ body {
 .nav-elements ul a {
     font-size: 16px;
     font-weight: 400;
-    color: #000000;
+    color: #DDE6ED;
     text-decoration: none;
 }
 
 .nav-elements ul a.active {
-    color: #000000;
+    color: #DDE6ED;
     font-weight: 500;
     position: relative;
 }
@@ -81,7 +82,7 @@ body {
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #27374D;
+    background-color: #DDE6ED;
 }
 
 
@@ -129,7 +130,7 @@ body {
 @media (max-width: 600px) {}
 
 .nav-elements ul li ul {
-    margin-top: 10px;
+    margin-top: 5px;
     display: none;
     /* Hide dropdown by default */
     position: absolute;
@@ -150,6 +151,6 @@ body {
 
 /* Adjust styling of dropdown links as needed */
 .nav-elements ul li ul li a {
-    color: #000000;
+    color: #DDE6ED;
     text-decoration: none;
 }
