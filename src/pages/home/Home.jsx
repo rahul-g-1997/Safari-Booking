@@ -1,6 +1,5 @@
 import { Container, Grid } from "@mui/material";
 import { ForgotPassword, SignIn, SignUp } from "../../components";
-import bgimg from "../../assets/backgroundimg.jpg";
 import { useState } from "react";
 
 export default function Home() {
@@ -27,14 +26,7 @@ export default function Home() {
   };
 
   return (
-    <Container
-      maxWidth="xl"
-      style={{
-        backgroundImage: `url(${bgimg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <Container maxWidth="xl">
       <Grid container component="main" sx={{ height: "100vh" }}>
         <Grid item xs={false} sm={4} md={7}></Grid>
         <Grid item xs={12} sm={8} md={5} elevation={6}>

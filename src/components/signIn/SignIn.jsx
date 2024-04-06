@@ -14,8 +14,16 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import "./SignIn.css";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { toggleLogin } from "../../rtk/reducer/loginReducer";
+import { useNavigate } from "react-router-dom";
 
+// Import toast here
+import { toast } from "react-toastify";
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -23,6 +31,17 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       email: data.get("email"),
       password: data.get("password"),
     });
+    if (data.get("email") === "admin" && data.get("password") === "admin") {
+      dispatch(toggleLogin());
+      data.get("email") === "";
+      data.get("password") === "";
+      navigate("/dashboard");
+      toast.success("Login successfully");
+    } else {
+      toast.error("Incorrect email or password.");
+      data.get("email") === "";
+      data.get("password") === "";
+    }
   };
 
   return (

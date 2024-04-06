@@ -18,11 +18,15 @@ body {
 
 .navbar {
     height: 70px;
-    background-color: #9DB2BF;
     position: fixed;
     width: 100%;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 1);
     z-index: 1000;
+    backdrop-filter: blur(21px) saturate(200%);
+    -webkit-backdrop-filter: blur(21px) saturate(200%);
+    background-color: rgba(157, 178, 191, 0.49);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
 .logo {
@@ -34,7 +38,7 @@ body {
 .logo-name {
     font-size: 30px;
     font-weight: bold;
-    color: #27374D;
+    color: #000000;
     margin-left: 10px;
 }
 
@@ -60,12 +64,12 @@ body {
 .nav-elements ul a {
     font-size: 16px;
     font-weight: 400;
-    color: #27374D;
+    color: #000000;
     text-decoration: none;
 }
 
 .nav-elements ul a.active {
-    color: #27374D;
+    color: #000000;
     font-weight: 500;
     position: relative;
 }
@@ -96,11 +100,15 @@ body {
         position: absolute;
         right: 0;
         top: 70px;
-        background-color: #9DB2BF;
         width: 0px;
         height: calc(100vh);
         transition: all 0.3s ease-in;
         overflow: hidden;
+        backdrop-filter: blur(25px) saturate(200%);
+        -webkit-backdrop-filter: blur(25px) saturate(200%);
+        background-color: rgba(82, 109, 130, 0.77);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.125);
     }
 
     .nav-elements.active {
@@ -142,6 +150,6 @@ body {
 
 /* Adjust styling of dropdown links as needed */
 .nav-elements ul li ul li a {
-    color: #27374D;
+    color: #000000;
     text-decoration: none;
 }
