@@ -14,7 +14,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 
-export default function SignUp({ toggleForm }) {
+export default function SignUp({ toggleSignIn }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -177,7 +177,7 @@ export default function SignUp({ toggleForm }) {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link
-                  onClick={toggleForm}
+                  onClick={toggleSignIn}
                   variant="body2"
                   sx={{ cursor: "pointer" }}
                 >
@@ -193,5 +193,5 @@ export default function SignUp({ toggleForm }) {
 }
 
 SignUp.propTypes = {
-  toggleForm: PropTypes.func.isRequired,
+  toggleSignIn: PropTypes.func.isRequired,
 };

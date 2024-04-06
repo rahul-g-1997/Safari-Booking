@@ -38,11 +38,14 @@ export default function Home() {
       <Grid container component="main" sx={{ height: "100vh" }}>
         <Grid item xs={false} sm={4} md={7}></Grid>
         <Grid item xs={12} sm={8} md={5} elevation={6}>
-          {showSignIn && <SignIn toggleForm={toggleSignUp} />}
-          {showSignUp && <SignUp toggleForm={toggleSignIn} />}
-          {showForgotPassword && (
-            <ForgotPassword toggleForgotPassword={toggleForgotPassword} />
+          {showSignIn && (
+            <SignIn
+              toggleForm={toggleSignUp}
+              toggleForgotPassword={toggleForgotPassword}
+            />
           )}
+          {showSignUp && <SignUp toggleSignIn={toggleSignIn} />}
+          {showForgotPassword && <ForgotPassword toggleSignIn={toggleSignIn} />}
         </Grid>
       </Grid>
     </Container>

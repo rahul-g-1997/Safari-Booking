@@ -13,20 +13,33 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 
-export default function ForgotPassword({ toggleForgotPassword }) {
+export default function ForgotPassword({ toggleSignIn }) {
+  const [option, setOption] = useState("password");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+
+  const handleOptionChange = (event) => {
+    setOption(event.target.value);
+  };
+
+  const handleSendEmailOtp = (event) => {
+    event.preventDefault();
+    setMessage(`A password reset OTP has been sent to ${email}.`);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here you can handle your forgot password logic, for example, sending a reset email
-    setMessage(`A password reset email has been sent to ${email}.`);
-    setEmail(""); // Clearing the email field
+    setMessage("Password reset successful!");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container
+        component="main"
         maxWidth="xs"
         className="card"
         sx={{
@@ -46,33 +59,111 @@ export default function ForgotPassword({ toggleForgotPassword }) {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Forgot Password
+          <Typography component="h1" variant="h5" sx={{ m: 1 }}>
+            Forgot
           </Typography>
+          <div>
+            <input
+              type="radio"
+              value="password"
+              checked={option === "password"}
+              onChange={handleOptionChange}
+            />
+            Password
+            <input
+              type="radio"
+              value="username"
+              checked={option === "username"}
+              onChange={handleOptionChange}
+            />
+            Username
+          </div>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              {option === "password" && (
+                <>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="password"
+                      label="Enter New Password"
+                      type="password"
+                      autoComplete="new-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="confirmPassword"
+                      label="Confirm Password"
+                      type="password"
+                      autoComplete="new-password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </Grid>
+                </>
+              )}
+              {option === "username" && (
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="username"
+                    label="Enter New Username"
+                    name="username"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={12}>
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  onClick={handleSendEmailOtp}
+                >
+                  Get OTP
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="otp"
+                  label="Enter OTP"
+                  name="otp"
+                  autoComplete="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
               Reset Password
             </Button>
             {message && (
@@ -83,7 +174,7 @@ export default function ForgotPassword({ toggleForgotPassword }) {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link
-                  onClick={toggleForgotPassword}
+                  onClick={toggleSignIn}
                   variant="body2"
                   sx={{ cursor: "pointer" }}
                 >
@@ -99,5 +190,5 @@ export default function ForgotPassword({ toggleForgotPassword }) {
 }
 
 ForgotPassword.propTypes = {
-  toggleForgotPassword: PropTypes.func.isRequired,
+  toggleSignIn: PropTypes.func.isRequired,
 };

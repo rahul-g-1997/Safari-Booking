@@ -15,7 +15,7 @@ import theme from "../../theme";
 import "./SignIn.css";
 import PropTypes from "prop-types";
 
-export default function SignIn({ toggleForm }) {
+export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -90,7 +90,7 @@ export default function SignIn({ toggleForm }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={toggleForgotPassword}>
                   Forgot password?
                 </Link>
               </Grid>
@@ -113,4 +113,5 @@ export default function SignIn({ toggleForm }) {
 
 SignIn.propTypes = {
   toggleForm: PropTypes.func.isRequired,
+  toggleForgotPassword: PropTypes.func.isRequired,
 };
