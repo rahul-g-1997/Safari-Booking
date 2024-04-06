@@ -163,9 +163,26 @@ export default function ForgotPassword({ toggleSignIn }) {
                 />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-              Reset Password
-            </Button>
+            {option === "username" && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3 }}
+              >
+                Reset Username
+              </Button>
+            )}
+            {option === "password" && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3 }}
+              >
+                Reset Password
+              </Button>
+            )}
             {message && (
               <Typography variant="body2" color="textSecondary" align="center">
                 {message}
