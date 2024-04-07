@@ -12,15 +12,21 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword, resetUsername } from "../../rtk/reducer/userReducer";
+import { setOtp } from "../../rtk/reducer/otpReducer";
 
 export default function ForgotPassword({ toggleSignIn }) {
+  const dispatch = useDispatch();
+  const otp = useSelector((state) => state.otp);
+
   const [option, setOption] = useState("password");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [otp, setOtp] = useState("");
-  const [password, setPassword] = useState("");
+  const [enteredOtp, setEnteredOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
 
   const handleOptionChange = (event) => {
     setOption(event.target.value);
@@ -29,11 +35,29 @@ export default function ForgotPassword({ toggleSignIn }) {
   const handleSendEmailOtp = (event) => {
     event.preventDefault();
     setMessage(`A password reset OTP has been sent to ${email}.`);
+    dispatch(setOtp("123")); // Set OTP to default value
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setMessage("Password reset successful!");
+
+    // Check if entered OTP matches the OTP stored in Redux state
+    if (enteredOtp === otp.otp) {
+      if (option === "password") {
+        if (newPassword !== confirmPassword) {
+          setMessage("Passwords do not match.");
+          return;
+        }
+
+        dispatch(resetPassword({ email, newPassword }));
+      } else if (option === "username") {
+        dispatch(resetUsername({ email, newUsername }));
+      }
+
+      setMessage("Reset successful!");
+    } else {
+      setMessage("Invalid OTP.");
+    }
   };
 
   return (
@@ -104,12 +128,12 @@ export default function ForgotPassword({ toggleSignIn }) {
                     <TextField
                       required
                       fullWidth
-                      id="password"
+                      id="newPassword"
                       label="Enter New Password"
                       type="password"
                       autoComplete="new-password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -131,12 +155,12 @@ export default function ForgotPassword({ toggleSignIn }) {
                   <TextField
                     required
                     fullWidth
-                    id="username"
+                    id="newUsername"
                     label="Enter New Username"
-                    name="username"
+                    name="newUsername"
                     autoComplete="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
                   />
                 </Grid>
               )}
@@ -158,8 +182,8 @@ export default function ForgotPassword({ toggleSignIn }) {
                   label="Enter OTP"
                   name="otp"
                   autoComplete="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  value={enteredOtp}
+                  onChange={(e) => setEnteredOtp(e.target.value)}
                 />
               </Grid>
             </Grid>

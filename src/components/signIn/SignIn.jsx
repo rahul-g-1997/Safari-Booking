@@ -14,7 +14,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import "./SignIn.css";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
 import { useNavigate } from "react-router-dom";
 
@@ -23,28 +23,29 @@ import { toast } from "react-toastify";
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const users = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    if (
-      data.get("email") === "professor" &&
-      data.get("password") === "professor"
-    ) {
-      dispatch(toggleLogin());
-      data.get("email") === "";
-      data.get("password") === "";
-      navigate("/dashboard");
-      toast.success("Login successfully");
-    } else {
-      toast.error("Incorrect email or password.");
-      data.get("email") === "";
-      data.get("password") === "";
+    const enteredEmail = data.get("email");
+    const enteredPassword = data.get("password");
+
+    const user = users.find((user) => user.email === enteredEmail);
+
+    if (!user) {
+      toast.error("User does not exist. Please sign up.");
+      return;
     }
+
+    if (user.password !== enteredPassword) {
+      toast.error("Invalid password.");
+      return;
+    }
+
+    dispatch(toggleLogin());
+    navigate("/dashboard");
+    toast.success("Login successful.");
   };
 
   return (

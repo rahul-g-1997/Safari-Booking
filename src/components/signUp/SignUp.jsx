@@ -13,8 +13,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../../rtk/reducer/userReducer";
 
 export default function SignUp({ toggleSignIn }) {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -38,6 +43,24 @@ export default function SignUp({ toggleSignIn }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    // Check if any of the required fields are empty
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "mobileNumber",
+      "dob",
+      "gender",
+      "password",
+      "confirmPassword",
+    ];
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
+
+    if (emptyFields.length > 0) {
+      toast.error("All fields are required.");
+      return;
+    }
+
     // Check if passwords match
     const passwordsMatch = formData.password === formData.confirmPassword;
 
@@ -60,7 +83,20 @@ export default function SignUp({ toggleSignIn }) {
       return;
     }
 
+    // Check if the user already exists
+    const userExists = users.some((user) => user.email === formData.email);
+
+    if (userExists) {
+      toast.info("User already exists. Please sign in.");
+      toggleSignIn();
+      return;
+    }
+
+    dispatch(addUser(formData));
     console.log(formData);
+    toast.success("Registration successful.");
+    toggleSignIn();
+
     // Reset form data
     setFormData({
       firstName: "",
