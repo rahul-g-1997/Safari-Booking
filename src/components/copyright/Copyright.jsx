@@ -5,7 +5,7 @@ export default function Copyright(props) {
   return (
     <Typography
       variant="body2"
-      color="text.secondary"
+      color="text.font"
       align="center"
       margin={10}
       {...props}

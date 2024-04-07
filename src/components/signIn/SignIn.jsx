@@ -112,17 +112,17 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" onClick={toggleForgotPassword}>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
                 <Link
                   onClick={toggleForm}
                   variant="body2"
                   sx={{ cursor: "pointer" }}
                 >
                   {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2" onClick={toggleForgotPassword}>
+                  Forgot password?
                 </Link>
               </Grid>
             </Grid>

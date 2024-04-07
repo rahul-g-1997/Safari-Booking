@@ -1,9 +1,8 @@
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -13,21 +12,66 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 export default function SignUp({ toggleSignIn }) {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNumber: "",
+    password: "",
+    confirmPassword: "",
+    dob: "",
+    gender: "",
+    receiveEmails: false,
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      mobileNumber: data.get("mobileNumber"),
-      password: data.get("password"),
-      confirmPassword: data.get("confirmPassword"),
-      dob: data.get("dob"),
-      gender: data.get("gender"),
-      receiveEmails: data.get("receiveEmails"),
+
+    // Check if passwords match
+    const passwordsMatch = formData.password === formData.confirmPassword;
+
+    if (!passwordsMatch) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    // Check age
+    const dob = new Date(formData.dob);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    if (age < 18) {
+      toast.error("You must be at least 18 years old to sign up.");
+      return;
+    }
+
+    console.log(formData);
+    // Reset form data
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobileNumber: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      gender: "",
+      receiveEmails: false,
     });
   };
 
@@ -73,6 +117,8 @@ export default function SignUp({ toggleSignIn }) {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={formData.firstName}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -83,9 +129,11 @@ export default function SignUp({ toggleSignIn }) {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -93,18 +141,21 @@ export default function SignUp({ toggleSignIn }) {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
                   name="mobileNumber"
                   label="Mobile Number"
                   id="mobileNumber"
+                  value={formData.mobileNumber}
+                  onChange={handleChange}
                 />
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -116,6 +167,8 @@ export default function SignUp({ toggleSignIn }) {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={formData.dob}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -129,6 +182,8 @@ export default function SignUp({ toggleSignIn }) {
                   SelectProps={{
                     native: true,
                   }}
+                  value={formData.gender}
+                  onChange={handleChange}
                 >
                   <option value="" />
                   <option value="male">Male</option>
@@ -145,6 +200,8 @@ export default function SignUp({ toggleSignIn }) {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -156,13 +213,8 @@ export default function SignUp({ toggleSignIn }) {
                   type="password"
                   id="confirmPassword"
                   autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="receiveEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                  name="receiveEmails"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                 />
               </Grid>
             </Grid>
