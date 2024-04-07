@@ -90,8 +90,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Dashboard() {
-  const [showFormview, setShowFormview] = useState(false);
-  const [showCreateForm, setShowCreateForm] = useState(true);
+  const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(true);
+  const [showBooking, setShowBooking] = useState(false);
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -164,8 +164,8 @@ export default function Dashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
-                setShowCreateForm(false);
-                setShowFormview(true);
+                setShowBooking(false);
+                setShowSenctuaryDetails(true);
               }}
             >
               <ListItemIcon>
@@ -178,8 +178,8 @@ export default function Dashboard() {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                setShowCreateForm(true);
-                setShowFormview(false);
+                setShowBooking(true);
+                setShowSenctuaryDetails(false);
               }}
             >
               <ListItemIcon>
@@ -215,8 +215,8 @@ export default function Dashboard() {
             }}
           >
             <div className={style.container}>
-              {showCreateForm && <Booking />}
-              {showFormview && <SenctuaryDetails />}
+              {showBooking && <Booking />}
+              {showSenctuaryDetails && <SenctuaryDetails />}
               <Copyright sx={{ pt: 4 }} />
             </div>
           </Container>

@@ -4,11 +4,9 @@ import Box from "@mui/material/Box";
 import { Navbar } from "./components";
 import { useSelector } from "react-redux";
 import bgimg from "./assets/backgroundimg.jpg";
-  import "react-toastify/dist/ReactToastify.css";
-  import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
-
-// import { ToastContainer } from "react-toastify";
 
 const Layout = () => {
   const isLogin = useSelector((state) => state.login.isLogin);
