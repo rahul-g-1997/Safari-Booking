@@ -1,9 +1,13 @@
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
+import Divider from "@mui/material/Divider";
+import { Grid, TextField } from "@mui/material";
+import { useState } from "react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -22,6 +26,19 @@ SquareIcon.propTypes = {
   backgroundColor: PropTypes.string.isRequired,
 };
 export default function SanctuaryDetails() {
+  const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [selectedZone, setSelectedZone] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("");
+
+  const handleVehicleChange = (event) => {
+    setSelectedVehicle(event.target.value);
+  };
+  const handleZoneChange = (event) => {
+    setSelectedZone(event.target.value);
+  };
+  const handlePlaceChange = (event) => {
+    setSelectedPlace(event.target.value);
+  };
   return (
     <Box>
       <Grid container spacing={2}>
@@ -31,37 +48,51 @@ export default function SanctuaryDetails() {
             label="Eco-Tourist-Places"
             select
             variant="outlined"
+            size="small"
+            value={selectedPlace}
+            onChange={handlePlaceChange}
           >
-            <MenuItem value={10}>Option 1</MenuItem>
-            <MenuItem value={20}>Option 2</MenuItem>
-            <MenuItem value={30}>Option 3</MenuItem>
+            <MenuItem value={1}>Option 1</MenuItem>
+            <MenuItem value={2}>Option 2</MenuItem>
+            <MenuItem value={3}>Option 3</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12} md={3}>
-          <TextField fullWidth label="Zone" select variant="outlined">
-            <MenuItem value={10}>Option 1</MenuItem>
-            <MenuItem value={20}>Option 2</MenuItem>
-            <MenuItem value={30}>Option 3</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField fullWidth label="Select-Vehicle" select variant="outlined">
-            <MenuItem value={10}>Option 1</MenuItem>
-            <MenuItem value={20}>Option 2</MenuItem>
-            <MenuItem value={30}>Option 3</MenuItem>
+          <TextField
+            fullWidth
+            label="Zone"
+            select
+            variant="outlined"
+            size="small"
+            value={selectedZone}
+            onChange={handleZoneChange}
+          >
+            <MenuItem value={1}>Option 1</MenuItem>
+            <MenuItem value={2}>Option 2</MenuItem>
+            <MenuItem value={3}>Option 3</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12} md={2}>
           <TextField
             fullWidth
-            label="Date of Booking"
-            type="date"
+            label="Select vehicle"
+            select
             variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+            size="small"
+            value={selectedVehicle}
+            onChange={handleVehicleChange}
+          >
+            <MenuItem value={1}>Option 1</MenuItem>
+            <MenuItem value={2}>Option 2</MenuItem>
+            <MenuItem value={3}>Option 3</MenuItem>
+          </TextField>
         </Grid>
+        <Grid item xs={12} md={2}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker />
+          </LocalizationProvider>
+        </Grid>
+
         <Grid item xs={12} md={1}>
           <Button fullWidth variant="contained">
             Search
@@ -82,6 +113,7 @@ export default function SanctuaryDetails() {
         </Grid>
         <Grid item>Holiday</Grid>
       </Grid>
+      <Divider></Divider>
     </Box>
   );
 }

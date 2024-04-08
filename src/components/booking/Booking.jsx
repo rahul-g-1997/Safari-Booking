@@ -1,10 +1,28 @@
 import * as React from "react";
+import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
+import {
+   Typography ,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableBody,
+  Grid,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -16,9 +34,7 @@ const Accordion = styled((props) => (
     display: "none",
   },
   /* Glassmorphism card effect */
-  backdropFilter: "blur(7px) saturate(200%)",
-  WebkitBackdropFilter: "blur(7px) saturate(200%)",
-  backgroundColor: "rgba(255, 255, 255, 0.49)",
+  backgroundColor: "transparent",
   borderRadius: "12px",
   border: "1px solid rgba(255, 255, 255, 0.125)",
 }));
@@ -29,11 +45,10 @@ const AccordionSummary = styled((props) => (
     {...props}
   />
 ))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, .05)"
-      : "rgba(0, 0, 0, .03)",
-  flexDirection: "row-reverse",
+  backgroundColor: "transparent",
+  backdropFilter: "blur(7px) saturate(200%)",
+  flexDirection: "row",
+  justifyContent: "space-between", // Aligns content to the start and end of the flex container
   "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
     transform: "rotate(90deg)",
   },
@@ -49,77 +64,343 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function Booking() {
   const [expanded, setExpanded] = React.useState("panel1");
-
+  const [numberOfPersons, setNumberOfPersons] = useState("");
+  const [hasCamera, setHasCamera] = useState("");
+  const [numberOfCameras, setNumberOfCameras] = useState("");
+  const [entryFees, setEntryFees] = useState("4000");
+  const handleInputChange = (setter) => (event) => {
+    setter(event.target.value);
+  };
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
+  // Function to generate rows for the first table based on the number of persons
+ const generateTourismDetailsRows = () => {
+   const [formData, setFormData] = useState([]);
+
+   const handleInputChange = (index, fieldName, value) => {
+     const updatedFormData = [...formData];
+     updatedFormData[index] = {
+       ...updatedFormData[index],
+       [fieldName]: value,
+     };
+     setFormData(updatedFormData);
+   };
+
+   const rows = [];
+   for (let i = 0; i < parseInt(numberOfPersons); i++) {
+     rows.push(
+       <TableRow key={i}>
+         <TableCell>
+           <TextField
+             label="Name"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.name || ""}
+             onChange={(e) => handleInputChange(i, "name", e.target.value)}
+           />
+         </TableCell>
+         <TableCell>
+           <TextField
+             select
+             label="Gender"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.gender || ""}
+             onChange={(e) => handleInputChange(i, "gender", e.target.value)}
+           >
+             <MenuItem value="male">Male</MenuItem>
+             <MenuItem value="female">Female</MenuItem>
+           </TextField>
+         </TableCell>
+         <TableCell>
+           <TextField
+             label="Age"
+             type="number"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.age || ""}
+             onChange={(e) => handleInputChange(i, "age", e.target.value)}
+           />
+         </TableCell>
+         <TableCell>
+           <TextField
+             select
+             label="Country"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.country || ""}
+             onChange={(e) => handleInputChange(i, "country", e.target.value)}
+           >
+             <MenuItem value="usa">USA</MenuItem>
+             <MenuItem value="uk">UK</MenuItem>
+             {/* Add other country options */}
+           </TextField>
+         </TableCell>
+         <TableCell>
+           <TextField
+             select
+             label="Identity Type"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.identityType || ""}
+             onChange={(e) =>
+               handleInputChange(i, "identityType", e.target.value)
+             }
+           >
+             <MenuItem value="passport">Passport</MenuItem>
+             <MenuItem value="idCard">ID Card</MenuItem>
+             {/* Add other identity type options */}
+           </TextField>
+         </TableCell>
+         <TableCell>
+           <TextField
+             label="Identity Number"
+             variant="standard"
+             size="small"
+             fullWidth
+             value={formData[i]?.identityNumber || ""}
+             onChange={(e) =>
+               handleInputChange(i, "identityNumber", e.target.value)
+             }
+           />
+         </TableCell>
+       </TableRow>
+     );
+   }
+   return rows;
+ };
+
   return (
     <div>
-      <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-      >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>Collapsible Group Item #1</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-            lacus ex, sit amet blandit leo lobortis eget.
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={2}>
+          <FormControl fullWidth variant="outlined" size="small">
+            <InputLabel id="number-of-persons-label">
+              Number of Persons
+            </InputLabel>
+            <Select
+              labelId="number-of-persons-label"
+              id="number-of-persons-select"
+              value={numberOfPersons}
+              onChange={handleInputChange(setNumberOfPersons)}
+              label="Number of Persons"
+            >
+              {[1, 2, 3, 4, 5, 6].map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={4}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <Typography
+            variant="body1"
+            gutterBottom
+            style={{ marginRight: "8px" }}
+          >
+            Do you have Camera ?
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-      >
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Collapsible Group Item #2</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-            lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-      >
-        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-          <Typography>Collapsible Group Item #3</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-            lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-      >
-        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-          <Typography>Collapsible Group Item #4</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-            lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+          <RadioGroup
+            aria-label="Do you have Camera ?"
+            name="hasCamera"
+            value={hasCamera}
+            onChange={handleInputChange(setHasCamera)}
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+            <FormControlLabel value="no" control={<Radio />} label="No" />
+          </RadioGroup>
+        </Grid>
+        {hasCamera === "yes" && (
+          <Grid item xs={12} md={2}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel id="number-of-cameras-label">
+                Number of Cameras
+              </InputLabel>
+              <Select
+                labelId="number-of-cameras-label"
+                id="number-of-cameras-select"
+                value={numberOfCameras}
+                onChange={handleInputChange(setNumberOfCameras)}
+                label="Number of Cameras"
+              >
+                {[1, 2, 3, 4, 5, 6].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
+        <Grid item xs={12} md={2}>
+          <Grid item xs={12}>
+            <Typography variant="body1">Entry Fees: {entryFees}</Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid  mt={2}>
+        <Accordion
+          expanded={expanded === "panel1"}
+          onChange={handleChange("panel1")}
+        >
+          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+            <Typography>Eco-tourism details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Tourist name</TableCell>
+                      <TableCell>Gender</TableCell>
+                      <TableCell>Age</TableCell>
+                      <TableCell>Country</TableCell>
+                      <TableCell>Identity type</TableCell>
+                      <TableCell>Identity number</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>{generateTourismDetailsRows()}</TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded === "panel2"}
+          onChange={handleChange("panel2")}
+        >
+          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+            <Typography>children (Max 2 allowed )</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>children name</TableCell>
+                      <TableCell>Age</TableCell>
+                      <TableCell>children name</TableCell>
+                      <TableCell>Age</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <TextField
+                          label="Name"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Age"
+                          type="number"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Name"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Age"
+                          type="number"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded === "panel3"}
+          onChange={handleChange("panel3")}
+        >
+          <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+            <Typography>Correspondence details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Tourist Address</TableCell>
+                      <TableCell>Mobile No.</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <TextField
+                          label="Address"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Number"
+                          type="number"
+                          variant="standard"
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded === "panel4"}
+          onChange={handleChange("panel4")}
+        >
+          <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+            <Typography>Camera details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid></Grid>
+          </AccordionDetails>
+        </Accordion>
+      </Grid>
     </div>
   );
 }
