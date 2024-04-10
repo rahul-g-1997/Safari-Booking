@@ -113,7 +113,8 @@ export default function SanctuaryDetails() {
         </Grid>
         <Grid item>Holiday</Grid>
       </Grid>
-      <Divider></Divider>
+      <Divider />
+      
     </Box>
   );
 }

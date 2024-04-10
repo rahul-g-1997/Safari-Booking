@@ -5,8 +5,9 @@ import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import SenctuaryDetailsDialog from "../senctuaryDetailsDialog/SenctuaryDetails";
 import {
-   Typography ,
+  Typography,
   Table,
   TableCell,
   TableContainer,
@@ -22,8 +23,8 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Button,
 } from "@mui/material";
-
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(() => ({
@@ -62,12 +63,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-export default function Booking() {
+export default function Booking({ handleShowBooking }) {
   const [expanded, setExpanded] = React.useState("panel1");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
   const [numberOfCameras, setNumberOfCameras] = useState("");
   const [entryFees, setEntryFees] = useState("4000");
+  const [showSanctuaryDialog, setShowSanctuaryDialog] = useState(false);
+
   const handleInputChange = (setter) => (event) => {
     setter(event.target.value);
   };
@@ -76,106 +79,160 @@ export default function Booking() {
   };
 
   // Function to generate rows for the first table based on the number of persons
- const generateTourismDetailsRows = () => {
-   const [formData, setFormData] = useState([]);
+  const generateTourismDetailsRows = () => {
+    const [formData, setFormData] = React.useState([]);
 
-   const handleInputChange = (index, fieldName, value) => {
-     const updatedFormData = [...formData];
-     updatedFormData[index] = {
-       ...updatedFormData[index],
-       [fieldName]: value,
-     };
-     setFormData(updatedFormData);
-   };
+    const handleInputChange = (index, fieldName, value) => {
+      const updatedFormData = [...formData];
+      updatedFormData[index] = {
+        ...updatedFormData[index],
+        [fieldName]: value,
+      };
+      setFormData(updatedFormData);
+    };
 
-   const rows = [];
-   for (let i = 0; i < parseInt(numberOfPersons); i++) {
-     rows.push(
-       <TableRow key={i}>
-         <TableCell>
-           <TextField
-             label="Name"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.name || ""}
-             onChange={(e) => handleInputChange(i, "name", e.target.value)}
-           />
-         </TableCell>
-         <TableCell>
-           <TextField
-             select
-             label="Gender"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.gender || ""}
-             onChange={(e) => handleInputChange(i, "gender", e.target.value)}
-           >
-             <MenuItem value="male">Male</MenuItem>
-             <MenuItem value="female">Female</MenuItem>
-           </TextField>
-         </TableCell>
-         <TableCell>
-           <TextField
-             label="Age"
-             type="number"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.age || ""}
-             onChange={(e) => handleInputChange(i, "age", e.target.value)}
-           />
-         </TableCell>
-         <TableCell>
-           <TextField
-             select
-             label="Country"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.country || ""}
-             onChange={(e) => handleInputChange(i, "country", e.target.value)}
-           >
-             <MenuItem value="usa">USA</MenuItem>
-             <MenuItem value="uk">UK</MenuItem>
-             {/* Add other country options */}
-           </TextField>
-         </TableCell>
-         <TableCell>
-           <TextField
-             select
-             label="Identity Type"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.identityType || ""}
-             onChange={(e) =>
-               handleInputChange(i, "identityType", e.target.value)
-             }
-           >
-             <MenuItem value="passport">Passport</MenuItem>
-             <MenuItem value="idCard">ID Card</MenuItem>
-             {/* Add other identity type options */}
-           </TextField>
-         </TableCell>
-         <TableCell>
-           <TextField
-             label="Identity Number"
-             variant="standard"
-             size="small"
-             fullWidth
-             value={formData[i]?.identityNumber || ""}
-             onChange={(e) =>
-               handleInputChange(i, "identityNumber", e.target.value)
-             }
-           />
-         </TableCell>
-       </TableRow>
-     );
-   }
-   return rows;
- };
+    const rows = [];
+    for (let i = 0; i < parseInt(numberOfPersons); i++) {
+      rows.push(
+        <TableRow key={i}>
+          <TableCell>
+            <TextField
+              label="Name"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.name || ""}
+              onChange={(e) => handleInputChange(i, "name", e.target.value)}
+            />
+          </TableCell>
+          <TableCell>
+            <TextField
+              select
+              label="Gender"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.gender || ""}
+              onChange={(e) => handleInputChange(i, "gender", e.target.value)}
+            >
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+            </TextField>
+          </TableCell>
+          <TableCell>
+            <TextField
+              label="Age"
+              type="number"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.age || ""}
+              onChange={(e) => handleInputChange(i, "age", e.target.value)}
+            />
+          </TableCell>
+          <TableCell>
+            <TextField
+              select
+              label="Country"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.country || ""}
+              onChange={(e) => handleInputChange(i, "country", e.target.value)}
+            >
+              <MenuItem value="usa">USA</MenuItem>
+              <MenuItem value="uk">UK</MenuItem>
+              {/* Add other country options */}
+            </TextField>
+          </TableCell>
+          <TableCell>
+            <TextField
+              select
+              label="Identity Type"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.identityType || ""}
+              onChange={(e) =>
+                handleInputChange(i, "identityType", e.target.value)
+              }
+            >
+              <MenuItem value="passport">Passport</MenuItem>
+              <MenuItem value="idCard">ID Card</MenuItem>
+              {/* Add other identity type options */}
+            </TextField>
+          </TableCell>
+          <TableCell>
+            <TextField
+              label="Identity Number"
+              variant="standard"
+              size="small"
+              fullWidth
+              value={formData[i]?.identityNumber || ""}
+              onChange={(e) =>
+                handleInputChange(i, "identityNumber", e.target.value)
+              }
+            />
+          </TableCell>
+        </TableRow>
+      );
+    }
+    return rows;
+  };
+
+  // Function to generate rows for camera details
+  const generateCameraDetailsRows = () => {
+    const [cameraFormData, setCameraFormData] = useState([]);
+
+    const handleCameraInputChange = (index, fieldName, value) => {
+      const updatedCameraFormData = [...cameraFormData];
+      updatedCameraFormData[index] = {
+        ...updatedCameraFormData[index],
+        [fieldName]: value,
+      };
+      setCameraFormData(updatedCameraFormData);
+    };
+
+    const cameraRows = [];
+    for (let i = 0; i < parseInt(numberOfCameras); i++) {
+      cameraRows.push(
+        <TableRow key={i}>
+          <TableCell>
+            <TextField
+              label={`Camera ${i + 1} Name`}
+              variant="standard"
+              size="small"
+              fullWidth
+              value={cameraFormData[i]?.cameraName || ""}
+              onChange={(e) =>
+                handleCameraInputChange(i, "cameraName", e.target.value)
+              }
+            />
+          </TableCell>
+          <TableCell>
+            <TextField
+              label={`Camera ${i + 1} Model`}
+              variant="standard"
+              size="small"
+              fullWidth
+              value={cameraFormData[i]?.cameraModel || ""}
+              onChange={(e) =>
+                handleCameraInputChange(i, "cameraModel", e.target.value)
+              }
+            />
+          </TableCell>
+          {/* Add more fields for camera details if needed */}
+        </TableRow>
+      );
+    }
+    return cameraRows;
+  };
+
+  const handleBack = () => {};
+
+  const handleNext = () => {
+    setShowSanctuaryDialog(true);
+  };
 
   return (
     <div>
@@ -256,7 +313,7 @@ export default function Booking() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid  mt={2}>
+      <Grid mt={2}>
         <Accordion
           expanded={expanded === "panel1"}
           onChange={handleChange("panel1")}
@@ -295,19 +352,11 @@ export default function Booking() {
             <Grid>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>children name</TableCell>
-                      <TableCell>Age</TableCell>
-                      <TableCell>children name</TableCell>
-                      <TableCell>Age</TableCell>
-                    </TableRow>
-                  </TableHead>
                   <TableBody>
                     <TableRow>
                       <TableCell>
                         <TextField
-                          label="Name"
+                          label="1st children Name"
                           variant="standard"
                           size="small"
                           fullWidth
@@ -315,7 +364,7 @@ export default function Booking() {
                       </TableCell>
                       <TableCell>
                         <TextField
-                          label="Age"
+                          label="1st children Age"
                           type="number"
                           variant="standard"
                           size="small"
@@ -324,7 +373,7 @@ export default function Booking() {
                       </TableCell>
                       <TableCell>
                         <TextField
-                          label="Name"
+                          label="2nd children Name"
                           variant="standard"
                           size="small"
                           fullWidth
@@ -332,7 +381,7 @@ export default function Booking() {
                       </TableCell>
                       <TableCell>
                         <TextField
-                          label="Age"
+                          label="2nd children Age"
                           type="number"
                           variant="standard"
                           size="small"
@@ -357,12 +406,6 @@ export default function Booking() {
             <Grid>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Tourist Address</TableCell>
-                      <TableCell>Mobile No.</TableCell>
-                    </TableRow>
-                  </TableHead>
                   <TableBody>
                     <TableRow>
                       <TableCell>
@@ -389,6 +432,7 @@ export default function Booking() {
             </Grid>
           </AccordionDetails>
         </Accordion>
+
         <Accordion
           expanded={expanded === "panel4"}
           onChange={handleChange("panel4")}
@@ -397,7 +441,13 @@ export default function Booking() {
             <Typography>Camera details</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Grid></Grid>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableBody>{generateCameraDetailsRows()}</TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
           </AccordionDetails>
         </Accordion>
       </Grid>

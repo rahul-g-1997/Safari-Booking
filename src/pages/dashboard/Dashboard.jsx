@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,30 +7,17 @@ import {
   CssBaseline,
   Box,
   Container,
-  Drawer as MuiDrawer,
   AppBar as MuiAppBar,
   Toolbar,
-  List,
-  Divider,
   IconButton,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Avatar,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import LogoutIcon from "@mui/icons-material/Logout";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
-import { Copyright, Booking, SenctuaryDetails } from "../../components";
+import { Copyright, Booking, AddSenctuaryDetails } from "../../components";
 import { toast } from "react-toastify";
 import style from "./dashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
-
-const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -42,8 +29,7 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: "100%",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -51,63 +37,31 @@ const AppBar = styled(MuiAppBar, {
   }),
   backgroundColor: "rgba(157, 178, 191, 0.49)", // Background color with transparency
   backdropFilter: "blur(21px) saturate(200%)", // Backdrop filter effect
-  "-webkit-backdrop-filter": "blur(21px) saturate(200%)", // For Safari
+  WebkitBackdropFilter: "blur(21px) saturate(200%)", // For Safari
   borderRadius: "12px", // Border radius
   border: "1px solid rgba(255, 255, 255, 0.125)", // Border
 }));
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    marginTop: 10,
-    height: "98%",
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-    backgroundColor: "rgba(157, 178, 191, 0.49)", // Background color with transparency
-    backdropFilter: "blur(21px) saturate(200%)", // Backdrop filter effect
-    "-webkit-backdrop-filter": "blur(21px) saturate(200%)", // For Safari
-    borderRadius: "12px", // Border radius
-    border: "1px solid rgba(255, 255, 255, 0.125)", // Border
-  },
-}));
-
 export default function Dashboard() {
-  const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(true);
-  const [showBooking, setShowBooking] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = useSelector((state) => state.login.isLogin);
+  const [showBooking, setShowBooking] = useState(true);
+
   const logOut = () => {
     dispatch(toggleLogin());
     toast.success("Logout successfully");
   };
+
   useEffect(() => {
     if (!isLogin) {
       navigate("/");
     }
   }, [isLogin, navigate]);
+
+  const handleShowBooking = () => {
+    setShowBooking(true);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -122,18 +76,6 @@ export default function Dashboard() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
-                sx={{
-                  marginRight: "36px",
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
               {/* Replace Typography with img tag for logo */}
               <img
                 src={Logo}
@@ -141,61 +83,12 @@ export default function Dashboard() {
                 style={{ maxWidth: "100px", height: "auto" }}
               />
             </div>
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={logOut}>
               <Avatar alt="User Profile" src="/path/to/profile-image.jpg" />
             </IconButton>
           </Toolbar>
         </AppBar>
 
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer} color="inherit">
-              <ChevronLeftIcon style={{ color: "#DDE6ED" }} />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <ListItemButton
-              onClick={() => {
-                setShowBooking(false);
-                setShowSenctuaryDetails(true);
-              }}
-            >
-              <ListItemIcon>
-                <EventNoteIcon style={{ color: "#DDE6ED" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary="Senctuary Details"
-                style={{ color: "#DDE6ED" }}
-              />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowBooking(true);
-                setShowSenctuaryDetails(false);
-              }}
-            >
-              <ListItemIcon>
-                <EditCalendarIcon style={{ color: "#DDE6ED" }} />
-              </ListItemIcon>
-              <ListItemText primary="Booking" style={{ color: "#DDE6ED" }} />
-            </ListItemButton>
-
-            <ListItemButton onClick={logOut}>
-              <ListItemIcon>
-                <LogoutIcon style={{ color: "#DDE6ED" }} />
-              </ListItemIcon>
-              <ListItemText primary="Log Out" style={{ color: "#DDE6ED" }} />
-            </ListItemButton>
-          </List>
-        </Drawer>
         <Box
           component="main"
           sx={{
@@ -215,8 +108,11 @@ export default function Dashboard() {
             }}
           >
             <div className={style.container}>
-              {showBooking && <Booking />}
-              {showSenctuaryDetails && <SenctuaryDetails />}
+              {showBooking ? (
+                <Booking />
+              ) : (
+                <AddSenctuaryDetails onNext={handleShowBooking} />
+              )}
               <Copyright sx={{ pt: 4 }} />
             </div>
           </Container>
