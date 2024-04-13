@@ -7,3 +7,4 @@ export { default as ForgotPassword } from "./forgotPassword/ForgotPassword";
 export { default as Booking } from "./booking/Booking";
 export { default as AddSenctuaryDetails } from "./addSenctuaryDetails/AddSenctuaryDetails";
 export { default as SenctuaryDetails} from "./senctuaryDetailsDialog/SenctuaryDetails"
+export {default as BookingHistory} from "./bookingHistory/BookingHistory"

@@ -24,10 +24,13 @@ import {
   Booking,
   AddSenctuaryDetails,
   SenctuaryDetails,
+  BookingHistory,
 } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import HistoryIcon from "@mui/icons-material/History";
 import { toast } from "react-toastify";
 import style from "./dashboard.module.css";
 import theme from "../../theme";
@@ -57,7 +60,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -90,7 +92,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-
 export default function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -98,6 +99,8 @@ export default function Dashboard() {
   const [showAddSenctuaryDetails, setShowAddSenctuaryDetails] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
   const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(false);
+  const [showBookingDiv, setShowBookingDiv] = useState(true);
+  const [showBookingHistory, setShowBookingHistory] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -146,7 +149,6 @@ export default function Dashboard() {
             </div>
 
             <div style={{ marginLeft: "auto" }}>
-              {" "}
               {/* This div positions Avatar to the right */}
               <IconButton color="inherit" onClick={logOut}>
                 <Avatar alt="User Profile" src="/path/to/profile-image.jpg" />
@@ -170,6 +172,28 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
+            <ListItemButton
+              onClick={() => {
+                setShowBookingDiv(true);
+                setShowBookingHistory(false);
+              }}
+            >
+              <ListItemIcon>
+                <EventAvailableIcon />
+              </ListItemIcon>
+              <ListItemText primary="Booking" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                setShowBookingDiv(false);
+                setShowBookingHistory(true);
+              }}
+            >
+              <ListItemIcon>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Booking History" />
+            </ListItemButton>
             <ListItemButton onClick={logOut}>
               <ListItemIcon>
                 <LogoutIcon />
@@ -197,22 +221,29 @@ export default function Dashboard() {
               transition: "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
             }}
           >
-            <div className={style.container}>
-              {showAddSenctuaryDetails && (
-                <AddSenctuaryDetails
-                  setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
-                  setShowBooking={setShowBooking}
-                />
-              )}
-              {showBooking && (
-                <Booking
-                  setShowBooking={setShowBooking}
-                  setShowSenctuaryDetails={setShowSenctuaryDetails}
-                />
-              )}
-              {showSenctuaryDetails && <SenctuaryDetails />}
-              <Copyright sx={{ pt: 4 }} />
-            </div>
+            {showBookingDiv && (
+              <div className={style.container}>
+                {showAddSenctuaryDetails && (
+                  <AddSenctuaryDetails
+                    setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
+                    setShowBooking={setShowBooking}
+                  />
+                )}
+                {showBooking && (
+                  <Booking
+                    setShowBooking={setShowBooking}
+                    setShowSenctuaryDetails={setShowSenctuaryDetails}
+                  />
+                )}
+                {showSenctuaryDetails && <SenctuaryDetails />}
+                <Copyright sx={{ pt: 4 }} />
+              </div>
+            )}
+            {showBookingHistory && (
+              <div className={style.container}>
+                <BookingHistory />
+              </div>
+            )}
           </Container>
         </Box>
       </Box>
