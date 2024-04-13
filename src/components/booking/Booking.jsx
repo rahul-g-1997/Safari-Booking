@@ -5,8 +5,9 @@ import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import SenctuaryDetailsDialog from "../senctuaryDetailsDialog/SenctuaryDetails";
+import PropTypes from "prop-types";
 import {
+  Button,
   Typography,
   Table,
   TableCell,
@@ -22,9 +23,10 @@ import {
   MenuItem,
   Select,
   InputLabel,
+  Paper,
   FormControl,
-  Button,
 } from "@mui/material";
+
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(() => ({
@@ -63,13 +65,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-export default function Booking({ handleShowBooking }) {
+export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
   const [expanded, setExpanded] = React.useState("panel1");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
   const [numberOfCameras, setNumberOfCameras] = useState("");
-  const [entryFees, setEntryFees] = useState("4000");
-  const [showSanctuaryDialog, setShowSanctuaryDialog] = useState(false);
+  const entryFees=4000;
+  const [formData, setFormData] = useState([]);
+  const [cameraFormData, setCameraFormData] = useState([]);
 
   const handleInputChange = (setter) => (event) => {
     setter(event.target.value);
@@ -80,8 +83,6 @@ export default function Booking({ handleShowBooking }) {
 
   // Function to generate rows for the first table based on the number of persons
   const generateTourismDetailsRows = () => {
-    const [formData, setFormData] = React.useState([]);
-
     const handleInputChange = (index, fieldName, value) => {
       const updatedFormData = [...formData];
       updatedFormData[index] = {
@@ -182,8 +183,6 @@ export default function Booking({ handleShowBooking }) {
 
   // Function to generate rows for camera details
   const generateCameraDetailsRows = () => {
-    const [cameraFormData, setCameraFormData] = useState([]);
-
     const handleCameraInputChange = (index, fieldName, value) => {
       const updatedCameraFormData = [...cameraFormData];
       updatedCameraFormData[index] = {
@@ -199,44 +198,104 @@ export default function Booking({ handleShowBooking }) {
         <TableRow key={i}>
           <TableCell>
             <TextField
+              select
               label={`Camera ${i + 1} Name`}
               variant="standard"
               size="small"
               fullWidth
+              style={{ width: "40%" }}
               value={cameraFormData[i]?.cameraName || ""}
               onChange={(e) =>
                 handleCameraInputChange(i, "cameraName", e.target.value)
               }
-            />
+            >
+              <MenuItem value="Point & Shoot Camera/DSLR/Mirrorless camera with lens">
+                Point & Shoot Camera/DSLR/Mirrorless camera with lens
+              </MenuItem>
+              <MenuItem value="Video camera (non-Professional & non Commercial use), Handy cam">
+                Video camera (non-Professional & non Commercial use), Handy cam
+              </MenuItem>
+            </TextField>
           </TableCell>
-          <TableCell>
-            <TextField
-              label={`Camera ${i + 1} Model`}
-              variant="standard"
-              size="small"
-              fullWidth
-              value={cameraFormData[i]?.cameraModel || ""}
-              onChange={(e) =>
-                handleCameraInputChange(i, "cameraModel", e.target.value)
-              }
-            />
-          </TableCell>
-          {/* Add more fields for camera details if needed */}
         </TableRow>
       );
     }
     return cameraRows;
   };
 
-  const handleBack = () => {};
-
-  const handleNext = () => {
-    setShowSanctuaryDialog(true);
-  };
-
   return (
     <div>
       <Grid container spacing={2}>
+        <Grid container spacing={2} m={1}>
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Eco Tourist places: Tadoba Andheri Tigrt Reserv (Core)
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Zone: Navegaon Zone (Core)
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Gate: Navegaon Gate (Core)
+            </Paper>
+          </Grid>
+
+          {/* Second row with three fields */}
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Date of Booking: 21/06/2024 (fri)
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Slot: Mornig Time:
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Paper
+              style={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 8,
+                padding: 10,
+              }}
+            >
+              Vehicle Name: Gypsy
+            </Paper>
+          </Grid>
+        </Grid>
         <Grid item xs={12} md={2}>
           <FormControl fullWidth variant="outlined" size="small">
             <InputLabel id="number-of-persons-label">
@@ -451,6 +510,30 @@ export default function Booking({ handleShowBooking }) {
           </AccordionDetails>
         </Accordion>
       </Grid>
+      <Grid container justifyContent="flex-end" mt={3} spacing={2}>
+        {/* <Grid item xs={12} md={1}>
+          <Button fullWidth variant="contained" onClick={handleShowBooking}>
+            Back
+          </Button>
+        </Grid> */}
+        <Grid item xs={12} md={2}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => (
+              setShowBooking(false), setShowSenctuaryDetails(true)
+            )}
+          >
+            Conform Details
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   );
 }
+
+// Add PropTypes validation
+Booking.propTypes = {
+  setShowSenctuaryDetails: PropTypes.func.isRequired,
+  setShowBooking: PropTypes.func.isRequired,
+};

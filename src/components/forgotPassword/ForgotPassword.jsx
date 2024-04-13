@@ -67,7 +67,7 @@ export default function ForgotPassword({ toggleSignIn }) {
         maxWidth="xs"
         className="card"
         sx={{
-          marginTop: 11,
+          marginTop: 3,
         }}
       >
         <CssBaseline />

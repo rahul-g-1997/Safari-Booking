@@ -1,0 +1,17 @@
+/* styles.css */
+
+.smallDatePickerContainer .MuiInputBase-root {
+    min-height: 36px;
+    /* Adjust the height as needed */
+}
+
+.smallDatePickerContainer .MuiInputBase-input {
+    padding: 8px 12px;
+    /* Adjust the padding as needed */
+}
+
+.smallDatePickerContainer .MuiSvgIcon-root {
+    width: 1em;
+    /* Adjust the icon size as needed */
+    height: 1em;
+}

@@ -118,7 +118,7 @@ export default function SignUp({ toggleSignIn }) {
         maxWidth="xs"
         className="card"
         sx={{
-          marginTop: 11,
+          marginTop: 3,
         }}
       >
         <CssBaseline />

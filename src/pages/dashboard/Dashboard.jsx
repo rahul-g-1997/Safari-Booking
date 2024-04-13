@@ -7,47 +7,101 @@ import {
   CssBaseline,
   Box,
   Container,
+  Drawer as MuiDrawer,
   AppBar as MuiAppBar,
   Toolbar,
   IconButton,
   Avatar,
+  Divider,
+  ListItemButton,
+  List,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
-import { Copyright, Booking, AddSenctuaryDetails } from "../../components";
+import {
+  Copyright,
+  Booking,
+  AddSenctuaryDetails,
+  SenctuaryDetails,
+} from "../../components";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
 import { toast } from "react-toastify";
 import style from "./dashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
 
+const drawerWidth = 240;
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  marginTop: 5,
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: "rgba(157, 178, 191, 0.49)",
+  backdropFilter: "blur(21px) saturate(200%)",
+  WebkitBackdropFilter: "blur(21px) saturate(200%)",
+  borderRadius: "12px",
+  border: "1px solid rgba(255, 255, 255, 0.125)",
   ...(open && {
-    width: "100%",
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
-  backgroundColor: "rgba(157, 178, 191, 0.49)", // Background color with transparency
-  backdropFilter: "blur(21px) saturate(200%)", // Backdrop filter effect
-  WebkitBackdropFilter: "blur(21px) saturate(200%)", // For Safari
-  borderRadius: "12px", // Border radius
-  border: "1px solid rgba(255, 255, 255, 0.125)", // Border
 }));
+
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    backgroundColor: "rgba(157, 178, 191, 0.49)", // Adding background properties
+    backdropFilter: "blur(21px) saturate(200%)",
+    WebkitBackdropFilter: "blur(21px) saturate(200%)",
+    borderRadius: "12px",
+    border: "1px solid rgba(255, 255, 255, 0.125)",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
+
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = useSelector((state) => state.login.isLogin);
-  const [showBooking, setShowBooking] = useState(true);
-
+  const [showAddSenctuaryDetails, setShowAddSenctuaryDetails] = useState(true);
+  const [showBooking, setShowBooking] = useState(false);
+  const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(false);
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
   const logOut = () => {
     dispatch(toggleLogin());
     toast.success("Logout successfully");
@@ -59,10 +113,6 @@ export default function Dashboard() {
     }
   }, [isLogin, navigate]);
 
-  const handleShowBooking = () => {
-    setShowBooking(true);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
@@ -70,11 +120,22 @@ export default function Dashboard() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              display: "flex",
-              justifyContent: "space-between", // This will move items to the start and end of the toolbar
               pr: "24px",
             }}
           >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: "36px",
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+
             <div style={{ display: "flex", alignItems: "center" }}>
               {/* Replace Typography with img tag for logo */}
               <img
@@ -83,11 +144,40 @@ export default function Dashboard() {
                 style={{ maxWidth: "100px", height: "auto" }}
               />
             </div>
-            <IconButton color="inherit" onClick={logOut}>
-              <Avatar alt="User Profile" src="/path/to/profile-image.jpg" />
-            </IconButton>
+
+            <div style={{ marginLeft: "auto" }}>
+              {" "}
+              {/* This div positions Avatar to the right */}
+              <IconButton color="inherit" onClick={logOut}>
+                <Avatar alt="User Profile" src="/path/to/profile-image.jpg" />
+              </IconButton>
+            </div>
           </Toolbar>
         </AppBar>
+
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
+            }}
+          >
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List component="nav">
+            <ListItemButton onClick={logOut}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log Out" />
+            </ListItemButton>
+          </List>
+        </Drawer>
 
         <Box
           component="main"
@@ -108,11 +198,19 @@ export default function Dashboard() {
             }}
           >
             <div className={style.container}>
-              {showBooking ? (
-                <Booking />
-              ) : (
-                <AddSenctuaryDetails onNext={handleShowBooking} />
+              {showAddSenctuaryDetails && (
+                <AddSenctuaryDetails
+                  setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
+                  setShowBooking={setShowBooking}
+                />
               )}
+              {showBooking && (
+                <Booking
+                  setShowBooking={setShowBooking}
+                  setShowSenctuaryDetails={setShowSenctuaryDetails}
+                />
+              )}
+              {showSenctuaryDetails && <SenctuaryDetails />}
               <Copyright sx={{ pt: 4 }} />
             </div>
           </Container>
