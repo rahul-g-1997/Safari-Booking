@@ -27,10 +27,10 @@ import {
   BookingHistory,
 } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import HistoryIcon from "@mui/icons-material/History";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { toast } from "react-toastify";
 import style from "./dashboard.module.css";
 import theme from "../../theme";
@@ -194,11 +194,11 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Booking History" />
             </ListItemButton>
-            <ListItemButton onClick={logOut}>
+            <ListItemButton>
               <ListItemIcon>
-                <LogoutIcon />
+                <AccountBoxIcon />
               </ListItemIcon>
-              <ListItemText primary="Log Out" />
+              <ListItemText primary="Profile" />
             </ListItemButton>
           </List>
         </Drawer>
@@ -240,9 +240,9 @@ export default function Dashboard() {
               </div>
             )}
             {showBookingHistory && (
-              <div className={style.container}>
+              
                 <BookingHistory />
-              </div>
+             
             )}
           </Container>
         </Box>

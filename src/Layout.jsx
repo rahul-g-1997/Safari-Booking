@@ -45,6 +45,7 @@ export default function Layout() {
               right: 0,
               bottom: 0,
               backgroundImage: `url(${bgimg})`,
+              // backgroundColor:"green",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
