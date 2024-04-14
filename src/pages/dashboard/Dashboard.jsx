@@ -17,6 +17,10 @@ import {
   List,
   ListItemIcon,
   ListItemText,
+  Typography,
+  MenuItem,
+  Menu,
+  Tooltip,
 } from "@mui/material";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
 import {
@@ -104,12 +108,21 @@ export default function Dashboard() {
   const [showBookingHistory, setShowBookingHistory] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const logOut = () => {
     dispatch(toggleLogin());
     toast.success("Logout successfully");
+  };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   useEffect(() => {
@@ -152,9 +165,50 @@ export default function Dashboard() {
 
             <div style={{ marginLeft: "auto" }}>
               {/* This div positions Avatar to the right */}
-              <IconButton color="inherit" onClick={logOut}>
-                <Avatar alt="User Profile" src="/path/to/profile-image.jpg" />
-              </IconButton>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      textAlign="center"
+                      onClick={() => {
+                        setShowBookingDiv(false);
+                        setShowBookingHistory(false);
+                        setShowProfile(true);
+                      }}
+                    >
+                      Profile
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center" onClick={() => logOut()}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
             </div>
           </Toolbar>
         </AppBar>
