@@ -30,11 +30,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import HistoryIcon from "@mui/icons-material/History";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { toast } from "react-toastify";
 import style from "./dashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
+import Profile from "../profile/Profile";
 
 const drawerWidth = 240;
 
@@ -101,6 +102,7 @@ export default function Dashboard() {
   const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(false);
   const [showBookingDiv, setShowBookingDiv] = useState(true);
   const [showBookingHistory, setShowBookingHistory] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -176,6 +178,7 @@ export default function Dashboard() {
               onClick={() => {
                 setShowBookingDiv(true);
                 setShowBookingHistory(false);
+                setShowProfile(false);
               }}
             >
               <ListItemIcon>
@@ -187,6 +190,7 @@ export default function Dashboard() {
               onClick={() => {
                 setShowBookingDiv(false);
                 setShowBookingHistory(true);
+                setShowProfile(false);
               }}
             >
               <ListItemIcon>
@@ -194,9 +198,15 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Booking History" />
             </ListItemButton>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                setShowBookingDiv(false);
+                setShowBookingHistory(false);
+                setShowProfile(true);
+              }}
+            >
               <ListItemIcon>
-                <AccountBoxIcon />
+                <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItemButton>
@@ -239,10 +249,11 @@ export default function Dashboard() {
                 <Copyright sx={{ pt: 4 }} />
               </div>
             )}
-            {showBookingHistory && (
-              
-                <BookingHistory />
-             
+            {showBookingHistory && <BookingHistory />}
+            {showProfile && (
+              <div className={style.container}>
+                <Profile />
+              </div>
             )}
           </Container>
         </Box>
