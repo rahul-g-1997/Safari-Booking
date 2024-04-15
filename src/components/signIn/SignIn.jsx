@@ -118,7 +118,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
                   variant="body2"
                   sx={{ cursor: "pointer" }}
                 >
-                  {"Don't have an account? Sign Up"}
+                  {"Don't have an account? Register"}
                 </Link>
               </Grid>
               <Grid item>

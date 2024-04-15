@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [
   {
+    id: "123",
     firstName: "Rahul",
     lastName: "",
     email: "123",
@@ -10,7 +11,7 @@ const initialState = [
     confirmPassword: "123",
     dob: "",
     gender: "",
-    receiveEmails: false,
+    bookingHistory: [],
   },
 ];
 

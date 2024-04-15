@@ -55,6 +55,11 @@ export default function ForgotPassword({ toggleSignIn }) {
       }
 
       setMessage("Reset successful!");
+      setNewUsername("");
+      setConfirmPassword("");
+      setNewPassword("");
+      setEmail("");
+      setEnteredOtp("");
     } else {
       setMessage("Invalid OTP.");
     }
