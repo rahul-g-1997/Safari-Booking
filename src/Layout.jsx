@@ -12,9 +12,9 @@ import Logo from "./assets/tatr-logo.png";
 import { Outlet } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import bgimg from "./assets/backgroundimg.jpg";
+import bgimg from "./assets/bg_img.png";
 
-const AppBar = styled(MuiAppBar)(( ) => ({
+const AppBar = styled(MuiAppBar)(() => ({
   backgroundColor: "rgba(157, 178, 191, 0.49)",
   backdropFilter: "blur(21px) saturate(200%)",
   WebkitBackdropFilter: "blur(21px) saturate(200%)",
@@ -75,7 +75,6 @@ export default function Layout() {
               position: "relative",
               zIndex: 1,
               backgroundColor: "transparent",
-             
             }}
           >
             <ToastContainer theme="dark" />
