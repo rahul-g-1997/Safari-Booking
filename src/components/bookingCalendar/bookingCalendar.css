@@ -1,0 +1,22 @@
+.default-tile {
+    /* Default style for all tiles */
+}
+
+.booked-tile {
+    background-color: red !important;
+    color: rgb(255, 255, 255);
+    /* Apply booked date styling */
+}
+
+.holiday-tile {
+    background-color: purple !important;
+    /* Apply holiday date styling */
+    color: rgb(255, 255, 255);
+}
+
+
+.available-tile {
+    background-color: green;
+    /* Change background color for available dates */
+    color: rgb(255, 255, 255);
+}

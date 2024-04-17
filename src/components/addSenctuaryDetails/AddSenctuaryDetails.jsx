@@ -1,14 +1,11 @@
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import PropTypes from "prop-types";
 import Divider from "@mui/material/Divider";
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "./AddSenctuaryDetails.css";
+import { BookingCalendar } from "..";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -23,9 +20,7 @@ const SquareIcon = ({ backgroundColor }) => {
     ></div>
   );
 };
-SquareIcon.propTypes = {
-  backgroundColor: PropTypes.string.isRequired,
-};
+
 export default function SanctuaryDetails({
   setShowBooking,
   setShowAddSenctuaryDetails,
@@ -43,6 +38,15 @@ export default function SanctuaryDetails({
   const handlePlaceChange = (event) => {
     setSelectedPlace(event.target.value);
   };
+
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    // Handle the selected date here, such as storing it in state or sending it to the server
+    console.log("Selected Date:", date);
+  };
+
 
   return (
     <Box>
@@ -87,13 +91,9 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        <Grid item xs={12} md={2}>
-          <div className="smallDatePickerContainer">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker />
-            </LocalizationProvider>
-          </div>
-        </Grid>
+        {/* <Grid item xs={12} md={2}>
+          <BookingCalendar />
+        </Grid> */}
 
         <Grid item xs={12} md={1}>
           <Button fullWidth variant="contained">
@@ -101,6 +101,15 @@ export default function SanctuaryDetails({
           </Button>
         </Grid>
       </Grid>
+      <div>
+       
+        <BookingCalendar
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+        />
+
+        {selectedDate && <p>Selected Date: {selectedDate.toDateString()}</p>}
+      </div>
       <Grid
         container
         justifyContent={{ xs: "center", md: "flex-end" }}
@@ -138,9 +147,3 @@ export default function SanctuaryDetails({
     </Box>
   );
 }
-
-// Add PropTypes validation
-SanctuaryDetails.propTypes = {
-  setShowBooking: PropTypes.func.isRequired,
-  setShowAddSenctuaryDetails: PropTypes.func.isRequired,
-};

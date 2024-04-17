@@ -5,7 +5,7 @@ import { red } from "@mui/material/colors";
 const theme = createTheme({
   palette: {
     font: {
-      main: "#27374D",
+      main: "black",
     },
     primary: {
       main: "#27374D",
@@ -18,6 +18,13 @@ const theme = createTheme({
     },
     error: {
       main: red.A400,
+    },
+    transparent: {
+      backgroundColor: "rgba(157, 178, 191, 0.49)",
+      backdropFilter: "blur(21px) saturate(200%)",
+      WebkitBackdropFilter: "blur(21px) saturate(200%)",
+      borderRadius: "12px",
+      border: "1px solid rgba(255, 255, 255, 0.125)",
     },
   },
 });
