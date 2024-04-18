@@ -63,7 +63,6 @@ const AccordionSummary = styled((props) => (
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
   borderTop: "1px solid rgba(0, 0, 0, .125)",
-  
 }));
 
 export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
@@ -71,7 +70,7 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
   const [numberOfCameras, setNumberOfCameras] = useState("");
-  const entryFees=4000;
+  const entryFees = 4000;
   const [formData, setFormData] = useState([]);
   const [cameraFormData, setCameraFormData] = useState([]);
 
@@ -444,7 +443,23 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
             </Grid>
           </AccordionDetails>
         </Accordion>
-
+        <Accordion
+          expanded={expanded === "panel4"}
+          onChange={handleChange("panel4")}
+        >
+          <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+            <Typography>Camera details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableBody>{generateCameraDetailsRows()}</TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
         <Accordion
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
@@ -477,24 +492,6 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion
-          expanded={expanded === "panel4"}
-          onChange={handleChange("panel4")}
-        >
-          <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-            <Typography>Camera details</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid>
-              <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableBody>{generateCameraDetailsRows()}</TableBody>
                 </Table>
               </TableContainer>
             </Grid>

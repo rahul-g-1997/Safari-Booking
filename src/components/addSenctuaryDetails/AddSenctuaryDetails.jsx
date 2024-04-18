@@ -6,6 +6,7 @@ import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import "./AddSenctuaryDetails.css";
 import { BookingCalendar } from "..";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -28,6 +29,7 @@ export default function SanctuaryDetails({
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedPlace, setSelectedPlace] = useState("");
+  const [showCalender, setShowCalender] = useState(false);
 
   const handleVehicleChange = (event) => {
     setSelectedVehicle(event.target.value);
@@ -39,14 +41,13 @@ export default function SanctuaryDetails({
     setSelectedPlace(event.target.value);
   };
 
-  const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const handleDateSelect = (date) => {
     setSelectedDate(date);
     // Handle the selected date here, such as storing it in state or sending it to the server
     console.log("Selected Date:", date);
+    setShowCalender(!showCalender);
   };
-
 
   return (
     <Box>
@@ -91,9 +92,29 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        {/* <Grid item xs={12} md={2}>
-          <BookingCalendar />
-        </Grid> */}
+        <Grid xs={12} md={3}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CalendarMonthIcon
+              onClick={() => setShowCalender(!showCalender)}
+              style={{ cursor: "pointer" }}
+            />
+            <p>: {selectedDate.toDateString()}</p>
+          </div>
+          {showCalender && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <BookingCalendar
+                selectedDate={selectedDate}
+                onDateSelect={handleDateSelect}
+              />
+            </div>
+          )}
+        </Grid>
 
         <Grid item xs={12} md={1}>
           <Button fullWidth variant="contained">
@@ -101,15 +122,7 @@ export default function SanctuaryDetails({
           </Button>
         </Grid>
       </Grid>
-      <div>
-       
-        <BookingCalendar
-          selectedDate={selectedDate}
-          onDateSelect={handleDateSelect}
-        />
 
-        {selectedDate && <p>Selected Date: {selectedDate.toDateString()}</p>}
-      </div>
       <Grid
         container
         justifyContent={{ xs: "center", md: "flex-end" }}
