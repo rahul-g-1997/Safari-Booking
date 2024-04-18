@@ -92,7 +92,7 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        <Grid xs={12} md={3}>
+        <Grid item xs={12} md={3}>
           <div
             style={{
               display: "flex",
