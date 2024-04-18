@@ -385,7 +385,7 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
             <Grid>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
+                  <TableHead sx={{ backgroundColor: "white" }}>
                     <TableRow>
                       <TableCell>Tourist name</TableCell>
                       <TableCell>Gender</TableCell>
@@ -397,21 +397,10 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
                   </TableHead>
                   <TableBody>{generateTourismDetailsRows()}</TableBody>
                 </Table>
-              </TableContainer>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === "panel2"}
-          onChange={handleChange("panel2")}
-        >
-          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-            <Typography>children (Max 2 allowed )</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid>
-              <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead sx={{ backgroundColor: "white" }}>
+                    <Typography>children (Max 2 allowed )</Typography>
+                  </TableHead>
                   <TableBody>
                     <TableRow>
                       <TableCell>
@@ -455,6 +444,7 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
             </Grid>
           </AccordionDetails>
         </Accordion>
+
         <Accordion
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
