@@ -1,17 +1,18 @@
 .default-tile {
     /* Default style for all tiles */
+       
 }
 
 .booked-tile {
     background-color: red !important;
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255)!important;
     /* Apply booked date styling */
 }
 
 .holiday-tile {
     background-color: purple !important;
     /* Apply holiday date styling */
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255)!important;
 }
 
 
@@ -19,4 +20,5 @@
     background-color: green;
     /* Change background color for available dates */
     color: rgb(255, 255, 255);
+    margin: "10px";
 }
