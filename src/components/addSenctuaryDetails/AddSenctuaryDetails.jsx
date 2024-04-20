@@ -6,7 +6,9 @@ import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import "./AddSenctuaryDetails.css";
 import { BookingCalendar } from "..";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { DateField } from "@mui/x-date-pickers/DateField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -29,7 +31,7 @@ export default function SanctuaryDetails({
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedPlace, setSelectedPlace] = useState("");
-  const [showCalender, setShowCalender] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const handleVehicleChange = (event) => {
     setSelectedVehicle(event.target.value);
@@ -46,7 +48,11 @@ export default function SanctuaryDetails({
     setSelectedDate(date);
     // Handle the selected date here, such as storing it in state or sending it to the server
     console.log("Selected Date:", date);
-    setShowCalender(!showCalender);
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleCalendarToggle = () => {
+    setShowCalendar(!showCalendar);
   };
 
   return (
@@ -93,27 +99,34 @@ export default function SanctuaryDetails({
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CalendarMonthIcon
-              onClick={() => setShowCalender(!showCalender)}
-              style={{ cursor: "pointer" }}
-            />
-            <p>: {selectedDate.toDateString()}</p>
-          </div>
-          {showCalender && (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <BookingCalendar
-                selectedDate={selectedDate}
-                onDateSelect={handleDateSelect}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div style={{ position: "relative" }}>
+              <DateField
+                label="Select date"
+                onClick={handleCalendarToggle}
+                size="small"
               />
+              {showCalendar && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    zIndex: 1000,
+                    backgroundColor: "#fff",
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <BookingCalendar
+                    selectedDate={selectedDate}
+                    onDateSelect={handleDateSelect}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </LocalizationProvider>
         </Grid>
 
         <Grid item xs={12} md={1}>
