@@ -2,8 +2,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -17,13 +15,22 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
 import { useNavigate } from "react-router-dom";
-
-// Import toast here
+import {
+  loadCaptchaEnginge,
+  LoadCanvasTemplate,
+  validateCaptcha,
+} from "react-simple-captcha";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
+
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector((state) => state.user);
+
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []); // This effect runs only once after the initial render
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,7 +38,13 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     const enteredEmail = data.get("email");
     const enteredPassword = data.get("password");
 
+    if (!enteredEmail || !enteredPassword) {
+      toast.error("Email and password are required.");
+      return;
+    }
+
     const user = users.find((user) => user.email === enteredEmail);
+    const userCaptcha = data.get("user_captcha_input");
 
     if (!user) {
       toast.error("User does not exist. Please sign up.");
@@ -40,6 +53,13 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
 
     if (user.password !== enteredPassword) {
       toast.error("Invalid password.");
+      return;
+    }
+
+    if (validateCaptcha(userCaptcha) === true) {
+      loadCaptchaEnginge(6);
+    } else {
+      toast.error("Captcha Does Not Match");
       return;
     }
 
@@ -99,10 +119,22 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <LoadCanvasTemplate />
+              <TextField
+                style={{ width: "calc(100% - 160px)", margin: "0 8px" }}
+                placeholder="Enter Captcha Value"
+                id="user_captcha_input"
+                name="user_captcha_input"
+                variant="outlined"
+              />
+            </Box>
             <Button
               type="submit"
               fullWidth

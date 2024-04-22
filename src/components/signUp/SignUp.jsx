@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../rtk/reducer/userReducer";
 import { v4 as uuidv4 } from "uuid";
-
+import userRegister from "../../services/userRegister";
 export default function SignUp({ toggleSignIn }) {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user);
@@ -103,6 +103,7 @@ export default function SignUp({ toggleSignIn }) {
 
    dispatch(addUser(updatedFormData));
    console.log(updatedFormData);
+   userRegister(formData);
    toast.success("Registration successful.");
    toggleSignIn();
 
