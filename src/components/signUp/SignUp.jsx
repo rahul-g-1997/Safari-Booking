@@ -13,12 +13,12 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../../rtk/reducer/userReducer";
 import user from "../../services/user";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 export default function SignUp({ toggleSignIn }) {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -42,7 +42,6 @@ export default function SignUp({ toggleSignIn }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Generate a unique user ID
 
     // Check if any of the required fields are empty
     const requiredFields = [
@@ -84,17 +83,6 @@ export default function SignUp({ toggleSignIn }) {
       return;
     }
 
-    // Check if the user already exists
-    const userExists = users.some((user) => user.email === formData.email);
-
-    if (userExists) {
-      toast.info("User already exists. Please sign in.");
-      toggleSignIn();
-      return;
-    }
-
-    // Update the formData with the generated userID
-    // Prepare the data to send
     const sendData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -105,10 +93,8 @@ export default function SignUp({ toggleSignIn }) {
       gender: formData.gender,
     };
 
-    dispatch(addUser(sendData));
     console.log(JSON.stringify(sendData));
     user.createAccount(sendData);
-    toast.success("Registration successful.");
     toggleSignIn();
 
     // Reset form data
@@ -123,6 +109,12 @@ export default function SignUp({ toggleSignIn }) {
       gender: "",
       receiveEmails: false,
     });
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
@@ -260,13 +252,27 @@ export default function SignUp({ toggleSignIn }) {
                   fullWidth
                   name="confirmPassword"
                   label="Confirm Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="confirmPassword"
                   autoComplete="new-password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleTogglePasswordVisibility}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
+              ;
             </Grid>
             <Button
               type="submit"

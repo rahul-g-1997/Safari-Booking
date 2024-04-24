@@ -12,7 +12,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import "./SignIn.css";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,7 +26,7 @@ import { useEffect } from "react";
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const users = useSelector((state) => state.user);
+  // const users = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -43,18 +43,18 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       return;
     }
 
-    const user = users.find((user) => user.email === enteredEmail);
+    // const user = users.find((user) => user.email === enteredEmail);
     const userCaptcha = data.get("user_captcha_input");
 
-    if (!user) {
-      toast.error("User does not exist. Please sign up.");
-      return;
-    }
+    // if (!user) {
+    //   toast.error("User does not exist. Please sign up.");
+    //   return;
+    // }
 
-    if (user.password !== enteredPassword) {
-      toast.error("Invalid password.");
-      return;
-    }
+    // if (user.password !== enteredPassword) {
+    //   toast.error("Invalid password.");
+    //   return;
+    // }
 
     if (validateCaptcha(userCaptcha) === true) {
       loadCaptchaEnginge(6);
@@ -65,7 +65,6 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
 
     dispatch(toggleLogin());
     navigate("/dashboard");
-    toast.success("Login successful.");
   };
 
   return (

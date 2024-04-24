@@ -13,7 +13,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { resetPassword, resetUsername } from "../../rtk/reducer/userReducer";
+// import { resetPassword, resetUsername } from "../../rtk/reducer/userReducer";
 import { setOtp } from "../../rtk/reducer/otpReducer";
 
 export default function ForgotPassword({ toggleSignIn }) {
@@ -42,27 +42,27 @@ export default function ForgotPassword({ toggleSignIn }) {
     event.preventDefault();
 
     // Check if entered OTP matches the OTP stored in Redux state
-    if (enteredOtp === otp.otp) {
-      if (option === "password") {
-        if (newPassword !== confirmPassword) {
-          setMessage("Passwords do not match.");
-          return;
-        }
+    // if (enteredOtp === otp.otp) {
+    //   if (option === "password") {
+    //     if (newPassword !== confirmPassword) {
+    //       setMessage("Passwords do not match.");
+    //       return;
+    //     }
 
-        dispatch(resetPassword({ email, newPassword }));
-      } else if (option === "username") {
-        dispatch(resetUsername({ email, newUsername }));
-      }
+    //     dispatch(resetPassword({ email, newPassword }));
+    //   } else if (option === "username") {
+    //     dispatch(resetUsername({ email, newUsername }));
+    //   }
 
-      setMessage("Reset successful!");
-      setNewUsername("");
-      setConfirmPassword("");
-      setNewPassword("");
-      setEmail("");
-      setEnteredOtp("");
-    } else {
-      setMessage("Invalid OTP.");
-    }
+    //   setMessage("Reset successful!");
+    //   setNewUsername("");
+    //   setConfirmPassword("");
+    //   setNewPassword("");
+    //   setEmail("");
+    //   setEnteredOtp("");
+    // } else {
+    //   setMessage("Invalid OTP.");
+    // }
   };
 
   return (

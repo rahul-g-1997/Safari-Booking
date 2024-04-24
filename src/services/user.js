@@ -1,5 +1,6 @@
 import axios from "axios";
 import conf from "../conf/conf";
+import { toast } from "react-toastify";
 
 const API_URL = conf.backend_url; // API base URL
 
@@ -26,8 +27,10 @@ const authService = {
       const response = await axios.post(`${API_URL}/login`, credentials); // Send login request
       const { token } = response.data; // Extract token from response
       localStorage.setItem("token", token); // Store token in local storage
+      toast.success("Login successful.");
       return token; // Return token
     } catch (error) {
+      toast.error("Invalid email or password");
       throw error.response.data; // Throw error response from the backend
     }
   },
@@ -38,8 +41,10 @@ const authService = {
       const response = await axios.post(`${API_URL}/register`, userData); // Send create account request
       const token = response.data.token; // Extract token from response
       localStorage.setItem("token", token); // Store token in local storage
+      toast.success("Registration successful.");
       return token; // Return token
     } catch (error) {
+      toast.error(error.response.data.error);
       throw error.response.data.error; // Throw error response from the backend
     }
   },
