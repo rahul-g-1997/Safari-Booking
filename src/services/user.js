@@ -35,12 +35,12 @@ const authService = {
   // Create a new user account
   createAccount: async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/create-account`, userData); // Send create account request
-      const { token } = response.data; // Extract token from response
+      const response = await axios.post(`${API_URL}/register`, userData); // Send create account request
+      const token = response.data.token; // Extract token from response
       localStorage.setItem("token", token); // Store token in local storage
       return token; // Return token
     } catch (error) {
-      throw error.response.data; // Throw error response from the backend
+      throw error.response.data.error; // Throw error response from the backend
     }
   },
 

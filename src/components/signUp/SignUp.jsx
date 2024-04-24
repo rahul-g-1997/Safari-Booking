@@ -15,7 +15,6 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../rtk/reducer/userReducer";
-import { v4 as uuidv4 } from "uuid";
 import user from "../../services/user";
 export default function SignUp({ toggleSignIn }) {
   const dispatch = useDispatch();
@@ -41,85 +40,90 @@ export default function SignUp({ toggleSignIn }) {
     }));
   };
 
- const handleSubmit = (event) => {
-   event.preventDefault();
-   // Generate a unique user ID
-   const userID = uuidv4();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Generate a unique user ID
 
-   // Check if any of the required fields are empty
-   const requiredFields = [
-     "firstName",
-     "lastName",
-     "email",
-     "mobileNumber",
-     "dob",
-     "gender",
-     "password",
-     "confirmPassword",
-   ];
-   const emptyFields = requiredFields.filter((field) => !formData[field]);
+    // Check if any of the required fields are empty
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "mobileNumber",
+      "dob",
+      "gender",
+      "password",
+      "confirmPassword",
+    ];
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
 
-   if (emptyFields.length > 0) {
-     toast.error("All fields are required.");
-     return;
-   }
+    if (emptyFields.length > 0) {
+      toast.error("All fields are required.");
+      return;
+    }
 
-   // Check if passwords match
-   const passwordsMatch = formData.password === formData.confirmPassword;
+    // Check if passwords match
+    const passwordsMatch = formData.password === formData.confirmPassword;
 
-   if (!passwordsMatch) {
-     toast.error("Passwords do not match.");
-     return;
-   }
+    if (!passwordsMatch) {
+      toast.error("Passwords do not match.");
+      return;
+    }
 
-   // Check age
-   const dob = new Date(formData.dob);
-   const today = new Date();
-   let age = today.getFullYear() - dob.getFullYear();
-   const monthDiff = today.getMonth() - dob.getMonth();
-   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-     age--;
-   }
+    // Check age
+    const dob = new Date(formData.dob);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
 
-   if (age < 18) {
-     toast.error("You must be at least 18 years old to sign up.");
-     return;
-   }
+    if (age < 18) {
+      toast.error("You must be at least 18 years old to sign up.");
+      return;
+    }
 
-   // Check if the user already exists
-   const userExists = users.some((user) => user.email === formData.email);
+    // Check if the user already exists
+    const userExists = users.some((user) => user.email === formData.email);
 
-   if (userExists) {
-     toast.info("User already exists. Please sign in.");
-     toggleSignIn();
-     return;
-   }
+    if (userExists) {
+      toast.info("User already exists. Please sign in.");
+      toggleSignIn();
+      return;
+    }
 
-   // Update the formData with the generated userID
-   const updatedFormData = {
-     ...formData,
-     userID: userID,
-   };
+    // Update the formData with the generated userID
+    // Prepare the data to send
+    const sendData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      mobileNumber: formData.mobileNumber,
+      password: formData.password,
+      dob: formData.dob,
+      gender: formData.gender,
+    };
 
-   dispatch(addUser(updatedFormData));
-   console.log(updatedFormData);
-   user.createAccount(formData);
-   toast.success("Registration successful.");
-   toggleSignIn();
+    dispatch(addUser(sendData));
+    console.log(JSON.stringify(sendData));
+    user.createAccount(sendData);
+    toast.success("Registration successful.");
+    toggleSignIn();
 
-   // Reset form data
-   setFormData({
-     firstName: "",
-     lastName: "",
-     email: "",
-     mobileNumber: "",
-     password: "",
-     confirmPassword: "",
-     dob: "",
-     gender: "",
-     receiveEmails: false,
-   });
- };
+    // Reset form data
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobileNumber: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      gender: "",
+      receiveEmails: false,
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
