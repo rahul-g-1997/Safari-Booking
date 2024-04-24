@@ -6,11 +6,13 @@ import "./bookingCalendar.css"; // Import your custom CSS file for BookingCalend
 const BookingCalendar = ({ onDateSelect }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const bookedDates = [
-    new Date(2024, 3, 20),
-    new Date(2024, 3, 21),
-    new Date(2024, 3, 22),
-    
+   
+    new Date(2024, 3, 25),
+    new Date(2024, 3, 26),
+    new Date(2024, 3, 27),
+    new Date(2024, 3, 29),
   ];
+
   const holidays = [new Date(2024, 3, 27), new Date(2024, 3, 30)]; // Define your holiday dates here
 
   const isBooked = (date) => {
