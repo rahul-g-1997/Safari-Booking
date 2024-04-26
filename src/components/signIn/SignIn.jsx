@@ -13,7 +13,7 @@ import theme from "../../theme";
 import "./SignIn.css";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { toggleLogin } from "../../rtk/reducer/loginReducer";
+import { login } from "../../rtk/reducer/userReducer";
 import { useNavigate } from "react-router-dom";
 import {
   loadCaptchaEnginge,
@@ -21,51 +21,52 @@ import {
   validateCaptcha,
 } from "react-simple-captcha";
 import { toast } from "react-toastify";
+import user from "../../services/user";
 import { useEffect } from "react";
 
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const users = useSelector((state) => state.user);
 
-  useEffect(() => {
-    loadCaptchaEnginge(6);
-  }, []); // This effect runs only once after the initial render
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const enteredEmail = data.get("email");
     const enteredPassword = data.get("password");
+    const enteredCaptcha = data.get("user_captcha_input");
 
     if (!enteredEmail || !enteredPassword) {
       toast.error("Email and password are required.");
       return;
     }
 
-    // const user = users.find((user) => user.email === enteredEmail);
-    const userCaptcha = data.get("user_captcha_input");
-
-    // if (!user) {
-    //   toast.error("User does not exist. Please sign up.");
-    //   return;
-    // }
-
-    // if (user.password !== enteredPassword) {
-    //   toast.error("Invalid password.");
-    //   return;
-    // }
-
-    if (validateCaptcha(userCaptcha) === true) {
-      loadCaptchaEnginge(6);
-    } else {
-      toast.error("Captcha Does Not Match");
+    // Validate captcha
+    if (!validateCaptcha(enteredCaptcha)) {
+      toast.error("Please Enter the captcha.");
       return;
     }
 
-    dispatch(toggleLogin());
-    navigate("/dashboard");
+    try {
+      // Call the existing login service with credentials
+      const token = await user.login({
+        email: enteredEmail,
+        password: enteredPassword,
+      });
+      console.log(token);
+      // Dispatch login action with user data
+      dispatch(login({ userData: token }));
+      toast.success("Login successful.");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Invalid email or password.");
+    }
   };
+
+  useEffect(() => {
+    // Load captcha engine on component mount
+    loadCaptchaEnginge(6);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

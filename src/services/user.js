@@ -27,10 +27,8 @@ const authService = {
       const response = await axios.post(`${API_URL}/login`, credentials); // Send login request
       const { token } = response.data; // Extract token from response
       localStorage.setItem("token", token); // Store token in local storage
-      toast.success("Login successful.");
       return token; // Return token
     } catch (error) {
-      toast.error("Invalid email or password");
       throw error.response.data; // Throw error response from the backend
     }
   },
