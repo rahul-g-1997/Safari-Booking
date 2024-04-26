@@ -9,6 +9,8 @@ import { BookingCalendar } from "..";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SingleInputDateRangePicker from "../dateRangeSelect/DateRangePicker";
+import DateRangeSelect from "../dateRangeSelect/DateRangePicker";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -31,6 +33,7 @@ export default function SanctuaryDetails({
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedPlace, setSelectedPlace] = useState("");
+  const [selectGate, setSelectedGate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
 
   const handleVehicleChange = (event) => {
@@ -41,6 +44,10 @@ export default function SanctuaryDetails({
   };
   const handlePlaceChange = (event) => {
     setSelectedPlace(event.target.value);
+  };
+
+  const handleGateChange = (event) => {
+    setSelectedGate(event.target.value);
   };
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -71,7 +78,7 @@ export default function SanctuaryDetails({
             <MenuItem value={1}>Tadoba Andheri Tigrt Reserv (Core)</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={2}>
           <TextField
             fullWidth
             label="Zone"
@@ -87,6 +94,19 @@ export default function SanctuaryDetails({
         <Grid item xs={12} md={2}>
           <TextField
             fullWidth
+            label="Gate"
+            select
+            size="small"
+            variant="outlined"
+            value={selectGate}
+            onChange={handleGateChange}
+          >
+            <MenuItem value={1}>Navegaon Gate (Core)</MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <TextField
+            fullWidth
             label="Select vehicle"
             select
             size="small"
@@ -94,7 +114,8 @@ export default function SanctuaryDetails({
             value={selectedVehicle}
             onChange={handleVehicleChange}
           >
-            <MenuItem value={1}>Gypsy</MenuItem>
+            <MenuItem value={"G"}>Gypsy</MenuItem>
+            <MenuItem value={"P"}>Private</MenuItem>
           </TextField>
         </Grid>
 
@@ -119,10 +140,11 @@ export default function SanctuaryDetails({
                     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <BookingCalendar
+                  {/* <BookingCalendar
                     selectedDate={selectedDate}
                     onDateSelect={handleDateSelect}
-                  />
+                  /> */}
+                  <DateRangeSelect />
                 </div>
               )}
             </div>
