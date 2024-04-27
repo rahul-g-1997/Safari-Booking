@@ -11,6 +11,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import SingleInputDateRangePicker from "../dateRangeSelect/DateRangePicker";
 import DateRangeSelect from "../dateRangeSelect/DateRangePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -119,7 +121,7 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        {/* <Grid item xs={12} md={3}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div style={{ position: "relative" }}>
               <DateField
@@ -140,13 +142,42 @@ export default function SanctuaryDetails({
                     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                   }}
                 >
-                  {/* <BookingCalendar
+                  <BookingCalendar
                     selectedDate={selectedDate}
                     onDateSelect={handleDateSelect}
-                  /> */}
-                  <DateRangeSelect />
+                  />
                 </div>
               )}
+            </div>
+          </LocalizationProvider>
+        </Grid> */}
+
+        <Grid item xs={12} md={3} mt={-1}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div style={{ position: "relative" }}>
+              <DemoContainer components={["SingleInputDateRangeField"]}>
+                <SingleInputDateRangeField
+                  label="Form - To"
+                  size="small"
+                  onClick={handleCalendarToggle}
+                />
+                {showCalendar && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: 0,
+                      zIndex: 1000,
+                      backgroundColor: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <DateRangeSelect />
+                  </div>
+                )}
+              </DemoContainer>
             </div>
           </LocalizationProvider>
         </Grid>
