@@ -22,11 +22,12 @@ import {
 } from "react-simple-captcha";
 import { toast } from "react-toastify";
 import user from "../../services/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [captchaValue, setCaptchaValue] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,8 +42,14 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     }
 
     // Validate captcha
+    if (!enteredCaptcha) {
+      toast.error("Please enter the captcha.");
+      return;
+    }
+
     if (!validateCaptcha(enteredCaptcha)) {
-      toast.error("Please Enter the captcha.");
+      toast.error("Invalid captcha. Please enter the correct value.");
+      setCaptchaValue("");
       return;
     }
 
@@ -52,11 +59,10 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
         email: enteredEmail,
         password: enteredPassword,
       });
-      console.log(token);
       // Dispatch login action with user data
-      dispatch(login({ userData: token }));
-      toast.success("Login successful.");
+      dispatch(login({ token, userData: "rahul" }));
       navigate("/dashboard");
+      toast.success("Login successful.");
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid email or password.");
@@ -133,6 +139,8 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
                 id="user_captcha_input"
                 name="user_captcha_input"
                 variant="outlined"
+                value={captchaValue}
+                onChange={(e) => setCaptchaValue(e.target.value)}
               />
             </Box>
             <Button

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   styled,
@@ -22,8 +22,8 @@ import {
   Menu,
   Tooltip,
 } from "@mui/material";
-import { toggleLogin } from "../../rtk/reducer/loginReducer";
-import { login } from "../../rtk/reducer/userReducer";
+import { logout } from "../../rtk/reducer/userReducer";
+
 import {
   Copyright,
   Booking,
@@ -41,6 +41,7 @@ import style from "./dashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
 import Profile from "../profile/Profile";
+import user from "../../services/user";
 
 const drawerWidth = 240;
 
@@ -101,7 +102,6 @@ const Drawer = styled(MuiDrawer, {
 export default function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLogin = useSelector((state) => state.login.isLogin);
   const [showAddSenctuaryDetails, setShowAddSenctuaryDetails] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
   const [showSenctuaryDetails, setShowSenctuaryDetails] = useState(false);
@@ -114,7 +114,9 @@ export default function Dashboard() {
     setOpen(!open);
   };
   const logOut = () => {
-    dispatch(toggleLogin());
+    user.logout();
+    dispatch(logout());
+    navigate("/");
     toast.success("Logout successfully");
   };
 
@@ -127,10 +129,10 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (!isLogin) {
-      navigate("/");
-    }
-  }, [isLogin, navigate]);
+    // if (!isLogin) {
+    //   navigate("/");
+    // }
+  }, [ navigate]);
 
   return (
     <ThemeProvider theme={theme}>
