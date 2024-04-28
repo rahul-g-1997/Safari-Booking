@@ -48,7 +48,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     }
 
     if (!validateCaptcha(enteredCaptcha)) {
-      toast.error("Invalid captcha. Please enter the correct value.");
+      toast.error("Captcha Does Not Match");
       setCaptchaValue("");
       return;
     }
