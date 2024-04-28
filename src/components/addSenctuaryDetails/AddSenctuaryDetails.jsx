@@ -13,6 +13,7 @@ import SingleInputDateRangePicker from "../dateRangeSelect/DateRangePicker";
 import DateRangeSelect from "../dateRangeSelect/DateRangePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
+import GateAvailableTable from "../gateAvailableTable/GateAvailableTable";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -37,6 +38,11 @@ export default function SanctuaryDetails({
   const [selectedPlace, setSelectedPlace] = useState("");
   const [selectGate, setSelectedGate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showGateTable, setShowGateTable] = useState(false);
+
+  const handleShowGateTable = () => {
+    setShowGateTable(true);
+  };
 
   const handleVehicleChange = (event) => {
     setSelectedVehicle(event.target.value);
@@ -183,7 +189,11 @@ export default function SanctuaryDetails({
         </Grid>
 
         <Grid item xs={12} md={1}>
-          <Button fullWidth variant="contained">
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => handleShowGateTable()}
+          >
             Search
           </Button>
         </Grid>
@@ -209,20 +219,15 @@ export default function SanctuaryDetails({
         <Grid item>Holiday</Grid>
       </Grid>
       <Divider />
-
-      <Grid container justifyContent="flex-end" mt={3}>
-        <Grid item xs={12} md={2}>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => (
-              setShowBooking(true), setShowAddSenctuaryDetails(false)
-            )}
-          >
-            Conform Details
-          </Button>
-        </Grid>
+      <Grid m={2}>
+        {showGateTable && (
+          <GateAvailableTable
+            setShowBooking={setShowBooking}
+            setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
+          />
+        )}
       </Grid>
+      <Divider />
     </Box>
   );
 }
