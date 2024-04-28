@@ -66,7 +66,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
-  const [expanded, setExpanded] = React.useState("panel1");
+  const [expanded, setExpanded] = React.useState("");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
   const [numberOfCameras, setNumberOfCameras] = useState("");

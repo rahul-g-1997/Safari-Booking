@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import {  useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   styled,
@@ -114,9 +114,9 @@ export default function Dashboard() {
     setOpen(!open);
   };
   const logOut = () => {
+    navigate("/");
     user.logout();
     dispatch(logout());
-    navigate("/");
     toast.success("Logout successfully");
   };
 
@@ -127,12 +127,6 @@ export default function Dashboard() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  useEffect(() => {
-    // if (!isLogin) {
-    //   navigate("/");
-    // }
-  }, [ navigate]);
 
   return (
     <ThemeProvider theme={theme}>

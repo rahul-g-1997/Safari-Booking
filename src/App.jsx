@@ -25,7 +25,6 @@ const AppBar = styled(MuiAppBar)(() => ({
 export default function App() {
   const isLogin = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
-
   console.log(isLogin);
   console.log(localStorage.getItem("token"));
   console.log(userData);

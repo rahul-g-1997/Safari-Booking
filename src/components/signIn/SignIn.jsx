@@ -60,9 +60,17 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
         password: enteredPassword,
       });
       // Dispatch login action with user data
-      dispatch(login({ token, userData: "rahul" }));
-      navigate("/dashboard");
-      toast.success("Login successful.");
+      user
+        .getCurrentUser()
+        .then((userData) => {
+          dispatch(login({ token, userData }));
+          navigate("/dashboard");
+          toast.success("Login successful.");
+          return;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid email or password.");
