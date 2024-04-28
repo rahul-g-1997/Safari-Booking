@@ -1,66 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [
-  {
-    id: "123",
-    type: "user",
-    firstName: "Rahul",
-    lastName: "",
-    email: "123",
-    mobileNumber: "",
-    password: "123",
-    confirmPassword: "123",
-    dob: "",
-    gender: "",
-    bookingHistory: [],
-  },
-  {
-    id: "admin",
-    type: "admin",
-    firstName: "admin",
-    lastName: "",
-    email: "admin",
-    mobileNumber: "9637728916",
-    password: "admin",
-    confirmPassword: "admin",
-    dob: "",
-    gender: "",
-    bookingHistory: [],
-  },
-];
+// Define initial state for the auth slice
+const initialState = {
+  status: false, // Indicates whether the user is logged in or not
+  userData: null, // Holds user data when logged in
+};
 
-const userSlice = createSlice({
-  name: "user",
-  initialState,
+// Create auth slice using createSlice from Redux Toolkit
+const authSlice = createSlice({
+  name: "auth", // Slice name
+  initialState, // Initial state
   reducers: {
-    addUser: (state, action) => {
-      state.push(action.payload);
+    // Reducer function for login action
+    login: (state, action) => {
+      state.status = true; // Set status to true indicating user is logged in
+      state.userData = action.payload.userData; // Set user data from payload
     },
-    updateUser: (state, action) => {
-      const { id, newData } = action.payload;
-      const existingUserIndex = state.findIndex((user) => user.id === id);
-      if (existingUserIndex !== -1) {
-        state[existingUserIndex] = { ...state[existingUserIndex], ...newData };
-      }
-    },
-    resetPassword: (state, action) => {
-      const { email, newPassword } = action.payload;
-      const user = state.find((user) => user.email === email);
-      if (user) {
-        user.password = newPassword;
-      }
-    },
-    resetUsername: (state, action) => {
-      const { email, newUsername } = action.payload;
-      const user = state.find((user) => user.email === email);
-      if (user) {
-        user.username = newUsername;
-      }
+    // Reducer function for logout action
+    logout: (state) => {
+      state.status = false; // Set status to false indicating user is logged out
+      state.userData = null; // Reset user data
     },
   },
 });
 
-export const { addUser, updateUser, resetPassword, resetUsername } =
-  userSlice.actions;
+// Export login and logout actions
+export const { login, logout } = authSlice.actions;
 
-export default userSlice.reducer;
+// Export auth reducer
+export default authSlice.reducer;

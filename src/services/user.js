@@ -1,5 +1,6 @@
 import axios from "axios";
 import conf from "../conf/conf";
+import { toast } from "react-toastify";
 
 const API_URL = conf.backend_url; // API base URL
 
@@ -35,12 +36,14 @@ const authService = {
   // Create a new user account
   createAccount: async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/create-account`, userData); // Send create account request
-      const { token } = response.data; // Extract token from response
+      const response = await axios.post(`${API_URL}/register`, userData); // Send create account request
+      const token = response.data.token; // Extract token from response
       localStorage.setItem("token", token); // Store token in local storage
+      toast.success("Registration successful.");
       return token; // Return token
     } catch (error) {
-      throw error.response.data; // Throw error response from the backend
+      toast.error(error.response.data.error);
+      throw error.response.data.error; // Throw error response from the backend
     }
   },
 

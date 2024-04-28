@@ -23,6 +23,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { toggleLogin } from "../../rtk/reducer/loginReducer";
+import { login } from "../../rtk/reducer/userReducer";
 import {
   Copyright,
   Booking,
