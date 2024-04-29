@@ -36,11 +36,12 @@ const authService = {
   // Create a new user account
   createAccount: async (userData) => {
     try {
-      const response = await axios.post(`${API_URL}/register`, userData); // Send create account request
-      const token = response.data.token; // Extract token from response
-      localStorage.setItem("token", token); // Store token in local storage
+      //const response = await axios.post(`${API_URL}/register`, userData); // Send create account request expres
+      const response = await axios.post(API_URL, userData); // Send create account request aws
+      // const token = response.data.token; // Extract token from response
+      // localStorage.setItem("token", token); // Store token in local storage
       toast.success("Registration successful.");
-      return token; // Return token
+      return response; // Return token
     } catch (error) {
       toast.error(error.response.data.error);
       throw error.response.data.error; // Throw error response from the backend

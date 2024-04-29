@@ -19,7 +19,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 export default function SignUp({ toggleSignIn }) {
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -84,13 +83,15 @@ export default function SignUp({ toggleSignIn }) {
     }
 
     const sendData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      mobileNumber: formData.mobileNumber,
-      password: formData.password,
+      act: "register",
+      "usr.fnm": formData.firstName,
+      "usr.lnm": formData.lastName,
+      "usr.eml": formData.email,
+      "usr.cntc": formData.mobileNumber,
       dob: formData.dob,
-      gender: formData.gender,
+      gender: formData.gender.toUpperCase(), // Assuming the backend requires uppercase gender
+      dtls: "{}", // Not sure what this field represents, leaving it as an empty object
+      pswd: formData.password,
     };
 
     console.log(JSON.stringify(sendData));
