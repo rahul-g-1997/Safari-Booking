@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   styled,
@@ -110,14 +110,24 @@ export default function Dashboard() {
   const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+
+  const isLogin = useSelector((state) => state.auth.status);
+
   const logOut = () => {
-    navigate("/");
     user.logout();
     dispatch(logout());
     toast.success("Logout successfully");
+  };
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/");
+      user.logout();
+    }
+  }, [isLogin, navigate]);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleOpenUserMenu = (event) => {
@@ -127,7 +137,6 @@ export default function Dashboard() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
