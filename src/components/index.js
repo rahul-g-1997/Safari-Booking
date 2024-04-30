@@ -9,3 +9,4 @@ export { default as AddSenctuaryDetails } from "./addSenctuaryDetails/AddSenctua
 export { default as SenctuaryDetails } from "./senctuaryDetailsDialog/SenctuaryDetails";
 export { default as BookingHistory } from "./bookingHistory/BookingHistory";
 export { default as BookingCalendar } from "./bookingCalendar/BookingCalendar";
+export { default as CircularLoader } from "./circularLoader/CircularLoader";

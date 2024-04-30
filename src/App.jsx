@@ -13,6 +13,7 @@ import { Outlet } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import bgimg from "./assets/bg_img.png";
+import { CircularLoader } from "./components";
 
 const AppBar = styled(MuiAppBar)(() => ({
   backgroundColor: "rgba(157, 178, 191, 0.49)",
@@ -25,10 +26,11 @@ const AppBar = styled(MuiAppBar)(() => ({
 export default function App() {
   const isLogin = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
+  const isLoading = useSelector((state) => state.loader.isLoading);
+
   console.log(isLogin);
   console.log(localStorage.getItem("token"));
   console.log(userData);
-  
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,25 +57,44 @@ export default function App() {
               backgroundPosition: "center",
             }}
           />
-          {!isLogin && (
-            <AppBar position="static">
-              <Toolbar
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  pr: "24px",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  {/* Replace Typography with img tag for logo */}
-                  <img
-                    src={Logo}
-                    alt="Logo"
-                    style={{ maxWidth: "100px", height: "auto" }}
-                  />
-                </div>
-              </Toolbar>
-            </AppBar>
+          {isLoading ? ( // Show loader if isLoading is true
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent background
+                zIndex: 9999, // Ensure the loader is on top of other content
+              }}
+            >
+              <CircularLoader color="secondary" />
+            </Box>
+          ) : (
+            !isLogin && (
+              <AppBar position="static">
+                <Toolbar
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    pr: "24px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {/* Replace Typography with img tag for logo */}
+                    <img
+                      src={Logo}
+                      alt="Logo"
+                      style={{ maxWidth: "100px", height: "auto" }}
+                    />
+                  </div>
+                </Toolbar>
+              </AppBar>
+            )
           )}
           <Box
             sx={{
