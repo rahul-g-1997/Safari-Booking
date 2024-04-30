@@ -36,18 +36,18 @@ const authService = {
   // Create a new user account
   createAccount: async (userData) => {
     try {
-      //const response = await axios.post(`${API_URL}/register`, userData); // Send create account request expres
-      const response = await axios.post(API_URL, userData); // Send create account request aws
-      // const token = response.data.token; // Extract token from response
-      // localStorage.setItem("token", token); // Store token in local storage
+      const response = await axios.post(`${API_URL}/register`, userData);
+      console.log("Response:", response); // Log the response for debugging
       toast.success("Registration successful.");
-      return response; // Return token
+
+      return response; // Return response data
     } catch (error) {
-      toast.error(error.response.data.error);
-      throw error.response.data.error; // Throw error response from the backend
+      console.error("Error:", error); // Log the error for debugging
+      toast.error(error.response);
+      throw error.response;
     }
   },
-
+  
   // Get current user data
   getCurrentUser: async () => {
     try {
