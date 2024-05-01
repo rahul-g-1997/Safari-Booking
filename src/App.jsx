@@ -74,27 +74,26 @@ export default function App() {
             >
               <CircularLoader color="secondary" />
             </Box>
-          ) : (
-            !isLogin && (
-              <AppBar position="static">
-                <Toolbar
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    pr: "24px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {/* Replace Typography with img tag for logo */}
-                    <img
-                      src={Logo}
-                      alt="Logo"
-                      style={{ maxWidth: "100px", height: "auto" }}
-                    />
-                  </div>
-                </Toolbar>
-              </AppBar>
-            )
+          ) : null}
+          {!isLogin && (
+            <AppBar position="static">
+              <Toolbar
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pr: "24px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  {/* Replace Typography with img tag for logo */}
+                  <img
+                    src={Logo}
+                    alt="Logo"
+                    style={{ maxWidth: "100px", height: "auto" }}
+                  />
+                </div>
+              </Toolbar>
+            </AppBar>
           )}
           <Box
             sx={{

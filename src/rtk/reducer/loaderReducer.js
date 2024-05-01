@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Define initial state
 const initialState = {
-  isLoading: false,
+  isLoading: true,
 };
 
 // Create loader slice
