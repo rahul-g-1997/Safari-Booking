@@ -55,22 +55,22 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
 
     try {
       // Call the existing login service with credentials
-      const token = await user.login({
-        email: enteredEmail,
-        password: enteredPassword,
+      const response = await user.login({
+        act: "login",
+        "usr.login": enteredEmail,
+        "usr.pwd": enteredPassword,
+        app: "tabk",
       });
-      // Dispatch login action with user data
-      user
-        .getCurrentUser()
-        .then((userData) => {
-          dispatch(login({ token, userData }));
-          navigate("/dashboard");
-          toast.success("Login successful.");
-          return;
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+
+      // Check if user data is available in the response
+      if (response.data && response.data.Record) {
+        const { token, data } = response.data;
+        dispatch(login({ token, data }));
+        navigate("/dashboard");
+        toast.success("Login successful.");
+      } else {
+        throw new Error("User data not available");
+      }
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid email or password.");

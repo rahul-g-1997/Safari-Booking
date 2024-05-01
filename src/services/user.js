@@ -25,45 +25,33 @@ const authService = {
   login: async (credentials) => {
     try {
       const response = await axios.post(`${API_URL}/login`, credentials); // Send login request
-      const { token } = response.data; // Extract token from response
-      localStorage.setItem("token", token); // Store token in local storage
-      return token; // Return token
+      const { Result, token } = response.data; // Extract result and token from response
+      if (Result === "OK") {
+        localStorage.setItem("token", token); // Store token in local storage
+        return response; // Return token if result is "OK"
+      } else {
+        throw new Error(response.data.Msg || "Unknown error occurred"); // Throw error with message from response
+      }
     } catch (error) {
-      throw error.response.data; // Throw error response from the backend
+      throw error.response.data.Msg || "Unknown error occurred"; // Throw error response message from the backend
     }
   },
-
+  
   // Create a new user account
   createAccount: async (userData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, userData);
       console.log("Response:", response); // Log the response for debugging
-      toast.success("Registration successful.");
 
-      return response; // Return response data
+      if (response.data.Result == "OK") {
+        toast.success("Registration successful.");
+        return response; // Return response data
+      } else {
+        toast.error(response.data.Msg);
+        throw new Error(response.data.Msg);
+      }
     } catch (error) {
-      console.error("Error:", error); // Log the error for debugging
-      toast.error(error.response);
-      throw error.response;
-    }
-  },
-  
-  // Get current user data
-  getCurrentUser: async () => {
-    try {
-      const token = localStorage.getItem("token"); // Get token from local storage
-      if (!token) throw new Error("No token available"); // Throw error if no token is available
-
-      // Send request to get current user data
-      const response = await axios.get(`${API_URL}/current-user`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Attach token to request headers
-        },
-      });
-
-      return response.data; // Return current user data
-    } catch (error) {
-      return "no user available"; // Return message indicating no user available
+      console.error(error); // Log the error for debugging
     }
   },
 };
