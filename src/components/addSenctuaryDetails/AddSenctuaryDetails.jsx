@@ -127,38 +127,40 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        {/* <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} mt={-1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div style={{ position: "relative" }}>
-              <DateField
-                label="Select date"
-                onClick={handleCalendarToggle}
-                size="small"
-              />
-              {showCalendar && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    zIndex: 1000,
-                    backgroundColor: "#fff",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <BookingCalendar
-                    selectedDate={selectedDate}
-                    onDateSelect={handleDateSelect}
-                  />
-                </div>
-              )}
+              <DemoContainer components={["SingleInputDateRangeField"]}>
+                <SingleInputDateRangeField
+                  label="Form - To"
+                  size="small"
+                  onClick={handleCalendarToggle}
+                />
+                {showCalendar && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      zIndex: 1000,
+                      backgroundColor: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <BookingCalendar
+                      selectedDate={selectedDate}
+                      onDateSelect={handleDateSelect}
+                    />
+                  </div>
+                )}
+              </DemoContainer>
             </div>
           </LocalizationProvider>
-        </Grid> */}
+        </Grid>
 
-        <Grid item xs={12} md={3} mt={-1}>
+        {/* <Grid item xs={12} md={3} mt={-1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div style={{ position: "relative" }}>
               <DemoContainer components={["SingleInputDateRangeField"]}>
@@ -186,7 +188,7 @@ export default function SanctuaryDetails({
               </DemoContainer>
             </div>
           </LocalizationProvider>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12} md={1}>
           <Button

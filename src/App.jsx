@@ -1,4 +1,5 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   styled,
   ThemeProvider,
@@ -14,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import bgimg from "./assets/bg_img.png";
 import { CircularLoader } from "./components";
+import { stopLoading } from "./rtk/reducer/loaderReducer";
 
 const AppBar = styled(MuiAppBar)(() => ({
   backgroundColor: "rgba(157, 178, 191, 0.49)",
@@ -25,12 +27,15 @@ const AppBar = styled(MuiAppBar)(() => ({
 
 export default function App() {
   const isLogin = useSelector((state) => state.auth.status);
-  const userData = useSelector((state) => state.auth.userData);
   const isLoading = useSelector((state) => state.loader.isLoading);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Stop loading after the component has mounted
+    dispatch(stopLoading());
+  }, []); // Empty dependency array ensures this effect runs only once after initial render
 
   console.log(isLogin);
-  console.log(localStorage.getItem("token"));
-  console.log(userData);
 
   return (
     <ThemeProvider theme={theme}>

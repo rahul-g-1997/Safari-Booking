@@ -29,6 +29,24 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const navigate = useNavigate();
   const [captchaValue, setCaptchaValue] = useState("");
 
+  useEffect(() => {
+    // Load captcha engine on component mount
+    loadCaptchaEnginge(6);
+  }, []);
+
+  const handleSignInSuccess = async (token) => {
+    try {
+      const userData = await user.getUserProfile(token); // Fetch user profile data
+      dispatch(login({ token, userData }));
+      navigate("/dashboard");
+      toast.success("Login successful.");
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      toast.error("Error fetching user profile.");
+    }
+  };
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -64,10 +82,8 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
 
       // Check if user data is available in the response
       if (response.data && response.data.Record) {
-        const { token, data } = response.data;
-        dispatch(login({ token, data }));
-        navigate("/dashboard");
-        toast.success("Login successful.");
+        const { token } = response.data;
+        handleSignInSuccess(token); // Fetch user profile data on successful login
       } else {
         throw new Error("User data not available");
       }
@@ -76,11 +92,6 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       toast.error("Invalid email or password.");
     }
   };
-
-  useEffect(() => {
-    // Load captcha engine on component mount
-    loadCaptchaEnginge(6);
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>

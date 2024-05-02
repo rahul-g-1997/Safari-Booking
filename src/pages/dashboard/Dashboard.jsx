@@ -112,6 +112,14 @@ export default function Dashboard() {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const isLogin = useSelector((state) => state.auth.status);
+  const userData = useSelector((state) => state.auth.userData);
+  const [firstName, setFirstName] = useState("");
+  useEffect(() => {
+    if (userData && userData.Records && userData.Records.length > 0) {
+      const userRecord = userData.Records[0];
+      setFirstName(userRecord.USR_FNM);
+    }
+  }, [userData]);
 
   const logOut = () => {
     user.logout();
@@ -174,10 +182,7 @@ export default function Dashboard() {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar alt={firstName} src="/static/images/avatar/2.jpg" />
                   </IconButton>
                 </Tooltip>
                 <Menu

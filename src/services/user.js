@@ -36,7 +36,7 @@ const authService = {
       throw error.response.data.Msg || "Unknown error occurred"; // Throw error response message from the backend
     }
   },
-  
+
   // Create a new user account
   createAccount: async (userData) => {
     try {
@@ -52,6 +52,28 @@ const authService = {
       }
     } catch (error) {
       console.error(error); // Log the error for debugging
+    }
+  },
+
+  // Get user profile details
+  getUserProfile: async () => {
+    try {
+      const token = authService.getToken(); // Get token from local storage
+      if (!token) {
+        throw new Error("User is not authenticated"); // Throw error if user is not authenticated
+      }
+
+      const requestData = {
+        act: "getprofile",
+        app: "tabk",
+        token: token,
+      };
+
+      const response = await axios.post(`${API_URL}/profile`, requestData);
+
+      return response.data; // Return profile details
+    } catch (error) {
+      throw error.response.data.Msg || "Error fetching user profile"; // Throw error response message from the backend
     }
   },
 };
