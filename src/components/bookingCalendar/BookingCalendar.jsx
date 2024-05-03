@@ -4,16 +4,16 @@ import "react-calendar/dist/Calendar.css";
 import "./bookingCalendar.css"; // Import your custom CSS file for BookingCalendar
 
 const BookingCalendar = ({ onDateSelect }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
+
   const bookedDates = [
-   
-    new Date(2024, 3, 25),
-    new Date(2024, 3, 26),
-    new Date(2024, 3, 27),
-    new Date(2024, 3, 29),
+    new Date(2024, 4, 13),
+    new Date(2024, 4, 9),
+    new Date(2024, 4, 8),
+    new Date(2024, 4, 7),
   ];
 
-  const holidays = [new Date(2024, 3, 27), new Date(2024, 3, 30)]; // Define your holiday dates here
+  const holidays = [new Date(2024, 4, 10), new Date(2024, 4, 30)]; // Define your holiday dates here
 
   const isBooked = (date) => {
     return bookedDates.some((bookedDate) => {
@@ -49,9 +49,17 @@ const BookingCalendar = ({ onDateSelect }) => {
   };
 
   const handleDateSelect = (date) => {
-    if (!isBooked(date) && !isFutureDate(date)) {
-      setSelectedDate(date);
-      onDateSelect(date);
+    if (!isFutureDate(date) && !isPastDate(date)) {
+      if (selectedDates.length === 2) {
+        setSelectedDates([date]);
+        onDateSelect([date]);
+      } else if (selectedDates.length === 1 && date > selectedDates[0]) {
+        setSelectedDates([selectedDates[0], date]);
+        onDateSelect([selectedDates[0], date]);
+      } else {
+        setSelectedDates([date]);
+        onDateSelect([date]);
+      }
     }
   };
 
@@ -62,6 +70,12 @@ const BookingCalendar = ({ onDateSelect }) => {
       className = "booked-tile"; // Apply booked styling
     } else if (isHoliday(date)) {
       className = "holiday-tile"; // Apply holiday styling
+    } else if (
+      selectedDates.length === 2 &&
+      date >= selectedDates[0] &&
+      date <= selectedDates[1]
+    ) {
+      className = "selected-range-tile"; // Apply styling for selected date range
     } else {
       className = "available-tile"; // Apply available date styling
     }
@@ -84,8 +98,9 @@ const BookingCalendar = ({ onDateSelect }) => {
       <Calendar
         tileClassName={tileClassName}
         tileDisabled={tileDisabled}
-        value={selectedDate}
+        value={selectedDates}
         onChange={handleDateSelect}
+        selectRange={true}
       />
     </div>
   );

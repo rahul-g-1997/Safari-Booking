@@ -6,11 +6,8 @@ import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import "./AddSenctuaryDetails.css";
 import { BookingCalendar } from "..";
-import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import SingleInputDateRangePicker from "../dateRangeSelect/DateRangePicker";
-import DateRangeSelect from "../dateRangeSelect/DateRangePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
 import GateAvailableTable from "../gateAvailableTable/GateAvailableTable";
@@ -159,36 +156,6 @@ export default function SanctuaryDetails({
             </div>
           </LocalizationProvider>
         </Grid>
-
-        {/* <Grid item xs={12} md={3} mt={-1}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div style={{ position: "relative" }}>
-              <DemoContainer components={["SingleInputDateRangeField"]}>
-                <SingleInputDateRangeField
-                  label="Form - To"
-                  size="small"
-                  onClick={handleCalendarToggle}
-                />
-                {showCalendar && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: 0,
-                      zIndex: 1000,
-                      backgroundColor: "#fff",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <DateRangeSelect />
-                  </div>
-                )}
-              </DemoContainer>
-            </div>
-          </LocalizationProvider>
-        </Grid> */}
 
         <Grid item xs={12} md={1}>
           <Button
