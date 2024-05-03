@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Grid, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AddSenctuaryDetails.css";
 import { BookingCalendar } from "..";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
 import GateAvailableTable from "../gateAvailableTable/GateAvailableTable";
+import config from "../../services/config";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -30,6 +31,9 @@ export default function SanctuaryDetails({
   setShowBooking,
   setShowAddSenctuaryDetails,
 }) {
+  const [places, setPlaces] = useState([]);
+  const [zones, setZones] = useState([]);
+  const [gates, setGates] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedPlace, setSelectedPlace] = useState("");
@@ -67,6 +71,53 @@ export default function SanctuaryDetails({
     setShowCalendar(!showCalendar);
   };
 
+  useEffect(() => {
+    async function fetchPlaces() {
+      try {
+        const placesData = await config.getPlaces();
+        setPlaces(placesData.Records);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+      }
+    }
+    fetchPlaces(); // Call fetchPlaces function when component mounts
+  }, []);
+
+  useEffect(() => {
+    async function fetchZones() {
+      try {
+        if (selectedPlace) {
+          const zonesData = await config.getZones(selectedPlace);
+          setZones(zonesData.Records);
+        } else {
+          // If no place is selected, reset zones to an empty array
+          setZones([]);
+        }
+      } catch (error) {
+        console.error("Error fetching zones:", error);
+      }
+    }
+
+    fetchZones(); // Call fetchZones function when selectedPlace changes
+  }, [selectedPlace]);
+
+  useEffect(() => {
+    async function fetchGates() {
+      try {
+        if (selectedZone) {
+          const gatesData = await config.getGates(selectedZone);
+          setGates(gatesData.Records); // Assuming gatesData is an array
+        } else {
+          // If no zone is selected, reset gates to an empty array
+          setGates([]);
+        }
+      } catch (error) {
+        console.error("Error fetching gates:", error);
+      }
+    }
+
+    fetchGates(); // Call fetchGates function when selectedZone changes
+  }, [selectedZone]); // Dependency array to trigger effect when selectedZone changes
   return (
     <Box>
       <Grid container spacing={2}>
@@ -80,7 +131,11 @@ export default function SanctuaryDetails({
             value={selectedPlace}
             onChange={handlePlaceChange}
           >
-            <MenuItem value={1}>Tadoba Andheri Tigrt Reserv (Core)</MenuItem>
+            {places.map((place) => (
+              <MenuItem key={place.PLACEID} value={place.PLACEID}>
+                {place.PLACE_NM}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
         <Grid item xs={12} md={2}>
@@ -93,9 +148,14 @@ export default function SanctuaryDetails({
             value={selectedZone}
             onChange={handleZoneChange}
           >
-            <MenuItem value={1}>Navegaon Zone (Core)</MenuItem>
+            {zones.map((zone) => (
+              <MenuItem key={zone.ZONEID} value={zone.ZONEID}>
+                {zone.ZONE_NM}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
+
         <Grid item xs={12} md={2}>
           <TextField
             fullWidth
@@ -106,9 +166,14 @@ export default function SanctuaryDetails({
             value={selectGate}
             onChange={handleGateChange}
           >
-            <MenuItem value={1}>Navegaon Gate (Core)</MenuItem>
+            {gates.map((gate) => (
+              <MenuItem key={gate.GATEID} value={gate.GATEID}>
+                {gate.GATE_NM}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
+
         <Grid item xs={12} md={2}>
           <TextField
             fullWidth
@@ -131,6 +196,7 @@ export default function SanctuaryDetails({
                 <SingleInputDateRangeField
                   label="Form - To"
                   size="small"
+                  defaultValue={selectedDate}
                   onClick={handleCalendarToggle}
                 />
                 {showCalendar && (
