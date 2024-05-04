@@ -273,7 +273,7 @@ export default function SignUp({ toggleSignIn }) {
                   }}
                 />
               </Grid>
-              ;
+              
             </Grid>
             <Button
               type="submit"

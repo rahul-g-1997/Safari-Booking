@@ -12,6 +12,8 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
 import GateAvailableTable from "../gateAvailableTable/GateAvailableTable";
 import config from "../../services/config";
+import dayjs from "dayjs";
+import "dayjs/locale/en-gb";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -40,6 +42,7 @@ export default function SanctuaryDetails({
   const [selectGate, setSelectedGate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showGateTable, setShowGateTable] = useState(false);
+  const [value, setValue] = useState([]);
 
   const handleShowGateTable = () => {
     setShowGateTable(true);
@@ -57,18 +60,6 @@ export default function SanctuaryDetails({
 
   const handleGateChange = (event) => {
     setSelectedGate(event.target.value);
-  };
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    // Handle the selected date here, such as storing it in state or sending it to the server
-    console.log("Selected Date:", date);
-    setShowCalendar(!showCalendar);
-  };
-
-  const handleCalendarToggle = () => {
-    setShowCalendar(!showCalendar);
   };
 
   useEffect(() => {
@@ -118,6 +109,26 @@ export default function SanctuaryDetails({
 
     fetchGates(); // Call fetchGates function when selectedZone changes
   }, [selectedZone]); // Dependency array to trigger effect when selectedZone changes
+
+  const [selectedDate, setSelectedDate] = useState([]);
+  const handleDateSelect = (date) => {
+    setSelectedDate(date[0], date[1]);
+    // Handle the selected date here, such as storing it in state or sending it to the server
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleCalendarToggle = () => {
+    setShowCalendar(!showCalendar);
+  };
+
+  // Initialize state with current date for both elements
+
+  // useEffect to update value when selectedDate changes
+  useEffect(() => {
+    const formattedDates = selectedDate.map((date) => dayjs(date));
+    setValue(formattedDates);
+  }, [selectedDate]);
+
   return (
     <Box>
       <Grid container spacing={2}>
@@ -196,8 +207,9 @@ export default function SanctuaryDetails({
                 <SingleInputDateRangeField
                   label="Form - To"
                   size="small"
-                  defaultValue={selectedDate}
+                  value={value}
                   onClick={handleCalendarToggle}
+                  format="DD/MM/YYYY"
                 />
                 {showCalendar && (
                   <div
