@@ -25,6 +25,11 @@ const AppBar = styled(MuiAppBar)(() => ({
   border: "1px solid rgba(255, 255, 255, 0.125)",
 }));
 
+const ContainerWithToast = styled(Box)({
+  position: "relative",
+  zIndex: 1,
+});
+
 export default function App() {
   const isLogin = useSelector((state) => state.auth.status);
   const isLoading = useSelector((state) => state.loader.isLoading);
@@ -47,22 +52,21 @@ export default function App() {
         }}
       >
         <CssBaseline />
-
+        <ToastContainer theme="dark" />
         <Box component="main" sx={{ flexGrow: 1, position: "relative" }}>
           <Box
             sx={{
-              position: "absolute",
+              position: "fixed",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
               backgroundImage: `url(${bgimg})`,
-              // backgroundColor:"green",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           />
-          {isLoading ? ( // Show loader if isLoading is true
+          {isLoading ? (
             <Box
               sx={{
                 position: "absolute",
@@ -73,15 +77,15 @@ export default function App() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent background
-                zIndex: 9999, // Ensure the loader is on top of other content
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 9999,
               }}
             >
               <CircularLoader color="secondary" />
             </Box>
           ) : null}
           {!isLogin && (
-            <AppBar position="static">
+            <AppBar position="fixed">
               <Toolbar
                 sx={{
                   display: "flex",
@@ -90,7 +94,6 @@ export default function App() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {/* Replace Typography with img tag for logo */}
                   <img
                     src={Logo}
                     alt="Logo"
@@ -100,16 +103,15 @@ export default function App() {
               </Toolbar>
             </AppBar>
           )}
-          <Box
+          <ContainerWithToast
             sx={{
               position: "relative",
               zIndex: 1,
               backgroundColor: "transparent",
             }}
           >
-            <ToastContainer theme="dark" />
             <Outlet />
-          </Box>
+          </ContainerWithToast>
         </Box>
       </Box>
     </ThemeProvider>

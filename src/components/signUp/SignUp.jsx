@@ -18,7 +18,12 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
+import { useDispatch } from "react-redux";
+
 export default function SignUp({ toggleSignIn }) {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -39,7 +44,7 @@ export default function SignUp({ toggleSignIn }) {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Check if any of the required fields are empty
@@ -94,9 +99,24 @@ export default function SignUp({ toggleSignIn }) {
       pswd: formData.password,
     };
 
-    console.log(JSON.stringify(sendData));
-    user.createAccount(sendData);
-    toggleSignIn();
+    try {
+      dispatch(startLoading()); // Start loading when sign-in process starts
+
+      const response = await user.createAccount(sendData);
+
+      // Check if the account creation is successful
+      if (response.status === "success") {
+        toast.success("Account created successfully.");
+        toggleSignIn();
+      } else {
+        throw new Error("Account creation failed.");
+      }
+    } catch (error) {
+      console.error("Account creation error:", error);
+      toast.error("Failed to create account.");
+    } finally {
+      dispatch(stopLoading()); // Stop loading when sign-in is completed
+    }
 
     // Reset form data
     setFormData({
@@ -118,6 +138,15 @@ export default function SignUp({ toggleSignIn }) {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const isEmailValid = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  const isEmailEmpty = (email) => {
+    return email.trim() === "";
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -125,7 +154,7 @@ export default function SignUp({ toggleSignIn }) {
         maxWidth="xs"
         className="card"
         sx={{
-          marginTop: 3,
+          marginTop: 13,
         }}
       >
         <CssBaseline />
@@ -186,8 +215,23 @@ export default function SignUp({ toggleSignIn }) {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
+                  inputProps={{
+                    type: "email",
+                    pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                  }}
+                  error={
+                    !isEmailEmpty(formData.email) &&
+                    !isEmailValid(formData.email)
+                  }
+                  helperText={
+                    !isEmailEmpty(formData.email) &&
+                    !isEmailValid(formData.email)
+                      ? "Please enter a valid email address"
+                      : ""
+                  }
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -273,7 +317,6 @@ export default function SignUp({ toggleSignIn }) {
                   }}
                 />
               </Grid>
-              
             </Grid>
             <Button
               type="submit"

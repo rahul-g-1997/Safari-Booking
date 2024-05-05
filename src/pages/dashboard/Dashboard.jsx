@@ -110,10 +110,10 @@ export default function Dashboard() {
   const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
   const isLogin = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const [firstName, setFirstName] = useState("");
+  const isLoading = useSelector((state) => state.loader.isLoading);
   useEffect(() => {
     if (userData && userData.Records && userData.Records.length > 0) {
       const userRecord = userData.Records[0];
@@ -287,40 +287,58 @@ export default function Dashboard() {
             backgroundColor: "transparent",
           }}
         >
-          <Toolbar />
-          <Container
-            maxWidth="100"
-            sx={{
-              p: "30px",
-              width: "auto",
-              transition: "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-            }}
-          >
-            {showBookingDiv && (
-              <div className={style.container}>
-                {showAddSenctuaryDetails && (
-                  <AddSenctuaryDetails
-                    setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
-                    setShowBooking={setShowBooking}
-                  />
+          {isLoading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              {/* You can replace this with any loading indicator */}
+              <Typography variant="h6">Loading...</Typography>
+            </Box>
+          ) : (
+            <>
+              {" "}
+              <Toolbar />
+              <Container
+                maxWidth="100"
+                sx={{
+                  p: "30px",
+                  width: "auto",
+                  transition:
+                    "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+                }}
+              >
+                {showBookingDiv && (
+                  <div className={style.container}>
+                    {showAddSenctuaryDetails && (
+                      <AddSenctuaryDetails
+                        setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
+                        setShowBooking={setShowBooking}
+                      />
+                    )}
+                    {showBooking && (
+                      <Booking
+                        setShowBooking={setShowBooking}
+                        setShowSenctuaryDetails={setShowSenctuaryDetails}
+                      />
+                    )}
+                    {showSenctuaryDetails && <SenctuaryDetails />}
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
                 )}
-                {showBooking && (
-                  <Booking
-                    setShowBooking={setShowBooking}
-                    setShowSenctuaryDetails={setShowSenctuaryDetails}
-                  />
+                {showBookingHistory && <BookingHistory />}
+                {showProfile && (
+                  <div className={style.container}>
+                    <Profile />
+                  </div>
                 )}
-                {showSenctuaryDetails && <SenctuaryDetails />}
-                <Copyright sx={{ pt: 4 }} />
-              </div>
-            )}
-            {showBookingHistory && <BookingHistory />}
-            {showProfile && (
-              <div className={style.container}>
-                <Profile />
-              </div>
-            )}
-          </Container>
+              </Container>
+            </>
+          )}
         </Box>
       </Box>
     </ThemeProvider>

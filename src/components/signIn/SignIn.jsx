@@ -14,6 +14,7 @@ import "./SignIn.css";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { login } from "../../rtk/reducer/userReducer";
+import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 import { useNavigate } from "react-router-dom";
 import {
   loadCaptchaEnginge,
@@ -40,15 +41,17 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       dispatch(login({ token, userData }));
       navigate("/dashboard");
       toast.success("Login successful.");
+      dispatch(stopLoading()); // Stop loading when sign-in is successful
     } catch (error) {
+      dispatch(stopLoading()); // Stop loading when sign-in is successful
       console.error("Error fetching user profile:", error);
       toast.error("Error fetching user profile.");
     }
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+    dispatch(startLoading()); // Start loading when sign-in process starts
     const data = new FormData(event.currentTarget);
     const enteredEmail = data.get("email");
     const enteredPassword = data.get("password");
@@ -56,18 +59,21 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
 
     if (!enteredEmail || !enteredPassword) {
       toast.error("Email and password are required.");
+      dispatch(stopLoading()); // Stop loading if validation fails
       return;
     }
 
     // Validate captcha
     if (!enteredCaptcha) {
       toast.error("Please enter the captcha.");
+      dispatch(stopLoading()); // Stop loading if captcha is not entered
       return;
     }
 
     if (!validateCaptcha(enteredCaptcha)) {
       toast.error("Captcha Does Not Match");
       setCaptchaValue("");
+      dispatch(stopLoading()); // Stop loading if captcha validation fails
       return;
     }
 
@@ -90,6 +96,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid email or password.");
+      dispatch(stopLoading());
     }
   };
 
@@ -99,7 +106,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
         maxWidth="xs"
         className="card"
         sx={{
-          marginTop: 3,
+          marginTop: 13,
         }}
       >
         <CssBaseline />
