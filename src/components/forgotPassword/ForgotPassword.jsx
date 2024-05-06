@@ -13,8 +13,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
 import config from "../../services/config";
-
+import { toast } from "react-toastify";
+import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
+import { useDispatch } from "react-redux";
 export default function ForgotPassword({ toggleSignIn }) {
+    const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [sendOtpMessage, setSendOtpMessage] = useState("");
   const [resetPasswordMessage, setResetPasswordMessage] = useState("");
@@ -43,9 +46,11 @@ export default function ForgotPassword({ toggleSignIn }) {
     event.preventDefault();
     try {
       if (newPassword !== confirmPassword) {
-        setResetPasswordMessage("Passwords do not match.");
+        toast.error("Passwords do not match.");
         return;
       }
+
+      dispatch(startLoading()); // Start loading indicator
 
       const response = await config.resetPassword(
         email,
@@ -66,8 +71,11 @@ export default function ForgotPassword({ toggleSignIn }) {
     } catch (error) {
       console.error("Error resetting password:", error);
       setResetPasswordMessage("Error resetting password. Please try again.");
+    } finally {
+      dispatch(stopLoading()); // Stop loading indicator
     }
   };
+
 
   return (
     <ThemeProvider theme={theme}>
