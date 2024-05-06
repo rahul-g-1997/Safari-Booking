@@ -41,7 +41,6 @@ const authService = {
   createAccount: async (userData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, userData);
-      console.log("Response:", response); // Log the response for debugging
 
       if (response.data.Result == "OK") {
         toast.success("Registration successful.");

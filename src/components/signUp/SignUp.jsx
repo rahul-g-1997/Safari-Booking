@@ -89,6 +89,7 @@ export default function SignUp({ toggleSignIn }) {
 
     const sendData = {
       act: "register",
+      USR_TYPE: "U",
       "usr.fnm": formData.firstName,
       "usr.lnm": formData.lastName,
       "usr.eml": formData.email,
@@ -101,16 +102,9 @@ export default function SignUp({ toggleSignIn }) {
 
     try {
       dispatch(startLoading()); // Start loading when sign-in process starts
-
       const response = await user.createAccount(sendData);
-
-      // Check if the account creation is successful
-      if (response.status === "success") {
-        toast.success("Account created successfully.");
-        toggleSignIn();
-      } else {
-        throw new Error("Account creation failed.");
-      }
+      console.log(response);
+      toggleSignIn();
     } catch (error) {
       console.error("Account creation error:", error);
       toast.error("Failed to create account.");

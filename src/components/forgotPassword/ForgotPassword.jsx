@@ -12,57 +12,61 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-// import { resetPassword, resetUsername } from "../../rtk/reducer/userReducer";
-import { setOtp } from "../../rtk/reducer/otpReducer";
+import config from "../../services/config";
 
 export default function ForgotPassword({ toggleSignIn }) {
-  const dispatch = useDispatch();
-  const otp = useSelector((state) => state.otp);
-
-  const [option, setOption] = useState("password");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [sendOtpMessage, setSendOtpMessage] = useState("");
+  const [resetPasswordMessage, setResetPasswordMessage] = useState("");
   const [enteredOtp, setEnteredOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [newUsername, setNewUsername] = useState("");
 
-  const handleOptionChange = (event) => {
-    setOption(event.target.value);
+  const handleSendEmailOtp = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await config.sendOTP(email);
+      console.log(response);
+
+      if (response.Result === "OK") {
+        setSendOtpMessage(`A password reset OTP has been sent to ${email}.`);
+      } else {
+        setSendOtpMessage(response.Msg);
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      setSendOtpMessage("Error sending OTP. Please try again.");
+    }
   };
 
-  const handleSendEmailOtp = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setMessage(`A password reset OTP has been sent to ${email}.`);
-    dispatch(setOtp("123")); // Set OTP to default value
-  };
+    try {
+      if (newPassword !== confirmPassword) {
+        setResetPasswordMessage("Passwords do not match.");
+        return;
+      }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+      const response = await config.resetPassword(
+        email,
+        newPassword,
+        enteredOtp
+      );
+      console.log(response);
 
-    // Check if entered OTP matches the OTP stored in Redux state
-    // if (enteredOtp === otp.otp) {
-    //   if (option === "password") {
-    //     if (newPassword !== confirmPassword) {
-    //       setMessage("Passwords do not match.");
-    //       return;
-    //     }
-
-    //     dispatch(resetPassword({ email, newPassword }));
-    //   } else if (option === "username") {
-    //     dispatch(resetUsername({ email, newUsername }));
-    //   }
-
-    //   setMessage("Reset successful!");
-    //   setNewUsername("");
-    //   setConfirmPassword("");
-    //   setNewPassword("");
-    //   setEmail("");
-    //   setEnteredOtp("");
-    // } else {
-    //   setMessage("Invalid OTP.");
-    // }
+      if (response.Result === "OK") {
+        setResetPasswordMessage("Reset successful!");
+        setConfirmPassword("");
+        setNewPassword("");
+        setEmail("");
+        setEnteredOtp("");
+      } else {
+        setResetPasswordMessage(response.Msg);
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      setResetPasswordMessage("Error resetting password. Please try again.");
+    }
   };
 
   return (
@@ -72,7 +76,7 @@ export default function ForgotPassword({ toggleSignIn }) {
         maxWidth="xs"
         className="card"
         sx={{
-          marginTop: 3,
+          marginTop: 13,
         }}
       >
         <CssBaseline />
@@ -89,24 +93,8 @@ export default function ForgotPassword({ toggleSignIn }) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5" sx={{ m: 1 }}>
-            Forgot
+            Forgot Password
           </Typography>
-          <div>
-            <input
-              type="radio"
-              value="password"
-              checked={option === "password"}
-              onChange={handleOptionChange}
-            />
-            Password
-            <input
-              type="radio"
-              value="username"
-              checked={option === "username"}
-              onChange={handleOptionChange}
-            />
-            Username
-          </div>
           <Box
             component="form"
             noValidate
@@ -127,48 +115,30 @@ export default function ForgotPassword({ toggleSignIn }) {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
-              {option === "password" && (
-                <>
-                  <Grid item xs={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="newPassword"
-                      label="Enter New Password"
-                      type="password"
-                      autoComplete="new-password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="confirmPassword"
-                      label="Confirm Password"
-                      type="password"
-                      autoComplete="new-password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                  </Grid>
-                </>
-              )}
-              {option === "username" && (
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="newUsername"
-                    label="Enter New Username"
-                    name="newUsername"
-                    autoComplete="username"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                  />
-                </Grid>
-              )}
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="newPassword"
+                  label="Enter New Password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Button
                   type="button"
@@ -178,6 +148,15 @@ export default function ForgotPassword({ toggleSignIn }) {
                 >
                   Get OTP
                 </Button>
+                {sendOtpMessage && (
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    align="center"
+                  >
+                    {sendOtpMessage}
+                  </Typography>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -192,29 +171,18 @@ export default function ForgotPassword({ toggleSignIn }) {
                 />
               </Grid>
             </Grid>
-            {option === "username" && (
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3 }}
-              >
-                Reset Username
-              </Button>
-            )}
-            {option === "password" && (
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3 }}
-              >
-                Reset Password
-              </Button>
-            )}
-            {message && (
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3 }}
+              onClick={handleSubmit}
+            >
+              Reset Password
+            </Button>
+            {resetPasswordMessage && (
               <Typography variant="body2" color="textSecondary" align="center">
-                {message}
+                {resetPasswordMessage}
               </Typography>
             )}
             <Grid container justifyContent="flex-end">
@@ -234,6 +202,11 @@ export default function ForgotPassword({ toggleSignIn }) {
     </ThemeProvider>
   );
 }
+
+ForgotPassword.propTypes = {
+  toggleSignIn: PropTypes.func.isRequired,
+};
+
 
 ForgotPassword.propTypes = {
   toggleSignIn: PropTypes.func.isRequired,
