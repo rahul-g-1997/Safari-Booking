@@ -23,21 +23,20 @@ import {
   Tooltip,
 } from "@mui/material";
 import { logout } from "../../rtk/reducer/userReducer";
-
 import {
+  AddGateManager,
+  AddHoliday,
   Copyright,
-  AddBookingDetails,
-  SearchAvailability,
-  ConfirmDetails,
-  BookingHistory,
+  ManageLocations,
 } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import HistoryIcon from "@mui/icons-material/History";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LoupeIcon from "@mui/icons-material/Loupe";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { toast } from "react-toastify";
-import style from "./dashboard.module.css";
+import style from "./adminDashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
 import Profile from "../profile/Profile";
@@ -99,15 +98,14 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showSearchAvailability, setShowSearchAvailability] = useState(true);
-  const [showAddBookingDetails, setShowAddBookingDetails] = useState(false);
-  const [showConfirmDetails, setShowConfirmDetails] = useState(false);
-  const [showBookingDiv, setShowBookingDiv] = useState(true);
-  const [showBookingHistory, setShowBookingHistory] = useState(false);
+  const [showManageLocations, setShowManageLocations] = useState(true);
+  const [showAddHoliday, setShowAddHoliday] = useState(false);
+  const [showAddGateManager, setShowAddGateManager] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const isLogin = useSelector((state) => state.auth.status);
@@ -205,8 +203,9 @@ export default function Dashboard() {
                     <Typography
                       textAlign="center"
                       onClick={() => {
-                        setShowBookingDiv(false);
-                        setShowBookingHistory(false);
+                        setShowManageLocations(false);
+                        setShowAddHoliday(false);
+                        setShowAddGateManager(false);
                         setShowProfile(true);
                       }}
                     >
@@ -241,32 +240,48 @@ export default function Dashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
-                setShowBookingDiv(true);
-                setShowBookingHistory(false);
+                setShowManageLocations(true);
+                setShowAddHoliday(false);
+                setShowAddGateManager(false);
                 setShowProfile(false);
               }}
             >
               <ListItemIcon>
-                <EventAvailableIcon />
+                <LoupeIcon />
               </ListItemIcon>
-              <ListItemText primary="Booking" />
+              <ListItemText primary="Manage locations" />
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                setShowBookingDiv(false);
-                setShowBookingHistory(true);
+                setShowManageLocations(false);
+                setShowAddHoliday(true);
+                setShowAddGateManager(false);
                 setShowProfile(false);
               }}
             >
               <ListItemIcon>
-                <HistoryIcon />
+                <EditCalendarIcon />
               </ListItemIcon>
-              <ListItemText primary="Booking History" />
+              <ListItemText primary="Add Holiday" />
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                setShowBookingDiv(false);
-                setShowBookingHistory(false);
+                setShowManageLocations(false);
+                setShowAddHoliday(false);
+                setShowAddGateManager(true);
+                setShowProfile(false);
+              }}
+            >
+              <ListItemIcon>
+                <PersonAddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add gate manager" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                setShowManageLocations(false);
+                setShowAddHoliday(false);
+                setShowAddGateManager(false);
                 setShowProfile(true);
               }}
             >
@@ -312,29 +327,28 @@ export default function Dashboard() {
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 }}
               >
-                {showBookingDiv && (
+                {showManageLocations && (
                   <div className={style.container}>
-                    {showSearchAvailability && (
-                      <SearchAvailability
-                        setShowSearchAvailability={setShowSearchAvailability}
-                        setShowAddBookingDetails={setShowAddBookingDetails}
-                      />
-                    )}
-                    {showAddBookingDetails && (
-                      <AddBookingDetails
-                        setShowAddBookingDetails={setShowAddBookingDetails}
-                        setShowConfirmDetails={setShowConfirmDetails}
-                      />
-                    )}
-
-                    {showConfirmDetails && <ConfirmDetails />}
+                    <ManageLocations />
                     <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}
-                {showBookingHistory && <BookingHistory />}
+                {showAddHoliday && (
+                  <div className={style.container}>
+                    <AddHoliday />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
+                {showAddGateManager && (
+                  <div className={style.container}>
+                    <AddGateManager />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
                 {showProfile && (
                   <div className={style.container}>
                     <Profile />
+                    <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}
               </Container>

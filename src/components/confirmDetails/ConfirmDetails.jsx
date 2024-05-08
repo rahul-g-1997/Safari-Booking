@@ -18,7 +18,7 @@ import {
   Table,
 } from "@mui/material";
 
-export default function SenctuaryDetails() {
+export default function ConfirmDetails() {
   const [openDialog, setOpenDialog] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
 

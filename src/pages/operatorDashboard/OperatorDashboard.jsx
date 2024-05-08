@@ -24,20 +24,12 @@ import {
 } from "@mui/material";
 import { logout } from "../../rtk/reducer/userReducer";
 
-import {
-  Copyright,
-  AddBookingDetails,
-  SearchAvailability,
-  ConfirmDetails,
-  BookingHistory,
-} from "../../components";
+import { Copyright } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import HistoryIcon from "@mui/icons-material/History";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { toast } from "react-toastify";
-import style from "./dashboard.module.css";
+import style from "./operatorDashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
 import Profile from "../profile/Profile";
@@ -99,14 +91,9 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showSearchAvailability, setShowSearchAvailability] = useState(true);
-  const [showAddBookingDetails, setShowAddBookingDetails] = useState(false);
-  const [showConfirmDetails, setShowConfirmDetails] = useState(false);
-  const [showBookingDiv, setShowBookingDiv] = useState(true);
-  const [showBookingHistory, setShowBookingHistory] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -205,8 +192,6 @@ export default function Dashboard() {
                     <Typography
                       textAlign="center"
                       onClick={() => {
-                        setShowBookingDiv(false);
-                        setShowBookingHistory(false);
                         setShowProfile(true);
                       }}
                     >
@@ -241,32 +226,6 @@ export default function Dashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
-                setShowBookingDiv(true);
-                setShowBookingHistory(false);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <EventAvailableIcon />
-              </ListItemIcon>
-              <ListItemText primary="Booking" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowBookingDiv(false);
-                setShowBookingHistory(true);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <HistoryIcon />
-              </ListItemIcon>
-              <ListItemText primary="Booking History" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowBookingDiv(false);
-                setShowBookingHistory(false);
                 setShowProfile(true);
               }}
             >
@@ -312,26 +271,10 @@ export default function Dashboard() {
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 }}
               >
-                {showBookingDiv && (
-                  <div className={style.container}>
-                    {showSearchAvailability && (
-                      <SearchAvailability
-                        setShowSearchAvailability={setShowSearchAvailability}
-                        setShowAddBookingDetails={setShowAddBookingDetails}
-                      />
-                    )}
-                    {showAddBookingDetails && (
-                      <AddBookingDetails
-                        setShowAddBookingDetails={setShowAddBookingDetails}
-                        setShowConfirmDetails={setShowConfirmDetails}
-                      />
-                    )}
+                <div className={style.container}>
+                  <Copyright sx={{ pt: 4 }} />
+                </div>
 
-                    {showConfirmDetails && <ConfirmDetails />}
-                    <Copyright sx={{ pt: 4 }} />
-                  </div>
-                )}
-                {showBookingHistory && <BookingHistory />}
                 {showProfile && (
                   <div className={style.container}>
                     <Profile />

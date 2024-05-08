@@ -6,7 +6,15 @@ import { Provider } from "react-redux";
 import store from "./rtk/store";
 import App from "./App";
 import theme from "./theme";
-import { About, ContactPage, Dashboard, Error, Home } from "./pages";
+import {
+  About,
+  AdminDashboard,
+  ContactPage,
+  Dashboard,
+  Error,
+  Home,
+  OperatorDashboard,
+} from "./pages";
 
 import {
   createRoutesFromElements,
@@ -27,6 +35,8 @@ const route = createBrowserRouter(
       <Route path="contacts" element={<ContactPage />} />
       <Route path="about" element={<About />} />
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="adminDashboard" element={<AdminDashboard />} />
+      <Route path="operatorDashboard" element={<OperatorDashboard />} />
     </Route>
   )
 );

@@ -4,4 +4,6 @@ export { default as About } from "./about/About";
 export { default as Error } from "./error/Error";
 export { default as ContactPage } from "./contacts/ContactPage";
 export { default as Dashboard } from "./dashboard/Dashboard";
+export { default as AdminDashboard } from "./adminDashboard/AdminDashboard";
+export { default as OperatorDashboard } from "./operatorDashboard/OperatorDashboard";
 export { default as Profile } from "./profile/Profile";

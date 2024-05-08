@@ -2,7 +2,7 @@ import axios from "axios";
 import conf from "../conf/conf";
 import { toast } from "react-toastify";
 
-const API_URL = conf.backend_url; // API base URL
+const API_URL = conf.user_backend_url; // API base URL
 
 const authService = {
   // Get token from local storage

@@ -35,11 +35,13 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     loadCaptchaEnginge(6);
   }, []);
 
-  const handleSignInSuccess = async (token) => {
+  const handleSignInSuccess = async (token, USR_TYPE) => {
     try {
       const userData = await user.getUserProfile(token); // Fetch user profile data
       dispatch(login({ token, userData }));
-      navigate("/dashboard");
+      if (USR_TYPE === "U") navigate("/dashboard");
+      if (USR_TYPE === "A") navigate("/adminDashboard");
+      if (USR_TYPE === "O") navigate("/operatorDashboard");
       toast.success("Login successful.");
       dispatch(stopLoading()); // Stop loading when sign-in is successful
     } catch (error) {
@@ -89,7 +91,8 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       // Check if user data is available in the response
       if (response.data && response.data.Record) {
         const { token } = response.data;
-        handleSignInSuccess(token); // Fetch user profile data on successful login
+        const { USR_TYPE } = response.data.Record;
+        handleSignInSuccess(token, USR_TYPE); // Fetch user profile data on successful login
       } else {
         throw new Error("User data not available");
       }

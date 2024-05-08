@@ -5,7 +5,6 @@ import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import PropTypes from "prop-types";
 import {
   Button,
   Typography,
@@ -65,7 +64,10 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
+export default function AddBookingDetails({
+  setShowConfirmDetails,
+  setShowAddBookingDetails,
+}) {
   const [expanded, setExpanded] = React.useState("");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
@@ -509,7 +511,7 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
             fullWidth
             variant="contained"
             onClick={() => (
-              setShowBooking(false), setShowSenctuaryDetails(true)
+              setShowAddBookingDetails(false), setShowConfirmDetails(true)
             )}
           >
             Conform Details
@@ -519,9 +521,3 @@ export default function Booking({ setShowBooking, setShowSenctuaryDetails }) {
     </div>
   );
 }
-
-// Add PropTypes validation
-Booking.propTypes = {
-  setShowSenctuaryDetails: PropTypes.func.isRequired,
-  setShowBooking: PropTypes.func.isRequired,
-};

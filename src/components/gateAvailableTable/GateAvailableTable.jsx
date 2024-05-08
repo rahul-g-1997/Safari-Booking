@@ -6,7 +6,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-export default function GateAvailableTable({ setShowAddSenctuaryDetails, setShowBooking }) {
+export default function GateAvailableTable({
+  setShowSearchAvailability,
+  setShowAddBookingDetails,
+}) {
   return (
     <Paper
       sx={{
@@ -145,7 +148,8 @@ export default function GateAvailableTable({ setShowAddSenctuaryDetails, setShow
                 align="center"
                 sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
                 onClick={() => (
-                  setShowBooking(true), setShowAddSenctuaryDetails(false)
+                  setShowAddBookingDetails(true),
+                  setShowSearchAvailability(false)
                 )}
               >
                 4

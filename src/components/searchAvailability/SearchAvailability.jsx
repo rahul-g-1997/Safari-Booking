@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import "./AddSenctuaryDetails.css";
+import "./SearchAvailability.css";
 import { BookingCalendar } from "..";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -30,16 +30,16 @@ const SquareIcon = ({ backgroundColor }) => {
 };
 
 export default function SanctuaryDetails({
-  setShowBooking,
-  setShowAddSenctuaryDetails,
+  setShowAddBookingDetails,
+  setShowSearchAvailability,
 }) {
   const [places, setPlaces] = useState([]);
   const [zones, setZones] = useState([]);
   const [gates, setGates] = useState([]);
-  const [selectedVehicle, setSelectedVehicle] = useState("");
-  const [selectedZone, setSelectedZone] = useState("");
-  const [selectedPlace, setSelectedPlace] = useState("");
-  const [selectGate, setSelectedGate] = useState("");
+  const [selectedVehicle, setSelectedVehicle] = useState('');
+  const [selectedZone, setSelectedZone] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState('');
+  const [selectGate, setSelectedGate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   const [showGateTable, setShowGateTable] = useState(false);
   const [value, setValue] = useState([]);
@@ -269,8 +269,8 @@ export default function SanctuaryDetails({
       <Grid m={2}>
         {showGateTable && (
           <GateAvailableTable
-            setShowBooking={setShowBooking}
-            setShowAddSenctuaryDetails={setShowAddSenctuaryDetails}
+            setShowAddBookingDetails={setShowAddBookingDetails}
+            setShowSearchAvailability={setShowSearchAvailability}
           />
         )}
       </Grid>

@@ -40,7 +40,6 @@ export default function App() {
     dispatch(stopLoading());
   }, []); // Empty dependency array ensures this effect runs only once after initial render
 
-  console.log(isLogin);
 
   return (
     <ThemeProvider theme={theme}>
