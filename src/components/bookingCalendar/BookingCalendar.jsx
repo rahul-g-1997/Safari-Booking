@@ -9,7 +9,6 @@ const BookingCalendar = ({ onDateSelect }) => {
   const bookedDates = [
     new Date(2024, 4, 13),
     new Date(2024, 4, 9),
-    new Date(2024, 4, 8),
     new Date(2024, 4, 7),
   ];
 
@@ -20,7 +19,8 @@ const BookingCalendar = ({ onDateSelect }) => {
       return (
         date.getDate() === bookedDate.getDate() &&
         date.getMonth() === bookedDate.getMonth() &&
-        date.getFullYear() === bookedDate.getFullYear()
+        date.getFullYear() === bookedDate.getFullYear() &&
+        !isPastDate(date) // Ensure date is not in the past
       );
     });
   };
@@ -30,7 +30,8 @@ const BookingCalendar = ({ onDateSelect }) => {
       return (
         date.getDate() === holidayDate.getDate() &&
         date.getMonth() === holidayDate.getMonth() &&
-        date.getFullYear() === holidayDate.getFullYear()
+        date.getFullYear() === holidayDate.getFullYear() &&
+        !isPastDate(date) // Ensure date is not in the past
       );
     });
   };
