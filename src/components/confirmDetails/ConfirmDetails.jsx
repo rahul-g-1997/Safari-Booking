@@ -17,11 +17,13 @@ import {
   TableContainer,
   Table,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 export default function ConfirmDetails() {
   const [openDialog, setOpenDialog] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
-
+  const userBookingData = useSelector((state) => state.userBookingData);
+  const { place, zone, gate, vehicle, date, slot } = userBookingData;
   const handleCheckboxChange = (event) => {
     // Check if the checkbox is not already checked
     if (!termsChecked) {
@@ -62,21 +64,21 @@ export default function ConfirmDetails() {
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Sanctuary: Tadoba Andheri Tigrt Reserv (Core)
+            Place: {place}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Zone: Navegaon Zone (Core)
+            Zone: {zone}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Gate: Navegaon Gate (Core)
+            Gate: {gate}
           </Paper>
         </Grid>
 
@@ -85,21 +87,21 @@ export default function ConfirmDetails() {
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Date of Booking: 21/06/2024 (fri)
+            Date of Booking: {date}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Slot: Mornig Time:
+            Slot: {slot}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Vehicle Name: Gypsy
+            Vehicle Name: {vehicle}
           </Paper>
         </Grid>
       </Grid>
@@ -112,7 +114,7 @@ export default function ConfirmDetails() {
           <Typography gutterBottom item xs={12} textAlign="center">
             <Typography>
               Current Available:
-              <span style={{ fontWeight: "bold", color: "green" }}> 06</span>
+              <span style={{ fontWeight: "bold", color: "green" }}> 04</span>
             </Typography>
           </Typography>
         </Grid>

@@ -1,0 +1,118 @@
+                                             //---user api---//
+
+1)Visitors registration: 
+
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/register  (created by aws)
+{"act":"register","usr.fnm":"Dinesh","usr.lnm":"Thakur","usr.eml":"di.nesh34@gmail.com","usr.cntc":"7852140369",
+"dob":"1984-12-20","gender":"M","dtls":"{}","pswd":"aa"}
+
+2)Login:
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/login
+{"act":"login","usr.login":"ABC456@gmail.com","usr.pwd":"aa","app":"tabk"}
+
+3)Logout:
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/logout
+{"act":"logout","app":"tabk","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjUsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ0NjQxNjgwNDQiLCJVU1JfTk0iOiJBQiBTaW5naCJ9.nBBpgRqdINGHV8SwtV_h_qMbQwJOLRl75rNc6jGELZo"}
+
+4)GetProfile
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/profile
+{"act":"getprofile","app":"tabk","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjcsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ2MzEzNzA1MDAiLCJVU1JfTk0iOiJOaWRoaSBQIn0.ViGUs1qCZxIV_l5uYQXB8h7TitVNo2ULRXOZocrxoGE"}
+
+Send OTP 
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/forgotpwd
+
+Send OTP to both(email,sms,whatsapp)
+{"act":"forgotpswd","usr.login":"pawar.nidhi19@gmail.com","emailfor":"OTP","provider":"bhash","emailprovider":"datae",
+"senderid":"DTENGN","smsfor":"OTP","wappfor":"OTP"}
+
+Reset Password:(Use above URL for reset the password)
+{"act":"resetpswd","usr.login":"pawar.nidhi19@gmail.com","usr.pwd":"abc","otp":"5116"}
+
+Note:Use OTP, which is send in your email.
+
+URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/getall
+
+For Places:
+{"act":"getplaces"}
+
+
+For Zoness:
+{"act":"getzones","placeid":"1"}
+
+
+For Gates:
+{"act":"getgates","zoneid":"3"}
+
+1)Search for available vehicles according to booking dates.
+Note: Here we get the output for booking date with no. of vehicles booked.
+
+URL: https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/getavaildt
+{"act":"getavildt","zoneid":"1","gateid":"2","slot":"Noon","date.from":"2024-04-28","date.to":"2024-04-30"}
+
+
+Book Tickets:
+
+URL: https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/booktckt
+{"act":"booktckt","v.placeid":"1","v.zoneid":"1","v.gateid":"1","v.slot":"Noon","v.date.from":"2024-05-12","v.date.to":"2024-05-13",
+"v.vhcle.type":"g","v.tourist.dtls":"{\"address\":\"Pune\",\"aadharno\":\"345699923012\"}","v.tot.amt":"4000","v.open.time":"12:00:00","v.dtls":"{}",
+"token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","app":"tabk"}
+
+Note:Save the tourist details in tourist.dtls json field.
+
+
+
+
+                                                 //---amine api---//
+
+Admin Login:
+Email Id:admin@gmail.com
+Password:aa
+Token:eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs
+
+For Places:
+URL:https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/places
+
+1)Save places:
+{"act":"saveplaces","place.nm":"Umred","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+2)Update Places:
+{"act":"updtplaces","place.nm":"Umred","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"3"}
+
+3)Search Places:
+{"act":"srchplaces","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+4)Delete Places:
+{"act":"delplaces","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"3"}
+
+For Zone:
+https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/zone
+1)Save zones:
+{"act":"savezone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"2","zone.nm":"Mohrli"}
+
+2)Update zones:
+{"act":"updtzone","zone.nm":"Umred","placeid":"2","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","zoneid":"3"}
+
+3)Search zones:
+{"act":"srchzone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+4)Delete zones:
+{"act":"delzone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","zoneid":"3"}
+
+For Gate:
+https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/gate
+1)Save Gate:
+{"act":"savegate","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"1","zoneid":"2","gate.nm":"Mohrli"}
+
+2)Update Gate:
+{"act":"updtgate","gate.nm":"Umred","zoneid":"","placeid":"2","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","gateid":"3"}
+
+3)Search Gate:
+{"act":"srchgate","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+4)Delete Gate:
+{"act":"delgate","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","gateid":"3"}
+
+To find zone name according to placeid:(Use gate URL) 
+{"act":"getzones","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"2"}
+
+

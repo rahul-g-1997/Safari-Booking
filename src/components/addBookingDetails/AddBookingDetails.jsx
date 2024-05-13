@@ -25,6 +25,7 @@ import {
   Paper,
   FormControl,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -225,6 +226,8 @@ export default function AddBookingDetails({
     return cameraRows;
   };
 
+  const userBookingData = useSelector((state) => state.userBookingData);
+  const { place, zone, gate, vehicle, date, slot } = userBookingData;
   return (
     <div>
       <Grid container spacing={2}>
@@ -237,7 +240,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Eco Tourist places: Tadoba Andheri Tigrt Reserv (Core)
+              Eco Tourist places: {place}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -248,7 +251,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Zone: Navegaon Zone (Core)
+              Zone: {zone}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -259,7 +262,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Gate: Navegaon Gate (Core)
+              Gate: {gate}
             </Paper>
           </Grid>
 
@@ -272,7 +275,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Date of Booking: 21/06/2024 (fri)
+              Date of Booking: {date}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -283,7 +286,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Slot: Mornig Time:
+              Slot: {slot}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -294,7 +297,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Vehicle Name: Gypsy
+              Vehicle Name: {vehicle}
             </Paper>
           </Grid>
         </Grid>

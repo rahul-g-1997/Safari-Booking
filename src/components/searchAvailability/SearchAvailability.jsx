@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import "./SearchAvailability.css";
 import { BookingCalendar } from "..";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -14,6 +15,15 @@ import GateAvailableTable from "../gateAvailableTable/GateAvailableTable";
 import config from "../../services/config";
 import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
+import configService from "../../services/config";
+import {
+  setGate,
+  setPlace,
+  setVehicle,
+  setStartDate,
+  setEndDate,
+  setZone,
+} from "../../rtk/reducer/userBookingDataReducer";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -33,19 +43,51 @@ export default function SanctuaryDetails({
   setShowAddBookingDetails,
   setShowSearchAvailability,
 }) {
+  const dispatch = useDispatch();
   const [places, setPlaces] = useState([]);
   const [zones, setZones] = useState([]);
   const [gates, setGates] = useState([]);
-  const [selectedVehicle, setSelectedVehicle] = useState('');
-  const [selectedZone, setSelectedZone] = useState('');
-  const [selectedPlace, setSelectedPlace] = useState('');
-  const [selectGate, setSelectedGate] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [selectedZone, setSelectedZone] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("");
+  const [selectGate, setSelectedGate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showGateTable, setShowGateTable] = useState(false);
   const [value, setValue] = useState([]);
+  const [booked, setBooked] = useState();
 
-  const handleShowGateTable = () => {
-    setShowGateTable(true);
+  const handleSearch = async (
+    placeId,
+    zoneId,
+    availableStartDate,
+    availableEndDate
+  ) => {
+    // Mark the function as async
+    try {
+      const availability = await configService.getAvailability(
+        placeId,
+        zoneId,
+        "Noon", // Default slot value
+        availableStartDate,
+        availableEndDate
+      );
+
+      dispatch(setPlace(selectedPlaceName));
+      dispatch(setZone(selectedZoneName));
+      dispatch(setGate(selectedGateName));
+
+      dispatch(setVehicle(selectedVehicle === "G" ? "Gypsy" : "Private"));
+
+      const [startDate, endDate] = selectedDate;
+      dispatch(setStartDate(startDate.toISOString())); // Convert startDate to ISO string
+      dispatch(setEndDate(endDate.toISOString())); // Convert endDate to ISO string
+
+      console.log(availability.Records);
+      setBooked(availability.Records);
+      setShowGateTable(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleVehicleChange = (event) => {
@@ -128,6 +170,19 @@ export default function SanctuaryDetails({
     const formattedDates = selectedDate.map((date) => dayjs(date));
     setValue(formattedDates);
   }, [selectedDate]);
+  // Add console.log for selected data
+
+  const selectedPlaceName =
+    places.find((place) => place.PLACEID === selectedPlace)?.PLACE_NM ||
+    "No Place Selected";
+
+  const selectedZoneName =
+    zones.find((zone) => zone.ZONEID === selectedZone)?.ZONE_NM ||
+    "No Zone Selected";
+
+  const selectedGateName =
+    gates.find((gate) => gate.GATEID === selectGate)?.GATE_NM ||
+    "No Gate Selected";
 
   return (
     <Box>
@@ -239,7 +294,7 @@ export default function SanctuaryDetails({
           <Button
             fullWidth
             variant="contained"
-            onClick={() => handleShowGateTable()}
+            onClick={() => handleSearch("1", "2", "2024-04-28", "2024-04-30")}
           >
             Search
           </Button>
@@ -269,6 +324,7 @@ export default function SanctuaryDetails({
       <Grid m={2}>
         {showGateTable && (
           <GateAvailableTable
+            booked={booked}
             setShowAddBookingDetails={setShowAddBookingDetails}
             setShowSearchAvailability={setShowSearchAvailability}
           />

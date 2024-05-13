@@ -77,6 +77,66 @@ const configService = {
       throw new Error("Error resetting password");
     }
   },
+
+  // Get availability
+  getAvailability: async (zoneId, gateId, slot, fromDate, toDate) => {
+    try {
+      const requestData = {
+        act: "getavildt",
+        zoneid: zoneId,
+        gateid: gateId,
+        slot: slot,
+        "date.from": fromDate,
+        "date.to": toDate,
+      };
+      const response = await axios.post(`${API_URL}/getavaildt`, requestData);
+      return response.data; // Return availability data
+    } catch (error) {
+      console.error("Error fetching gate availability:", error); // Log error for debugging
+      throw new Error("Error fetching gate availability");
+    }
+  },
+  
+  // Book ticket
+  bookTicket: async ({
+    placeId,
+    zoneId,
+    gateId,
+    slot,
+    fromDate,
+    toDate,
+    vehicleType,
+    touristDetails,
+    totalAmount,
+    openTime,
+    details,
+    token,
+    app,
+  }) => {
+    try {
+      const requestData = {
+        act: "booktckt",
+        "v.placeid": placeId,
+        "v.zoneid": zoneId,
+        "v.gateid": gateId,
+        "v.slot": slot,
+        "v.date.from": fromDate,
+        "v.date.to": toDate,
+        "v.vhcle.type": vehicleType,
+        "v.tourist.dtls": JSON.stringify(touristDetails),
+        "v.tot.amt": totalAmount,
+        "v.open.time": openTime,
+        "v.dtls": JSON.stringify(details),
+        token: token,
+        app: app,
+      };
+      const response = await axios.post(API_URL, requestData);
+      return response.data; // Return response data
+    } catch (error) {
+      console.error("Error booking ticket:", error); // Log error for debugging
+      throw new Error("Error booking ticket");
+    }
+  },
 };
 
 export default configService; // Export configService module

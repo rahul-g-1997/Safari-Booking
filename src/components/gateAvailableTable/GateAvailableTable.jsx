@@ -5,11 +5,32 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useSelector, useDispatch } from "react-redux";
+import { setDate } from "../../rtk/reducer/userBookingDataReducer";
 
 export default function GateAvailableTable({
   setShowSearchAvailability,
   setShowAddBookingDetails,
 }) {
+  const dispatch = useDispatch();
+
+  // Access the state from the Redux store
+  const userBookingData = useSelector((state) => state.userBookingData);
+  const { gate, startDate } = userBookingData;
+
+  // Convert startDate to a JavaScript Date object
+  const startDateObject = new Date(startDate);
+
+  // Calculate the next day
+  const nextDayDate = new Date(startDateObject);
+  nextDayDate.setDate(startDateObject.getDate() + 1);
+
+  // Function to format the date as 'DD/MM/YYYY'
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return date.toLocaleDateString("en-GB", options);
+  };
+
   return (
     <Paper
       sx={{
@@ -32,39 +53,36 @@ export default function GateAvailableTable({
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
                 Gate
               </TableCell>
               <TableCell
                 align="center"
-                colSpan={2}
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
-                29/04/2024 (Tue)
+                {formatDate(startDateObject)}
               </TableCell>
               <TableCell
                 align="center"
-                colSpan={2}
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
-                30/04/2024 (Tue)
+                {formatDate(nextDayDate)}
               </TableCell>
               <TableCell
                 align="center"
-                colSpan={2}
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
-                31/04/2024 (Tue)
+                {formatDate(new Date(nextDayDate.getTime() + 86400000))}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -73,54 +91,29 @@ export default function GateAvailableTable({
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
                 Morning
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
-              >
-                Afternoon
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
                 Morning
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{
                   border: "1px solid rgba(255, 255, 255, 0.5)",
                   fontWeight: "bold",
-                }} // Bold style added
-              >
-                Afternoon
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }} // Bold style added
+                }}
               >
                 Morning
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }} // Bold style added
-              >
-                Afternoon
               </TableCell>
             </TableRow>
           </TableHead>
@@ -130,47 +123,62 @@ export default function GateAvailableTable({
                 align="center"
                 sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
               >
-                Navegaon Gate (Core)
+                {gate}
               </TableCell>
               <TableCell
+                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
                 align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.5)",
+                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
+                }}
+                onClick={() => {
+                  if (gate !== "No Gate Selected") {
+                    setShowAddBookingDetails(true);
+                    setShowSearchAvailability(false);
+                    dispatch(setDate(formatDate(startDateObject))); // Dispatch setDate with startDate
+                  }
+                }}
               >
-                Gate Closed
+                {gate === "No Gate Selected" ? "_" : 4}
               </TableCell>
               <TableCell
+                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
                 align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.5)",
+                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
+                }}
+                onClick={() => {
+                  if (gate !== "No Gate Selected") {
+                    setShowAddBookingDetails(true);
+                    setShowSearchAvailability(false);
+                    dispatch(setDate(formatDate(nextDayDate))); // Dispatch setDate with nextDayDate
+                  }
+                }}
               >
-                Gate Closed
+                {gate === "No Gate Selected" ? "_" : 4}
               </TableCell>
               <TableCell
+                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
                 align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
-                onClick={() => (
-                  setShowAddBookingDetails(true),
-                  setShowSearchAvailability(false)
-                )}
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.5)",
+                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
+                }}
+                onClick={() => {
+                  if (gate !== "No Gate Selected") {
+                    setShowAddBookingDetails(true);
+                    setShowSearchAvailability(false);
+                    dispatch(
+                      setDate(
+                        formatDate(new Date(nextDayDate.getTime() + 86400000))
+                      )
+                    ); // Dispatch setDate with nextNextDayDate
+                  }
+                }}
               >
-                4
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
-              >
-                3
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
-              >
-                2
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
-              >
-                1
+                {gate === "No Gate Selected" ? "_" : 4}
               </TableCell>
             </TableRow>
           </TableBody>
