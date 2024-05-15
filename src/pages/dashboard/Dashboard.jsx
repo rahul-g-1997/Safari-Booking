@@ -301,12 +301,12 @@ export default function Dashboard() {
             </Box>
           ) : (
             <>
-              {" "}
               <Toolbar />
               <Container
-                maxWidth="100"
+                maxWidth="xl"
                 sx={{
-                  p: "30px",
+                  margin: "0 -15px",
+                  p: "20px",
                   width: "auto",
                   transition:
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",

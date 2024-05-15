@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./bookingCalendar.css"; // Import your custom CSS file for BookingCalendar
+import admin from "../../services/admin";
+import { CircularProgress } from "@mui/material";
 
 const BookingCalendar = ({ onDateSelect }) => {
   const [selectedDates, setSelectedDates] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const bookedDates = [
     new Date(2024, 4, 13),
@@ -12,7 +16,26 @@ const BookingCalendar = ({ onDateSelect }) => {
     new Date(2024, 4, 7),
   ];
 
-  const holidays = [new Date(2024, 4, 10), new Date(2024, 4, 30)]; // Define your holiday dates here
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await admin.searchHoliday(token);
+
+        // Assuming holidays are directly available in the response as an array
+        const holidayDates = Array.isArray(response.Records)
+          ? response.Records.map((holiday) => new Date(holiday.DATE)) // Extracting DATE and converting to Date objects
+          : []; // If response is not an array, set empty array
+        setHolidays(holidayDates); // Setting holiday dates in the state
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching holidays:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchHolidays();
+  }, []);
 
   const isBooked = (date) => {
     return bookedDates.some((bookedDate) => {
@@ -26,14 +49,17 @@ const BookingCalendar = ({ onDateSelect }) => {
   };
 
   const isHoliday = (date) => {
-    return holidays.some((holidayDate) => {
-      return (
-        date.getDate() === holidayDate.getDate() &&
-        date.getMonth() === holidayDate.getMonth() &&
-        date.getFullYear() === holidayDate.getFullYear() &&
-        !isPastDate(date) // Ensure date is not in the past
-      );
-    });
+    return (
+      holidays &&
+      holidays.some((holidayDate) => {
+        return (
+          date.getDate() === holidayDate.getDate() &&
+          date.getMonth() === holidayDate.getMonth() &&
+          date.getFullYear() === holidayDate.getFullYear() &&
+          !isPastDate(date) // Ensure date is not in the past
+        );
+      })
+    );
   };
 
   const isFutureDate = (date) => {
@@ -96,13 +122,17 @@ const BookingCalendar = ({ onDateSelect }) => {
 
   return (
     <div className="booking-calendar-container">
-      <Calendar
-        tileClassName={tileClassName}
-        tileDisabled={tileDisabled}
-        value={selectedDates}
-        onChange={handleDateSelect}
-        selectRange={true}
-      />
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <Calendar
+          tileClassName={tileClassName}
+          tileDisabled={tileDisabled}
+          value={selectedDates}
+          onChange={handleDateSelect}
+          selectRange={true}
+        />
+      )}
     </div>
   );
 };

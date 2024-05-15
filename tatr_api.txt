@@ -116,3 +116,18 @@ To find zone name according to placeid:(Use gate URL)
 {"act":"getzones","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"2"}
 
 
+Save and search holidays.
+
+URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/holidays
+{"act":"saveholiday","date":"2024-05-23","remark":"BudhhaPoornima","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+
+{"act":"srchholiday","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+Get all places,zones and gates.
+
+URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/getall
+
+{"act":"getalldtls","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+

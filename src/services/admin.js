@@ -61,9 +61,11 @@ const adminService = {
   deletePlace: async (token, placeId) => {
     try {
       const requestData = {
-        act: "delplaces",
+        act: "delplczone",
         token: token,
-        placeid: placeId,
+        v_placeid: placeId, // Set placeid to 0 when deleting zone
+        v_zoneid: 0,
+        actn: "P",
       };
       const response = await axios.post(`${ADMIN_API_URL}/places`, requestData);
       return response.data; // Return response data after deleting places
@@ -101,9 +103,11 @@ const adminService = {
   deleteZone: async (token, zoneId) => {
     try {
       const requestData = {
-        act: "delzone",
+        act: "delplczone",
         token: token,
-        zoneid: zoneId,
+        v_placeid: 0,
+        v_zoneid: zoneId,
+        actn: "Z",
       };
       console.log(requestData);
       const response = await axios.post(`${ADMIN_API_URL}/zone`, requestData);
@@ -159,6 +163,59 @@ const adminService = {
     } catch (error) {
       console.error("Error deleting gate:", error); // Log error for debugging
       throw new Error("Error deleting gate");
+    }
+  },
+
+  // Save holiday
+  saveHoliday: async (date, remark, token) => {
+    try {
+      const requestData = {
+        act: "saveholiday",
+        date: date,
+        remark: remark,
+        token: token,
+      };
+      const response = await axios.post(
+        `${ADMIN_API_URL}/holidays`,
+        requestData
+      );
+      return response.data; // Return response data after saving holiday
+    } catch (error) {
+      console.error("Error saving holiday:", error); // Log error for debugging
+      throw new Error("Error saving holiday");
+    }
+  },
+
+  // Search holidays
+  searchHoliday: async (token) => {
+    try {
+      const requestData = {
+        act: "srchholiday",
+        token: token,
+      };
+      const response = await axios.post(
+        `${ADMIN_API_URL}/holidays`,
+        requestData
+      );
+      return response.data; // Return response data after searching holiday
+    } catch (error) {
+      console.error("Error searching holiday:", error); // Log error for debugging
+      throw new Error("Error searching holiday");
+    }
+  },
+
+  // Get all details: places, zones, and gates
+  getAllDetails: async (token) => {
+    try {
+      const requestData = {
+        act: "getalldtls",
+        token: token,
+      };
+      const response = await axios.post(`${ADMIN_API_URL}/getall`, requestData);
+      return response.data; // Return all details data
+    } catch (error) {
+      console.error("Error fetching all details:", error); // Log error for debugging
+      throw new Error("Error fetching all details");
     }
   },
 };

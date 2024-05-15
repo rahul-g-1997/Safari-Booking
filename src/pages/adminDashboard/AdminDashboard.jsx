@@ -249,7 +249,7 @@ export default function AdminDashboard() {
               <ListItemIcon>
                 <LoupeIcon />
               </ListItemIcon>
-              <ListItemText primary="Manage locations" />
+              <ListItemText primary="Manage tourist places" />
             </ListItemButton>
             <ListItemButton
               onClick={() => {
@@ -316,12 +316,12 @@ export default function AdminDashboard() {
             </Box>
           ) : (
             <>
-              {" "}
               <Toolbar />
               <Container
-                maxWidth="100"
+                maxWidth="xl"
                 sx={{
-                  p: "30px",
+                  margin: "0 -15px",
+                  p: "20px",
                   width: "auto",
                   transition:
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
@@ -329,7 +329,7 @@ export default function AdminDashboard() {
               >
                 {showManageLocations && (
                   <div className={style.container}>
-                    <ManageLocations />
+                    <ManageLocations  />
                     <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}

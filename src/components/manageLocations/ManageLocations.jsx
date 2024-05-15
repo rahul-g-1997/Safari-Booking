@@ -7,6 +7,13 @@ import {
   Button,
   Tooltip,
   IconButton,
+  TableCell,
+  TableRow,
+  TableHead,
+  Table,
+  TableContainer,
+  TableBody,
+  Paper,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
@@ -24,6 +31,7 @@ export default function ManageLocations() {
   const [newPlaceName, setNewPlaceName] = useState("");
   const [newZoneName, setNewZoneName] = useState("");
   const [newGateName, setNewGateName] = useState("");
+  const [getall, setGetall] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -241,16 +249,72 @@ export default function ManageLocations() {
     }
   };
 
+  const fetchAllDetails = async () => {
+    try {
+      const allDetails = await admin.getAllDetails(token);
+      setGetall(allDetails.Records);
+    } catch (error) {
+      console.error("Error fetching all details:", error);
+      toast.error("Error fetching all details");
+    }
+  };
+
+  useEffect(() => {
+    fetchAllDetails();
+  }, [
+    handleSaveGate,
+    handleDeleteGate,
+    handleDeleteZone,
+    handleSaveZone,
+    handleDeletePlace,
+    handleSavePlace,
+  ]); // Fetch all details on component mount
+
   useEffect(() => {
     fetchPlaces();
     fetchZones(); // Call fetchZones function when selectedPlace changes
     fetchGates(); // Call fetchGates function when selectedPlace changes
   }, [selectedPlace, selectedZone]);
 
+  function transformData(records) {
+    let places = {};
+
+    records.forEach((record) => {
+      let placeName = record.PLACE_NM;
+      let zoneName = record.ZONE_NM;
+      let gateName = record.GATE_NM;
+
+      if (!places[placeName]) {
+        places[placeName] = { Name: placeName, Zones: [] };
+      }
+
+      let zone = places[placeName].Zones.find((zone) => zone.Name === zoneName);
+
+      if (!zone) {
+        zone = { Name: zoneName, Gates: [] };
+        places[placeName].Zones.push(zone);
+      }
+
+      if (gateName && !zone.Gates.includes(gateName)) {
+        zone.Gates.push(gateName);
+      }
+    });
+
+    // Convert object to array
+    let result = [];
+    for (let placeName in places) {
+      result.push(places[placeName]);
+    }
+
+    return result;
+  }
+
+  let transformedData = transformData(getall);
+
   return (
     <div>
       {!showPlaceInputField && (
-        <Grid container spacing={2} mt={1} height={200}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
             <TextField
               fullWidth
@@ -325,7 +389,6 @@ export default function ManageLocations() {
           )}
         </Grid>
       )}
-
       {/* input filds for place */}
       {showPlaceInputField && (
         <div>
@@ -379,7 +442,6 @@ export default function ManageLocations() {
           ))}
         </ul>
       )}
-
       {/* input filds for zone */}
       {showZoneInputField && (
         <div>
@@ -433,7 +495,6 @@ export default function ManageLocations() {
           ))}
         </ul>
       )}
-
       {/* input filds for gate */}
       {showGateInputField && (
         <div>
@@ -487,6 +548,126 @@ export default function ManageLocations() {
           ))}
         </ul>
       )}
+
+      <Paper
+        sx={{
+          marginTop: 7,
+          width: "auto",
+          overflow: "hidden",
+          backgroundColor: "rgba(157, 178, 191, 0.1)",
+          backdropFilter: "blur(21px) saturate(200%)",
+          WebkitBackdropFilter: "blur(21px) saturate(200%)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.5)", // Increased border visibility
+        }}
+      >
+        <TableContainer>
+          <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid rgba(255, 255, 255, 0.5)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Place
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {transformedData.map((place) => (
+                <TableRow key={place.Name}>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {place.Name}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(255, 255, 255, 0.5)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Zone
+                        </TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {place.Zones.map((zone) => (
+                          <TableRow key={zone.Name}>
+                            <TableCell
+                              align="center"
+                              sx={{
+                                border: "1px solid rgba(255, 255, 255, 0.5)",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {zone.Name}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              sx={{
+                                border: "1px solid rgba(255, 255, 255, 0.5)",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              <Table>
+                                <TableHead>
+                                  <TableCell
+                                    align="center"
+                                    sx={{
+                                      border:
+                                        "1px solid rgba(255, 255, 255, 0.5)",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Gate
+                                  </TableCell>
+                                </TableHead>
+                                <TableBody>
+                                  {zone.Gates.map((gate) => (
+                                    <TableRow key={gate}>
+                                      <TableCell
+                                        align="center"
+                                        sx={{
+                                          border:
+                                            "1px solid rgba(255, 255, 255, 0.5)",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        {gate}
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 }

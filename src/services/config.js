@@ -96,7 +96,7 @@ const configService = {
       throw new Error("Error fetching gate availability");
     }
   },
-  
+
   // Book ticket
   bookTicket: async ({
     placeId,
