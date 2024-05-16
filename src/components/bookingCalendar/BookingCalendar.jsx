@@ -22,11 +22,23 @@ const BookingCalendar = ({ onDateSelect }) => {
         const token = localStorage.getItem("token");
         const response = await admin.searchHoliday(token);
 
-        // Assuming holidays are directly available in the response as an array
-        const holidayDates = Array.isArray(response.Records)
-          ? response.Records.map((holiday) => new Date(holiday.DATE)) // Extracting DATE and converting to Date objects
-          : []; // If response is not an array, set empty array
-        setHolidays(holidayDates); // Setting holiday dates in the state
+        if (Array.isArray(response.Records)) {
+          const holidayDates = response.Records.map((holiday) => {
+            const startDateParts = holiday.DATE_FROM.split("-").map(Number);
+            const startDate = new Date(
+              startDateParts[0],
+              startDateParts[1] - 1,
+              startDateParts[2]
+            );
+
+            const endDate = new Date(holiday.DATE_TO);
+            return { startDate, endDate };
+          });
+          setHolidays(holidayDates);
+        } else {
+          setHolidays([]);
+        }
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching holidays:", error);
@@ -51,11 +63,11 @@ const BookingCalendar = ({ onDateSelect }) => {
   const isHoliday = (date) => {
     return (
       holidays &&
-      holidays.some((holidayDate) => {
+      holidays.some((holiday) => {
+        const { startDate, endDate } = holiday;
         return (
-          date.getDate() === holidayDate.getDate() &&
-          date.getMonth() === holidayDate.getMonth() &&
-          date.getFullYear() === holidayDate.getFullYear() &&
+          date >= startDate &&
+          date <= endDate && // Check if the date is within the holiday range
           !isPastDate(date) // Ensure date is not in the past
         );
       })

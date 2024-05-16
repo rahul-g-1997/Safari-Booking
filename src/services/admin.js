@@ -167,14 +167,16 @@ const adminService = {
   },
 
   // Save holiday
-  saveHoliday: async (date, remark, token) => {
+  saveHoliday: async (startDate, endDate, remark, token) => {
     try {
       const requestData = {
         act: "saveholiday",
-        date: date,
+        date_from: startDate,
+        date_to: endDate,
         remark: remark,
         token: token,
       };
+
       const response = await axios.post(
         `${ADMIN_API_URL}/holidays`,
         requestData
