@@ -124,6 +124,7 @@ export default function ManageLocations() {
       await fetchPlaces();
 
       // Show success message
+      fetchAllDetails();
       toast.success("Place saved successfully");
     } catch (error) {
       console.error("Error saving place:", error);
@@ -141,6 +142,7 @@ export default function ManageLocations() {
       await admin.deletePlace(token, placeId);
       // Fetch updated places data
       await fetchPlaces();
+      fetchAllDetails();
       toast.success("Place delete successfully");
     } catch (error) {
       console.error("Error deleting place:", error.message);
@@ -177,6 +179,7 @@ export default function ManageLocations() {
       await fetchZones();
 
       // Show success message
+      fetchAllDetails();
       toast.success("Zone saved successfully");
     } catch (error) {
       console.error("Error saving zone:", error.message);
@@ -193,6 +196,7 @@ export default function ManageLocations() {
       await admin.deleteZone(token, `${zoneId}`);
       // Fetch updated zones data
       await fetchZones();
+      fetchAllDetails();
       toast.success("Zone deleted successfully");
     } catch (error) {
       console.error("Error deleting zone:", error.message);
@@ -227,6 +231,7 @@ export default function ManageLocations() {
       await admin.saveGate(placeId, zoneId, newGateName, token);
       // Fetch updated gates data
       await fetchGates();
+      fetchAllDetails();
       toast.success("Gate saved successfully");
     } catch (error) {
       console.error("Error saving gate:", error.message);
@@ -242,6 +247,7 @@ export default function ManageLocations() {
       await admin.deleteGate(token, gateId);
       // Fetch updated gates data
       await fetchGates();
+      fetchAllDetails();
       toast.success("Gate deleted successfully");
     } catch (error) {
       console.error("Error deleting gate:", error.message);
@@ -252,6 +258,7 @@ export default function ManageLocations() {
   const fetchAllDetails = async () => {
     try {
       const allDetails = await admin.getAllDetails(token);
+      console.log(allDetails.Records);
       setGetall(allDetails.Records);
     } catch (error) {
       console.error("Error fetching all details:", error);
@@ -261,55 +268,14 @@ export default function ManageLocations() {
 
   useEffect(() => {
     fetchAllDetails();
-  }, [
-    handleSaveGate,
-    handleDeleteGate,
-    handleDeleteZone,
-    handleSaveZone,
-    handleDeletePlace,
-    handleSavePlace,
-  ]); // Fetch all details on component mount
+    console.log(getall);
+  }, []); // Fetch all details on component mount
 
   useEffect(() => {
     fetchPlaces();
     fetchZones(); // Call fetchZones function when selectedPlace changes
     fetchGates(); // Call fetchGates function when selectedPlace changes
   }, [selectedPlace, selectedZone]);
-
-  function transformData(records) {
-    let places = {};
-
-    records.forEach((record) => {
-      let placeName = record.PLACE_NM;
-      let zoneName = record.ZONE_NM;
-      let gateName = record.GATE_NM;
-
-      if (!places[placeName]) {
-        places[placeName] = { Name: placeName, Zones: [] };
-      }
-
-      let zone = places[placeName].Zones.find((zone) => zone.Name === zoneName);
-
-      if (!zone) {
-        zone = { Name: zoneName, Gates: [] };
-        places[placeName].Zones.push(zone);
-      }
-
-      if (gateName && !zone.Gates.includes(gateName)) {
-        zone.Gates.push(gateName);
-      }
-    });
-
-    // Convert object to array
-    let result = [];
-    for (let placeName in places) {
-      result.push(places[placeName]);
-    }
-
-    return result;
-  }
-
-  let transformedData = transformData(getall);
 
   return (
     <div>
@@ -548,11 +514,10 @@ export default function ManageLocations() {
           ))}
         </ul>
       )}
-
       <Paper
         sx={{
           marginTop: 7,
-          width: "auto",
+          width: "100%",
           overflow: "hidden",
           backgroundColor: "rgba(157, 178, 191, 0.1)",
           backdropFilter: "blur(21px) saturate(200%)",
@@ -574,93 +539,59 @@ export default function ManageLocations() {
                 >
                   Place
                 </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid rgba(255, 255, 255, 0.5)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Zones
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid rgba(255, 255, 255, 0.5)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Gates
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {transformedData.map((place) => (
-                <TableRow key={place.Name}>
+              {getall.map((place) => (
+                <TableRow key={place.PLACE}>
                   <TableCell
                     align="center"
                     sx={{
                       border: "1px solid rgba(255, 255, 255, 0.5)",
-                      fontWeight: "bold",
                     }}
                   >
-                    {place.Name}
+                    {place.PLACE}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{
                       border: "1px solid rgba(255, 255, 255, 0.5)",
-                      fontWeight: "bold",
                     }}
                   >
-                    <Table>
-                      <TableHead>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(255, 255, 255, 0.5)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Zone
-                        </TableCell>
-                      </TableHead>
-                      <TableBody>
-                        {place.Zones.map((zone) => (
-                          <TableRow key={zone.Name}>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(255, 255, 255, 0.5)",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {zone.Name}
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(255, 255, 255, 0.5)",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              <Table>
-                                <TableHead>
-                                  <TableCell
-                                    align="center"
-                                    sx={{
-                                      border:
-                                        "1px solid rgba(255, 255, 255, 0.5)",
-                                      fontWeight: "bold",
-                                    }}
-                                  >
-                                    Gate
-                                  </TableCell>
-                                </TableHead>
-                                <TableBody>
-                                  {zone.Gates.map((gate) => (
-                                    <TableRow key={gate}>
-                                      <TableCell
-                                        align="center"
-                                        sx={{
-                                          border:
-                                            "1px solid rgba(255, 255, 255, 0.5)",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        {gate}
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    {place.ZONES.map((zone) => (
+                      <div key={zone.ZONEID}>{zone.ZONE}</div>
+                    ))}
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                    }}
+                  >
+                    {place.ZONES.map((zone) =>
+                      zone.GATES.map((gate) => (
+                        <div key={gate.GATEID}>{gate.GATE_NM}</div>
+                      ))
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

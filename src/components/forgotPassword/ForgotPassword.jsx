@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
 import PropTypes from "prop-types";
-import config from "../../services/config";
+import configService from "../../services/config"; // Ensure correct path to your config service
 import { toast } from "react-toastify";
 import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 import { useDispatch } from "react-redux";
@@ -31,7 +31,7 @@ export default function ForgotPassword({ toggleSignIn }) {
   const handleSendEmailOtp = async (event) => {
     event.preventDefault();
     try {
-      const response = await config.sendOTP(email);
+      const response = await configService.sendOTP(email);
 
       if (response.Result === "OK") {
         setSendOtpMessage(`A password reset OTP has been sent to ${email}.`);
@@ -48,8 +48,7 @@ export default function ForgotPassword({ toggleSignIn }) {
   const handleVerifyEmail = async (event) => {
     event.preventDefault();
     try {
-      const response = await config.verifyEmail(email, enteredOtp);
-
+      const response = await configService.verifyOTP(email, enteredOtp);
       if (response.Result === "OK") {
         setEmailVerified(true);
         setSendOtpMessage(""); // Clear OTP message
@@ -73,13 +72,14 @@ export default function ForgotPassword({ toggleSignIn }) {
 
       dispatch(startLoading());
 
-      const response = await config.resetPassword(
+      const response = await configService.resetPassword(
         email,
         newPassword,
         enteredOtp
       );
 
       if (response.Result === "OK") {
+        toast.success("Reset successful!");
         setResetPasswordMessage("Reset successful!");
         setConfirmPassword("");
         setNewPassword("");
@@ -219,11 +219,10 @@ export default function ForgotPassword({ toggleSignIn }) {
                   </Grid>
                   <Grid item xs={12}>
                     <Button
-                      type="button"
+                      type="submit"
                       fullWidth
                       variant="contained"
                       sx={{ mt: 3 }}
-                      onClick={handleSubmit}
                     >
                       Reset Password
                     </Button>

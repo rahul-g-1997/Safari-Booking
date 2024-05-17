@@ -161,8 +161,8 @@ export default function AddBookingDetails({
                 handleInputChange(i, "identityType", e.target.value)
               }
             >
+              <MenuItem value="idCard">Adhar Card</MenuItem>
               <MenuItem value="passport">Passport</MenuItem>
-              <MenuItem value="idCard">ID Card</MenuItem>
               {/* Add other identity type options */}
             </TextField>
           </TableCell>
@@ -449,23 +449,6 @@ export default function AddBookingDetails({
           </AccordionDetails>
         </Accordion>
         <Accordion
-          expanded={expanded === "panel4"}
-          onChange={handleChange("panel4")}
-        >
-          <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-            <Typography>Camera details</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid>
-              <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableBody>{generateCameraDetailsRows()}</TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
         >
@@ -497,6 +480,23 @@ export default function AddBookingDetails({
                       </TableCell>
                     </TableRow>
                   </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded === "panel4"}
+          onChange={handleChange("panel4")}
+        >
+          <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+            <Typography>Camera details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableBody>{generateCameraDetailsRows()}</TableBody>
                 </Table>
               </TableContainer>
             </Grid>

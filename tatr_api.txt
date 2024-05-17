@@ -25,10 +25,16 @@ Send OTP to both(email,sms,whatsapp)
 {"act":"forgotpswd","usr.login":"pawar.nidhi19@gmail.com","emailfor":"OTP","provider":"bhash","emailprovider":"datae",
 "senderid":"DTENGN","smsfor":"OTP","wappfor":"OTP"}
 
+
+This is for reset password:
 Reset Password:(Use above URL for reset the password)
 {"act":"resetpswd","usr.login":"pawar.nidhi19@gmail.com","usr.pwd":"abc","otp":"5116"}
 
 Note:Use OTP, which is send in your email.
+
+
+Match EmailId whether it is correct or not.
+{"act":"matcheml","usr.login":"pawar.nidhi19@gmail.com","otp":"0133"}
 
 URL:https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/getall
 
@@ -70,7 +76,7 @@ Password:aa
 Token:eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs
 
 For Places:
-URL:https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/places
+URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/places
 
 1)Save places:
 {"act":"saveplaces","place.nm":"Umred","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
@@ -81,11 +87,10 @@ URL:https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/places
 3)Search Places:
 {"act":"srchplaces","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
-4)Delete Places:
-{"act":"delplaces","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"3"}
+
 
 For Zone:
-https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/zone
+https:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/zone
 1)Save zones:
 {"act":"savezone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"2","zone.nm":"Mohrli"}
 
@@ -95,11 +100,9 @@ https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/zone
 3)Search zones:
 {"act":"srchzone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
-4)Delete zones:
-{"act":"delzone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","zoneid":"3"}
 
 For Gate:
-https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/gate
+https:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/gate
 1)Save Gate:
 {"act":"savegate","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"1","zoneid":"2","gate.nm":"Mohrli"}
 
@@ -112,8 +115,17 @@ https://hp3hkkrgg6.execute-api.ap-south-1.amazonaws.com/dev/gate
 4)Delete Gate:
 {"act":"delgate","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","gateid":"3"}
 
+
+
 To find zone name according to placeid:(Use gate URL) 
 {"act":"getzones","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","placeid":"2"}
+
+
+URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/places
+Delete both place and zone with provide actn('P' for place and 'Z' for zone)
+Note:When it is applied for place then zoneid =0 and when for zone placeid =0
+{"act":"delplczone","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","v_zoneid":"10","v_placeid":"0","actn":"Z"}
+
 
 
 Save and search holidays.

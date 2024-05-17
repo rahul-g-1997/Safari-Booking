@@ -293,7 +293,7 @@ export default function ConfirmDetails() {
           <Typography>Total Amount: 4750 </Typography>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" disabled={!termsChecked}>
             Pay
           </Button>
         </Grid>

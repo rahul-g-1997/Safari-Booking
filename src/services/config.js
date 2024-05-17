@@ -61,6 +61,22 @@ const configService = {
     }
   },
 
+  // Verify OTP
+  verifyOTP: async (email, otp) => {
+    try {
+      const requestData = {
+        act: "matcheml",
+        "usr.login": email,
+        otp: otp,
+      };
+      const response = await axios.post(`${API_URL}/forgotpwd`, requestData); // Adjust the endpoint if needed
+      return response.data; // Return response data
+    } catch (error) {
+      console.error("Error verifying OTP:", error); // Log error for debugging
+      throw new Error("Error verifying OTP");
+    }
+  },
+
   // Reset Password
   resetPassword: async (email, newPassword, otp) => {
     try {
