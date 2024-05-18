@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useSelector, useDispatch } from "react-redux";
-import { setDate } from "../../rtk/reducer/userBookingDataReducer";
+import { setBookingDate } from "../../rtk/reducer/userBookingDataReducer";
 
 export default function GateAvailableTable({
   setShowSearchAvailability,
@@ -136,7 +136,7 @@ export default function GateAvailableTable({
                   if (gate !== "No Gate Selected") {
                     setShowAddBookingDetails(true);
                     setShowSearchAvailability(false);
-                    dispatch(setDate(formatDate(startDateObject))); // Dispatch setDate with startDate
+                    dispatch(setBookingDate(formatDate(startDateObject))); // Dispatch setDate with startDate
                   }
                 }}
               >
@@ -153,7 +153,7 @@ export default function GateAvailableTable({
                   if (gate !== "No Gate Selected") {
                     setShowAddBookingDetails(true);
                     setShowSearchAvailability(false);
-                    dispatch(setDate(formatDate(nextDayDate))); // Dispatch setDate with nextDayDate
+                    dispatch(setBookingDate(formatDate(nextDayDate))); // Dispatch setDate with nextDayDate
                   }
                 }}
               >
@@ -171,7 +171,7 @@ export default function GateAvailableTable({
                     setShowAddBookingDetails(true);
                     setShowSearchAvailability(false);
                     dispatch(
-                      setDate(
+                      setBookingDate(
                         formatDate(new Date(nextDayDate.getTime() + 86400000))
                       )
                     ); // Dispatch setDate with nextNextDayDate

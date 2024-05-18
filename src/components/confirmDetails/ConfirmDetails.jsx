@@ -23,7 +23,39 @@ export default function ConfirmDetails() {
   const [openDialog, setOpenDialog] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
   const userBookingData = useSelector((state) => state.userBookingData);
-  const { place, zone, gate, vehicle, date, slot } = userBookingData;
+  const {
+    place,
+    zone,
+    gate,
+    vehicle,
+    bookingDate,
+    slot,
+    numberOfTourism,
+    tourismDetails,
+    contact,
+    numberOfCamera,
+    cameraDetails,
+    numberOfChildren,
+    childrenDetails,
+  } = userBookingData;
+
+  const bookingData = {
+    place: place,
+    zone: zone,
+    gate: gate,
+    bookingDate: bookingDate,
+    slot: slot,
+    vehicle: vehicle,
+    numberOfTourism: numberOfTourism,
+    tourismDetails: tourismDetails,
+    contact: contact,
+    numberOfCamera: numberOfCamera,
+    cameraDetails: cameraDetails,
+    numberOfChildren: numberOfChildren,
+    childrenDetails: childrenDetails,
+  };
+  console.log(bookingData);
+  
   const handleCheckboxChange = (event) => {
     // Check if the checkbox is not already checked
     if (!termsChecked) {
@@ -87,7 +119,7 @@ export default function ConfirmDetails() {
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Date of Booking: {date}
+            Date of Booking: {bookingDate}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -150,7 +182,6 @@ export default function ConfirmDetails() {
         </Grid>
       </Grid>
       <Grid></Grid>
-
       <Grid container mt={3}>
         <Grid item xs={12}>
           <Typography variant="body1" gutterBottom>

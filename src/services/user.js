@@ -1,6 +1,5 @@
 import axios from "axios";
 import conf from "../conf/conf";
-import { toast } from "react-toastify";
 
 const API_URL = conf.user_backend_url; // API base URL
 
@@ -42,13 +41,7 @@ const authService = {
     try {
       const response = await axios.post(`${API_URL}/register`, userData);
 
-      if (response.data.Result == "OK") {
-        toast.success("Registration successful.");
-        return response; // Return response data
-      } else {
-        toast.error(response.data.Msg);
-        throw new Error(response.data.Msg);
-      }
+      return response;
     } catch (error) {
       console.error(error); // Log the error for debugging
     }

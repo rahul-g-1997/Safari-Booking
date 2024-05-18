@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "dayjs": "^1.11.10",
+    "mui-tel-input": "^5.1.2",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
     "react-date-range": "^2.0.1",

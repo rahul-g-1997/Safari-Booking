@@ -20,6 +20,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 import { useDispatch } from "react-redux";
+import { MuiTelInput } from "mui-tel-input";
 
 export default function SignUp({ toggleSignIn }) {
   const dispatch = useDispatch();
@@ -41,6 +42,13 @@ export default function SignUp({ toggleSignIn }) {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleTelChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      mobileNumber: value,
     }));
   };
 
@@ -93,37 +101,41 @@ export default function SignUp({ toggleSignIn }) {
       "usr.fnm": formData.firstName,
       "usr.lnm": formData.lastName,
       "usr.eml": formData.email,
-      "usr.cntc": formData.mobileNumber,
+      "usr.cntc": formData.mobileNumber.replace(/\s+/g, ""),
       dob: formData.dob,
-      gender: formData.gender.toUpperCase(), // Assuming the backend requires uppercase gender
-      dtls: "{}", // Not sure what this field represents, leaving it as an empty object
+      gender: formData.gender.toUpperCase(),
+      dtls: "{}",
       pswd: formData.password,
     };
 
     try {
-      dispatch(startLoading()); // Start loading when sign-in process starts
+      dispatch(startLoading());
+      console.log(sendData);
       const response = await user.createAccount(sendData);
-      console.log(response);
-      toggleSignIn();
+      if (response.data.Result == "OK") {
+        toast.success("Registration successful.");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          mobileNumber: "",
+          password: "",
+          confirmPassword: "",
+          dob: "",
+          gender: "",
+          receiveEmails: false,
+        });
+        toggleSignIn();
+      } else {
+        toast.warn(response.data.Msg);
+        throw new Error(response.data.Msg);
+      }
     } catch (error) {
       console.error("Account creation error:", error);
       toast.error("Failed to create account.");
     } finally {
-      dispatch(stopLoading()); // Stop loading when sign-in is completed
+      dispatch(stopLoading());
     }
-
-    // Reset form data
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      mobileNumber: "",
-      password: "",
-      confirmPassword: "",
-      dob: "",
-      gender: "",
-      receiveEmails: false,
-    });
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -225,16 +237,16 @@ export default function SignUp({ toggleSignIn }) {
                   }
                 />
               </Grid>
-
               <Grid item xs={12}>
-                <TextField
+                <MuiTelInput
                   required
                   fullWidth
+                  defaultCountry="IN"
                   name="mobileNumber"
                   label="Mobile Number"
                   id="mobileNumber"
                   value={formData.mobileNumber}
-                  onChange={handleChange}
+                  onChange={handleTelChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -278,7 +290,7 @@ export default function SignUp({ toggleSignIn }) {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
                   value={formData.password}

@@ -1,16 +1,20 @@
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import { useEffect, useState } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  IconButton,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import RefreshIcon from "@mui/icons-material/Refresh"; // Import Refresh icon
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../theme";
-import "./SignIn.css";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { login } from "../../rtk/reducer/userReducer";
@@ -18,22 +22,22 @@ import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 import { useNavigate } from "react-router-dom";
 import {
   loadCaptchaEnginge,
-  LoadCanvasTemplate,
+  LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha";
 import { toast } from "react-toastify";
 import user from "../../services/user";
-import { useEffect, useState } from "react";
+import "./SignIn.css";
 
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [captchaValue, setCaptchaValue] = useState("");
+  const [captchaKey, setCaptchaKey] = useState(Math.random()); // State to manage CAPTCHA reload
 
   useEffect(() => {
-    // Load captcha engine on component mount
-    loadCaptchaEnginge(6);
-  }, []);
+    loadCaptchaEnginge(6); // Load captcha engine on component mount
+  }, [captchaKey]); // Re-run this effect when captchaKey changes
 
   const handleSignInSuccess = async (token, USR_TYPE) => {
     try {
@@ -103,6 +107,11 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
     }
   };
 
+  const reloadCaptcha = () => {
+    setCaptchaKey(Math.random()); // Change the key to reload the CAPTCHA
+    setCaptchaValue(""); // Clear the input field
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -154,29 +163,41 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
               id="password"
               autoComplete="current-password"
             />
+
             <Box
               style={{
                 display: "flex",
                 alignItems: "center",
                 marginBottom: "8px",
               }}
+              className="captcha-container"
             >
-              <LoadCanvasTemplate />
-              <TextField
-                style={{ width: "calc(100% - 160px)", margin: "0 8px" }}
-                placeholder="Enter Captcha Value"
-                id="user_captcha_input"
-                name="user_captcha_input"
-                variant="outlined"
-                value={captchaValue}
-                onChange={(e) => setCaptchaValue(e.target.value)}
-              />
+              <div style={{ flex: "45%" }}>
+                <LoadCanvasTemplateNoReload key={captchaKey} />
+              </div>
+              <div style={{ flex: "10%" }}>
+                <IconButton onClick={reloadCaptcha}>
+                  <RefreshIcon />
+                </IconButton>
+              </div>
+              <div style={{ flex: "45%" }}>
+                <TextField
+                  style={{ width: "100%" }}
+                  placeholder="Enter Captcha Value"
+                  id="user_captcha_input"
+                  name="user_captcha_input"
+                  variant="outlined"
+                  value={captchaValue}
+                  onChange={(e) => setCaptchaValue(e.target.value)}
+                />
+              </div>
             </Box>
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 1, mb: 2 }}
             >
               Sign In
             </Button>
@@ -190,9 +211,13 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
                   {"Don't have an account? Register"}
                 </Link>
               </Grid>
-              <Grid item>
-                <Link href="#" variant="body2" onClick={toggleForgotPassword}>
-                  Forgot password?
+              <Grid item xs sx={{ textAlign: "right" }}>
+                <Link
+                  variant="body2"
+                  sx={{ cursor: "pointer" }}
+                  onClick={toggleForgotPassword}
+                >
+                  {"Forgot credentials?"}
                 </Link>
               </Grid>
             </Grid>

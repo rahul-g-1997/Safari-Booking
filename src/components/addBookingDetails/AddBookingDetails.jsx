@@ -25,7 +25,16 @@ import {
   Paper,
   FormControl,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setNumberOfTourism,
+  setTourismDetails,
+  setContact,
+  setNumberOfCamera,
+  setCameraDetails,
+  setNumberOfChildren,
+  setChildrenDetails,
+} from "../../rtk/reducer/userBookingDataReducer";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -69,6 +78,7 @@ export default function AddBookingDetails({
   setShowConfirmDetails,
   setShowAddBookingDetails,
 }) {
+  const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState("");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
@@ -129,7 +139,7 @@ export default function AddBookingDetails({
               type="number"
               variant="standard"
               size="small"
-              fullWidth
+              sx={{ width: 100 }}
               value={formData[i]?.age || ""}
               onChange={(e) => handleInputChange(i, "age", e.target.value)}
             />
@@ -196,17 +206,16 @@ export default function AddBookingDetails({
     };
 
     const cameraRows = [];
-    for (let i = 0; i < parseInt(numberOfCameras); i++) {
+    for (let i = 0; i < parseInt(numberOfCameras); i += 2) {
       cameraRows.push(
-        <TableRow key={i}>
-          <TableCell>
+        <Grid container spacing={2} key={i}>
+          <Grid item xs={12} sm={6}>
             <TextField
               select
               label={`Camera ${i + 1} Name`}
               variant="standard"
               size="small"
               fullWidth
-              style={{ width: "40%" }}
               value={cameraFormData[i]?.cameraName || ""}
               onChange={(e) =>
                 handleCameraInputChange(i, "cameraName", e.target.value)
@@ -219,15 +228,68 @@ export default function AddBookingDetails({
                 Video camera (non-Professional & non Commercial use), Handy cam
               </MenuItem>
             </TextField>
-          </TableCell>
-        </TableRow>
+          </Grid>
+          {/* Check if the next index exists */}
+          {i + 1 < parseInt(numberOfCameras) && (
+            <Grid item xs={12} sm={6}>
+              <TextField
+                select
+                label={`Camera ${i + 2} Name`}
+                variant="standard"
+                size="small"
+                fullWidth
+                value={cameraFormData[i + 1]?.cameraName || ""}
+                onChange={(e) =>
+                  handleCameraInputChange(i + 1, "cameraName", e.target.value)
+                }
+              >
+                <MenuItem value="Point & Shoot Camera/DSLR/Mirrorless camera with lens">
+                  Point & Shoot Camera/DSLR/Mirrorless camera with lens
+                </MenuItem>
+                <MenuItem value="Video camera (non-Professional & non Commercial use), Handy cam">
+                  Video camera (non-Professional & non Commercial use), Handy
+                  cam
+                </MenuItem>
+              </TextField>
+            </Grid>
+          )}
+        </Grid>
       );
     }
     return cameraRows;
   };
 
   const userBookingData = useSelector((state) => state.userBookingData);
-  const { place, zone, gate, vehicle, date, slot } = userBookingData;
+  const { place, zone, gate, vehicle, bookingDate, slot } = userBookingData;
+
+  const handleConfirmDetails = () => {
+    // Dispatch actions with the provided details
+    dispatch(setNumberOfTourism(parseInt(numberOfPersons)));
+    dispatch(setTourismDetails(formData));
+    dispatch(
+      setContact({
+        address: formData[0]?.address || "", // Assuming address is entered in the first person's details
+        contactNumber: formData[0]?.contactNumber || "", // Assuming contact number is entered in the first person's details
+      })
+    );
+    dispatch(setNumberOfCamera(parseInt(numberOfCameras)));
+    dispatch(setCameraDetails(cameraFormData));
+
+    // Collect children details from form fields
+    const childrenDetails = [];
+    for (let i = 0; i < 2; i++) {
+      const childName = formData[i]?.childName || ""; // Assuming child name is entered in the first two rows of the children table
+      const childAge = formData[i]?.childAge || ""; // Assuming child age is entered in the first two rows of the children table
+      childrenDetails.push({ childrenName: childName, age: childAge });
+    }
+    dispatch(setNumberOfChildren(childrenDetails.length));
+    dispatch(setChildrenDetails(childrenDetails));
+
+    // Show Confirm Details component
+    setShowAddBookingDetails(false);
+    setShowConfirmDetails(true);
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -275,7 +337,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Date of Booking: {date}
+              Date of Booking: {bookingDate}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -403,7 +465,13 @@ export default function AddBookingDetails({
                 </Table>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead sx={{ backgroundColor: "white" }}>
-                    <Typography>children (Max 2 allowed )</Typography>
+                    <TableRow>
+                      <TableCell colSpan={4}>
+                        <Typography align="center">
+                          Children (Max 2 allowed)
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
@@ -513,9 +581,7 @@ export default function AddBookingDetails({
           <Button
             fullWidth
             variant="contained"
-            onClick={() => (
-              setShowAddBookingDetails(false), setShowConfirmDetails(true)
-            )}
+            onClick={() => handleConfirmDetails()}
           >
             Conform Details
           </Button>

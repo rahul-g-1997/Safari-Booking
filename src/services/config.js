@@ -94,6 +94,21 @@ const configService = {
     }
   },
 
+  //forgot username
+  getUsername: async (number) => {
+    try {
+      const requestData = {
+        act: "geteml",
+        "usr.cntc": number.replace(/\s+/g, ""),
+      };
+      const response = await axios.post(`${API_URL}/forgotpwd`, requestData);
+      return response.data;
+    } catch (error) {
+      console.error("Error getting username:", error);
+      throw new Error("Error getting username");
+    }
+  },
+
   // Get availability
   getAvailability: async (zoneId, gateId, slot, fromDate, toDate) => {
     try {
