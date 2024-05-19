@@ -81,8 +81,6 @@ export default function SanctuaryDetails({
       const [startDate, endDate] = selectedDate;
       dispatch(setStartDate(startDate.toISOString())); // Convert startDate to ISO string
       dispatch(setEndDate(endDate.toISOString())); // Convert endDate to ISO string
-
-      console.log(availability.Records);
       setBooked(availability.Records);
       setShowGateTable(true);
     } catch (error) {

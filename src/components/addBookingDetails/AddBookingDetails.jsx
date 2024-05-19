@@ -35,6 +35,7 @@ import {
   setNumberOfChildren,
   setChildrenDetails,
 } from "../../rtk/reducer/userBookingDataReducer";
+import { MuiTelInput } from "mui-tel-input";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -86,6 +87,11 @@ export default function AddBookingDetails({
   const entryFees = 4000;
   const [formData, setFormData] = useState([]);
   const [cameraFormData, setCameraFormData] = useState([]);
+  const [mobileNumber, setMobileNumber] = useState();
+
+  const handleTelChange = (value) => {
+    setMobileNumber(value);
+  };
 
   const handleInputChange = (setter) => (event) => {
     setter(event.target.value);
@@ -209,7 +215,7 @@ export default function AddBookingDetails({
     for (let i = 0; i < parseInt(numberOfCameras); i += 2) {
       cameraRows.push(
         <Grid container spacing={2} key={i}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <TextField
               select
               label={`Camera ${i + 1} Name`}
@@ -231,7 +237,7 @@ export default function AddBookingDetails({
           </Grid>
           {/* Check if the next index exists */}
           {i + 1 < parseInt(numberOfCameras) && (
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 select
                 label={`Camera ${i + 2} Name`}
@@ -451,7 +457,7 @@ export default function AddBookingDetails({
             <Grid>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead sx={{ backgroundColor: "white" }}>
+                  <TableHead sx={{ backgroundColor: "#e3c2bd" }}>
                     <TableRow>
                       <TableCell>Tourist name</TableCell>
                       <TableCell>Gender</TableCell>
@@ -464,7 +470,7 @@ export default function AddBookingDetails({
                   <TableBody>{generateTourismDetailsRows()}</TableBody>
                 </Table>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead sx={{ backgroundColor: "white" }}>
+                  <TableHead sx={{ backgroundColor: "#e3c2bd" }}>
                     <TableRow>
                       <TableCell colSpan={4}>
                         <Typography align="center">
@@ -538,12 +544,14 @@ export default function AddBookingDetails({
                         />
                       </TableCell>
                       <TableCell>
-                        <TextField
-                          label="Number"
-                          type="number"
-                          variant="standard"
-                          size="small"
-                          fullWidth
+                        <MuiTelInput
+                          required
+                          defaultCountry="IN"
+                          name="mobileNumber"
+                          label="Mobile Number"
+                          id="mobileNumber"
+                          value={mobileNumber}
+                          onChange={handleTelChange}
                         />
                       </TableCell>
                     </TableRow>

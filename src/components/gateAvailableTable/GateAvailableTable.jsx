@@ -1,18 +1,30 @@
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setBookingDate } from "../../rtk/reducer/userBookingDataReducer";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import adminService from "../../services/admin";
 
 export default function GateAvailableTable({
+  booked,
   setShowSearchAvailability,
   setShowAddBookingDetails,
 }) {
   const dispatch = useDispatch();
+  const [holidays, setHolidays] = useState([]);
+  const [bookings, setBookings] = useState({
+    // Example booking data, replace with real data fetching
+    "29/05/2024": 1,
+    "30/05/2024": 2,
+    "01/06/2024": 4,
+  });
 
   // Access the state from the Redux store
   const userBookingData = useSelector((state) => state.userBookingData);
@@ -21,14 +33,76 @@ export default function GateAvailableTable({
   // Convert startDate to a JavaScript Date object
   const startDateObject = new Date(startDate);
 
-  // Calculate the next day
-  const nextDayDate = new Date(startDateObject);
-  nextDayDate.setDate(startDateObject.getDate() + 1);
-
   // Function to format the date as 'DD/MM/YYYY'
   const formatDate = (date) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
     return date.toLocaleDateString("en-GB", options);
+  };
+
+  // Utility function to check if a date is within any holiday range
+  const isHoliday = (date) => {
+    return holidays.some(
+      (holiday) => date >= holiday.startDate && date <= holiday.endDate
+    );
+  };
+
+  // Utility function to get the next valid date
+  const getNextValidDate = (currentDate) => {
+    let date = new Date(currentDate);
+    date.setDate(date.getDate() + 1);
+    while (isHoliday(date)) {
+      date.setDate(date.getDate() + 1);
+    }
+    return date;
+  };
+
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await adminService.searchHoliday(token);
+
+        if (Array.isArray(response.Records)) {
+          const holidayDates = response.Records.map((holiday) => {
+            const startDateParts = holiday.DATE_FROM.split("-").map(Number);
+            const startDate = new Date(
+              startDateParts[0],
+              startDateParts[1] - 1,
+              startDateParts[2]
+            );
+
+            const endDate = new Date(holiday.DATE_TO);
+            return { startDate, endDate };
+          });
+          setHolidays(holidayDates);
+        } else {
+          setHolidays([]);
+        }
+      } catch (error) {
+        console.error("Error fetching holidays:", error);
+      }
+    };
+
+    fetchHolidays();
+  }, []);
+
+  // Array of three valid dates
+  const dateArray = [startDateObject];
+  for (let i = 1; i < 3; i++) {
+    const nextValidDate = getNextValidDate(dateArray[dateArray.length - 1]);
+    dateArray.push(nextValidDate);
+  }
+
+  // Function to handle booking
+  const handleBooking = (date) => {
+    const formattedDate = formatDate(date);
+    setBookings((prevBookings) => {
+      const currentBooking = prevBookings[formattedDate] || 0;
+      if (currentBooking < 4) {
+        return { ...prevBookings, [formattedDate]: currentBooking + 1 };
+      }
+      return prevBookings;
+    });
   };
 
   return (
@@ -57,64 +131,32 @@ export default function GateAvailableTable({
               >
                 Gate
               </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                {formatDate(startDateObject)}
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                {formatDate(nextDayDate)}
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                {formatDate(new Date(nextDayDate.getTime() + 86400000))}
-              </TableCell>
+              {dateArray.map((date, index) => (
+                <TableCell
+                  key={index}
+                  align="center"
+                  sx={{
+                    border: "1px solid rgba(255, 255, 255, 0.5)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatDate(date)}
+                </TableCell>
+              ))}
             </TableRow>
             <TableRow>
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                Morning
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                Morning
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  fontWeight: "bold",
-                }}
-              >
-                Morning
-              </TableCell>
+              {dateArray.map((_, index) => (
+                <TableCell
+                  key={index}
+                  align="center"
+                  sx={{
+                    border: "1px solid rgba(255, 255, 255, 0.5)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Morning
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -125,61 +167,56 @@ export default function GateAvailableTable({
               >
                 {gate}
               </TableCell>
-              <TableCell
-                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
-                }}
-                onClick={() => {
-                  if (gate !== "No Gate Selected") {
-                    setShowAddBookingDetails(true);
-                    setShowSearchAvailability(false);
-                    dispatch(setBookingDate(formatDate(startDateObject))); // Dispatch setDate with startDate
-                  }
-                }}
-              >
-                {gate === "No Gate Selected" ? "_" : 4}
-              </TableCell>
-              <TableCell
-                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
-                }}
-                onClick={() => {
-                  if (gate !== "No Gate Selected") {
-                    setShowAddBookingDetails(true);
-                    setShowSearchAvailability(false);
-                    dispatch(setBookingDate(formatDate(nextDayDate))); // Dispatch setDate with nextDayDate
-                  }
-                }}
-              >
-                {gate === "No Gate Selected" ? "_" : 4}
-              </TableCell>
-              <TableCell
-                cursor={gate === "No Gate Selected" ? "default" : "pointer"}
-                align="center"
-                sx={{
-                  border: "1px solid rgba(255, 255, 255, 0.5)",
-                  cursor: gate === "No Gate Selected" ? "default" : "pointer",
-                }}
-                onClick={() => {
-                  if (gate !== "No Gate Selected") {
-                    setShowAddBookingDetails(true);
-                    setShowSearchAvailability(false);
-                    dispatch(
-                      setBookingDate(
-                        formatDate(new Date(nextDayDate.getTime() + 86400000))
-                      )
-                    ); // Dispatch setDate with nextNextDayDate
-                  }
-                }}
-              >
-                {gate === "No Gate Selected" ? "_" : 4}
-              </TableCell>
+              {dateArray.map((date, index) => {
+                const formattedDate = formatDate(date);
+                const availableVehicles = 4 - (bookings[formattedDate] || 0);
+                return (
+                  <TableCell
+                    key={index}
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      cursor:
+                        gate !== "No Gate Selected" ? "pointer" : "default",
+                    }}
+                    onClick={() => {
+                      if (
+                        gate !== "No Gate Selected" &&
+                        availableVehicles > 0
+                      ) {
+                        handleBooking(date);
+                        setShowAddBookingDetails(true);
+                        setShowSearchAvailability(false);
+                        dispatch(setBookingDate(formattedDate)); // Dispatch setDate with the selected date
+                      }
+                    }}
+                  >
+                    {gate === "No Gate Selected" ? (
+                      "_"
+                    ) : availableVehicles > 0 ? (
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          color: "green",
+                          fontSize: "17px",
+                        }}
+                      >
+                        {availableVehicles}
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          color: "red",
+                          fontSize: "17px",
+                        }}
+                      >
+                        Booked
+                      </span>
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableBody>
         </Table>
