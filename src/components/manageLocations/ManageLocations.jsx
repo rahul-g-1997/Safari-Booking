@@ -7,17 +7,12 @@ import {
   Button,
   Tooltip,
   IconButton,
-  TableCell,
-  TableRow,
-  TableHead,
-  Table,
-  TableContainer,
-  TableBody,
-  Paper,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
-
+import EcoTouristPlacesTable from "./EcoTouristPlacesTable";
 export default function ManageLocations() {
   const [places, setPlaces] = useState([]);
   const [zones, setZones] = useState([]);
@@ -258,7 +253,6 @@ export default function ManageLocations() {
   const fetchAllDetails = async () => {
     try {
       const allDetails = await admin.getAllDetails(token);
-      console.log(allDetails.Records);
       setGetall(allDetails.Records);
     } catch (error) {
       console.error("Error fetching all details:", error);
@@ -268,7 +262,6 @@ export default function ManageLocations() {
 
   useEffect(() => {
     fetchAllDetails();
-    console.log(getall);
   }, []); // Fetch all details on component mount
 
   useEffect(() => {
@@ -277,11 +270,14 @@ export default function ManageLocations() {
     fetchGates(); // Call fetchGates function when selectedPlace changes
   }, [selectedPlace, selectedZone]);
 
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
     <div>
       {!showPlaceInputField && (
         <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               label="Eco-Tourist-Places"
@@ -303,7 +299,7 @@ export default function ManageLocations() {
           </Grid>
           {!showZoneInputField && (
             <>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} sm={6} md={3}>
                 <TextField
                   fullWidth
                   label="Zone"
@@ -327,7 +323,7 @@ export default function ManageLocations() {
                 </TextField>
               </Grid>
               {!showGateInputField && (
-                <Grid item xs={12} md={2}>
+                <Grid item xs={12} sm={6} md={3}>
                   <TextField
                     fullWidth
                     label="Gate"
@@ -355,250 +351,177 @@ export default function ManageLocations() {
           )}
         </Grid>
       )}
-      {/* input filds for place */}
-      {showPlaceInputField && (
-        <div>
-          <TextField
-            fullWidth
-            label="Add New Place"
-            value={newPlaceName}
-            onChange={handleNewPlaceNameChange}
-            size="small"
-            style={{ marginTop: 10, width: 200 }}
-          />
-          <Button
-            onClick={handleSavePlace}
-            variant="contained"
-            color="primary"
-            style={{
-              marginTop: 10,
-              marginLeft: 10,
-              backgroundColor: "#1976d2",
-              color: "#fff",
-            }}
-          >
-            Save
-          </Button>
 
-          <Button
-            onClick={() => setShowPlaceInputField(false)}
-            variant="contained"
-            color="secondary"
-            style={{ marginTop: 10, marginLeft: 10 }}
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
-      {showPlaceInputField && (
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {places.map((place) => (
-            <li key={place.PLACEID}>
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={() => handleDeletePlace(place.PLACEID)}
-                  color="error"
-                  aria-label="delete"
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Tooltip>
-              {place.PLACE_NM}
-            </li>
-          ))}
-        </ul>
-      )}
-      {/* input filds for zone */}
-      {showZoneInputField && (
-        <div>
-          <TextField
-            fullWidth
-            label="Add New Zone"
-            value={newZoneName}
-            onChange={handleNewZoneNameChange}
-            size="small"
-            style={{ marginTop: 10, width: 200 }}
-          />
-          <Button
-            onClick={() => handleSaveZone(selectedPlace)}
-            variant="contained"
-            color="primary"
-            style={{
-              marginTop: 10,
-              marginLeft: 10,
-              backgroundColor: "#1976d2",
-              color: "#fff",
-            }}
-          >
-            Save
-          </Button>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          {showPlaceInputField && (
+            <div>
+              <TextField
+                fullWidth
+                label="Add New Place"
+                value={newPlaceName}
+                onChange={handleNewPlaceNameChange}
+                size="small"
+                sx={{ mt: 1, width: 200 }}
+              />
+              <Button
+                onClick={handleSavePlace}
+                variant="contained"
+                color="primary"
+                sx={{ mt: 1, ml: 1 }}
+              >
+                Save
+              </Button>
 
-          <Button
-            onClick={() => setShowZoneInputField(false)}
-            variant="contained"
-            color="secondary"
-            style={{ marginTop: 10, marginLeft: 10 }}
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
-      {showZoneInputField && (
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {zones.map((zone) => (
-            <li key={zone.ZONEID}>
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={() => handleDeleteZone(zone.ZONEID)}
-                  color="error"
-                  aria-label="delete"
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Tooltip>
-              {zone.ZONE_NM}
-            </li>
-          ))}
-        </ul>
-      )}
-      {/* input filds for gate */}
-      {showGateInputField && (
-        <div>
-          <TextField
-            fullWidth
-            label="Add New Gate"
-            value={newGateName}
-            onChange={handleNewGateNameChange}
-            size="small"
-            style={{ marginTop: 10, width: 200 }}
-          />
-          <Button
-            onClick={() => handleSaveGate(selectedPlace, selectedZone)}
-            variant="contained"
-            color="primary"
-            style={{
-              marginTop: 10,
-              marginLeft: 10,
-              backgroundColor: "#1976d2",
-              color: "#fff",
-            }}
-          >
-            Save
-          </Button>
-
-          <Button
-            onClick={() => setShowGateInputField(false)}
-            variant="contained"
-            color="secondary"
-            style={{ marginTop: 10, marginLeft: 10 }}
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
-      {showGateInputField && (
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {gates.map((gate) => (
-            <li key={gate.GATEID}>
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={() => handleDeleteGate(gate.GATEID)}
-                  color="error"
-                  aria-label="delete"
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Tooltip>
-              {gate.GATE_NM}
-            </li>
-          ))}
-        </ul>
-      )}
-      <Paper
-        sx={{
-          marginTop: 7,
-          width: "100%",
-          overflow: "hidden",
-          backgroundColor: "rgba(157, 178, 191, 0.1)",
-          backdropFilter: "blur(21px) saturate(200%)",
-          WebkitBackdropFilter: "blur(21px) saturate(200%)",
-          borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.5)", // Increased border visibility
-        }}
-      >
-        <TableContainer>
-          <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(255, 255, 255, 0.5)",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Place
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(255, 255, 255, 0.5)",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Zones
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(255, 255, 255, 0.5)",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Gates
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {getall.map((place) => (
-                <TableRow key={place.PLACE}>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                    }}
-                  >
-                    {place.PLACE}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                    }}
-                  >
-                    {place.ZONES.map((zone) => (
-                      <div key={zone.ZONEID}>{zone.ZONE}</div>
-                    ))}
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                    }}
-                  >
-                    {place.ZONES.map((zone) =>
-                      zone.GATES.map((gate) => (
-                        <div key={gate.GATEID}>{gate.GATE_NM}</div>
-                      ))
-                    )}
-                  </TableCell>
-                </TableRow>
+              <Button
+                onClick={() => setShowPlaceInputField(false)}
+                variant="contained"
+                color="secondary"
+                sx={{ mt: 1, ml: 1 }}
+              >
+                Cancel
+              </Button>
+            </div>
+          )}
+          {showPlaceInputField && (
+            <ul style={{ listStyleType: "none", padding: 0 }}>
+              {places.map((place) => (
+                <li key={place.PLACEID}>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => handleDeletePlace(place.PLACEID)}
+                      color="error"
+                      aria-label="delete"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                  {place.PLACE_NM}
+                </li>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+            </ul>
+          )}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {showZoneInputField && !showPlaceInputField && (
+            <div>
+              <TextField
+                fullWidth
+                label="Add New Zone"
+                value={newZoneName}
+                onChange={handleNewZoneNameChange}
+                size="small"
+                sx={{ mt: isMd ? -5 : 1, ml: isMd ? -15 : 0, width: 200 }}
+              />
+              <Button
+                onClick={() => handleSaveZone(selectedPlace)}
+                variant="contained"
+                color="primary"
+                sx={{ mt: isMd ? -8 : 1, ml: 1 }}
+              >
+                Save
+              </Button>
+
+              <Button
+                onClick={() => setShowZoneInputField(false)}
+                variant="contained"
+                color="secondary"
+                sx={{ mt: isMd ? -8 : 1, ml: 1 }}
+              >
+                Cancel
+              </Button>
+            </div>
+          )}
+          {showZoneInputField && (
+            <ul
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                marginLeft: isMd ? -125 : 0,
+                marginTop: isMd ? -10 : 0,
+              }}
+            >
+              {zones.map((zone) => (
+                <li key={zone.ZONEID}>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => handleDeleteZone(zone.ZONEID)}
+                      color="error"
+                      aria-label="delete"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                  {zone.ZONE_NM}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {showGateInputField &&
+            !showZoneInputField &&
+            !showPlaceInputField && (
+              <div>
+                <TextField
+                  fullWidth
+                  label="Add New Gate"
+                  value={newGateName}
+                  onChange={handleNewGateNameChange}
+                  size="small"
+                  sx={{ mt: isMd ? -5 : 1, ml: isMd ? -30 : 0, width: 200 }}
+                />
+                <Button
+                  onClick={() => handleSaveGate(selectedPlace, selectedZone)}
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: isMd ? -8 : 1, ml: 1 }}
+                >
+                  Save
+                </Button>
+
+                <Button
+                  onClick={() => setShowGateInputField(false)}
+                  variant="contained"
+                  color="secondary"
+                  sx={{ mt: isMd ? -8 : 1, ml: 1 }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+          {showGateInputField && (
+            <ul
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                marginLeft: isMd ? -235 : 0,
+                marginTop: isMd ? -10 : 0,
+              }}
+            >
+              {gates.map((gate) => (
+                <li key={gate.GATEID}>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => handleDeleteGate(gate.GATEID)}
+                      color="error"
+                      aria-label="delete"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                  {gate.GATE_NM}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Grid>
+        <Grid container spacing={2} margin={1}>
+          <Grid item xs={12} sm={12} md={10} lg={10}>
+            <EcoTouristPlacesTable getall={getall} />
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 }

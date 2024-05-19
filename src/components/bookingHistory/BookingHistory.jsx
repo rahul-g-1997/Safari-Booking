@@ -151,7 +151,7 @@ export default function BookingHistory() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[8, 25, 50]}
+        rowsPerPageOptions={[2, 25, 50]}
         component="div"
         count={jsonData.length}
         rowsPerPage={rowsPerPage}

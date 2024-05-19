@@ -113,6 +113,7 @@ export default function ForgotPassword({ toggleSignIn }) {
     try {
       const response = await configService.getUsername(mobileNumber);
       if (response.Result === "OK") {
+        toggleSignIn();
         toast.success(response.Msg);
       } else {
         toast.error("Error gating username");
@@ -154,9 +155,38 @@ export default function ForgotPassword({ toggleSignIn }) {
             onChange={(event, value) => setToggle(value)}
             aria-label="Forgot password or username"
             sx={{ m: 2 }}
+            value={toggle} // Ensures the selected value is set
           >
-            <ToggleButton value={true}>Forgot Password</ToggleButton>
-            <ToggleButton value={false}>Forgot Username</ToggleButton>
+            <ToggleButton
+              value={true}
+              selected={toggle === true}
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "primary.main",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "primary.dark",
+                  },
+                },
+              }}
+            >
+              Forgot Password
+            </ToggleButton>
+            <ToggleButton
+              value={false}
+              selected={toggle === false}
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "primary.main",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "primary.dark",
+                  },
+                },
+              }}
+            >
+              Forgot Username
+            </ToggleButton>
           </ToggleButtonGroup>
 
           {toggle ? (

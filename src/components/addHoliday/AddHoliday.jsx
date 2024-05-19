@@ -1,17 +1,5 @@
-import  { useState, useEffect, useCallback } from "react";
-import {
-  Button,
-  TextField,
-  Grid,
-  Box,
-  Divider,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Table,
-  TableContainer,
-} from "@mui/material";
+import { useState, useEffect, useCallback } from "react";
+import { Button, TextField, Grid, Box, Divider } from "@mui/material";
 import { BookingCalendar } from "..";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,6 +8,7 @@ import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDa
 import dayjs from "dayjs";
 import admin from "../../services/admin";
 import { toast } from "react-toastify";
+import HolidayRecordsTable from "./HolidayRecordsTable";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -190,32 +179,10 @@ export default function AddHoliday() {
           <Grid item>Holiday</Grid>
         </Grid>
         <Divider />
-        <Grid item xs={12}>
-          <Box mt={2}>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date From</TableCell>
-                    <TableCell>Date To</TableCell>
-                    <TableCell>Remark</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {holidayRecords
-                    .slice()
-                    .reverse()
-                    .map((record) => (
-                      <TableRow key={record.HLDYSID}>
-                        <TableCell>{record.DATE_FROM}</TableCell>
-                        <TableCell>{record.DATE_TO}</TableCell>
-                        <TableCell>{record.REMARK}</TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
+        <Grid container spacing={2} margin={1}>
+          <Grid item xs={12} sm={12} md={10} lg={10}>
+            <HolidayRecordsTable holidayRecords={holidayRecords} />
+          </Grid>
         </Grid>
       </Grid>
     </Box>
