@@ -91,7 +91,7 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function AdminDashboard() {
+export default function OperatorDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);

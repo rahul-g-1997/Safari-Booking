@@ -190,7 +190,7 @@ export default function SignUp({ toggleSignIn }) {
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
-                  required
+                  required={true}
                   fullWidth
                   id="firstName"
                   label="First Name"
@@ -201,7 +201,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  required={true}
                   fullWidth
                   id="lastName"
                   label="Last Name"
@@ -213,7 +213,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
+                  required={true}
                   fullWidth
                   id="email"
                   label="Email Address"
@@ -239,7 +239,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12}>
                 <MuiTelInput
-                  required
+                  required={true}
                   fullWidth
                   defaultCountry="IN"
                   name="mobileNumber"
@@ -251,7 +251,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  required={true}
                   fullWidth
                   name="dob"
                   label="Date of Birth"
@@ -267,7 +267,7 @@ export default function SignUp({ toggleSignIn }) {
               <Grid item xs={12} sm={6}>
                 <TextField
                   select
-                  required
+                  required={true}
                   fullWidth
                   name="gender"
                   label="Gender"
@@ -286,7 +286,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  required={true}
                   fullWidth
                   name="password"
                   label="Password"
@@ -299,7 +299,7 @@ export default function SignUp({ toggleSignIn }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  required={true}
                   fullWidth
                   name="confirmPassword"
                   label="Confirm Password"

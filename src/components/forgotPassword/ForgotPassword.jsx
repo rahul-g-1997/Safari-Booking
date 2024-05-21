@@ -199,7 +199,7 @@ export default function ForgotPassword({ toggleSignIn }) {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    required
+                    required={true}
                     fullWidth
                     id="email"
                     label="Email Address"
@@ -237,7 +237,7 @@ export default function ForgotPassword({ toggleSignIn }) {
                   <>
                     <Grid item xs={12}>
                       <TextField
-                        required
+                        required={true}
                         fullWidth
                         id="otp"
                         label="Enter OTP"
@@ -263,7 +263,7 @@ export default function ForgotPassword({ toggleSignIn }) {
                   <>
                     <Grid item xs={6}>
                       <TextField
-                        required
+                        required={true}
                         fullWidth
                         id="newPassword"
                         label="Enter New Password"
@@ -275,7 +275,6 @@ export default function ForgotPassword({ toggleSignIn }) {
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        required
                         fullWidth
                         id="confirmPassword"
                         label="Confirm Password"
@@ -283,6 +282,7 @@ export default function ForgotPassword({ toggleSignIn }) {
                         autoComplete="new-password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        required={true}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -324,7 +324,6 @@ export default function ForgotPassword({ toggleSignIn }) {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <MuiTelInput
-                    required
                     fullWidth
                     defaultCountry="IN"
                     name="mobileNumber"
@@ -332,6 +331,7 @@ export default function ForgotPassword({ toggleSignIn }) {
                     id="mobileNumber"
                     value={mobileNumber}
                     onChange={handleTelChange}
+                    required={true}
                   />
                 </Grid>
 

@@ -58,7 +58,7 @@ const AccordionSummary = styled((props) => (
     {...props}
   />
 ))(({ theme }) => ({
-  backgroundColor: "transparent",
+  backgroundColor: "#e0e0e0",
   backdropFilter: "blur(7px) saturate(200%)",
   flexDirection: "row",
   justifyContent: "space-between", // Aligns content to the start and end of the flex container
@@ -453,27 +453,30 @@ export default function AddBookingDetails({
           <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
             <Typography>Eco-tourism details</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 0 }}>
             <Grid>
               <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: 650, m: 0 }} aria-label="simple table">
                   <TableHead sx={{ backgroundColor: "#e3c2bd" }}>
-                    <TableRow>
-                      <TableCell>Tourist name</TableCell>
-                      <TableCell>Gender</TableCell>
-                      <TableCell>Age</TableCell>
-                      <TableCell>Country</TableCell>
-                      <TableCell>Identity type</TableCell>
-                      <TableCell>Identity number</TableCell>
+                    <TableRow sx={{ p: 0 }}>
+                      <TableCell sx={{ p: 0.5 }}>Tourist name</TableCell>
+                      <TableCell sx={{ p: 0.5 }}>Gender</TableCell>
+                      <TableCell sx={{ p: 0.5 }}>Age</TableCell>
+                      <TableCell sx={{ p: 0.5 }}>Country</TableCell>
+                      <TableCell sx={{ p: 0.5 }}>Identity type</TableCell>
+                      <TableCell sx={{ p: 0.5 }}>Identity number</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>{generateTourismDetailsRows()}</TableBody>
                 </Table>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead sx={{ backgroundColor: "#e3c2bd" }}>
-                    <TableRow>
-                      <TableCell colSpan={4}>
-                        <Typography align="center">
+                    <TableRow sx={{ p: 0 }}>
+                      <TableCell colSpan={4} sx={{ p: 0.5 }}>
+                        <Typography
+                          align="center"
+                          sx={{ lineHeight: 1.2, p: 0.5 }}
+                        >
                           Children (Max 2 allowed)
                         </Typography>
                       </TableCell>
@@ -529,8 +532,8 @@ export default function AddBookingDetails({
           <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
             <Typography>Correspondence details</Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Grid>
+          <AccordionDetails sx={{ p: 0 }}>
+            <Grid container>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableBody>
@@ -549,6 +552,7 @@ export default function AddBookingDetails({
                           defaultCountry="IN"
                           name="mobileNumber"
                           label="Mobile Number"
+                          size="small"
                           id="mobileNumber"
                           value={mobileNumber}
                           onChange={handleTelChange}
@@ -568,7 +572,7 @@ export default function AddBookingDetails({
           <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
             <Typography>Camera details</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 0 }}>
             <Grid>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

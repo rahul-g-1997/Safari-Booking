@@ -13,6 +13,7 @@ import {
   Dashboard,
   Error,
   Home,
+  ManagerDashboard,
   OperatorDashboard,
 } from "./pages";
 
@@ -37,6 +38,7 @@ const route = createBrowserRouter(
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="adminDashboard" element={<AdminDashboard />} />
       <Route path="operatorDashboard" element={<OperatorDashboard />} />
+      <Route path="managerDashboard" element={<ManagerDashboard />} />
     </Route>
   )
 );

@@ -142,4 +142,13 @@ URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/getall
 
 {"act":"getalldtls","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
+Admin Save the staff(Like Manager,Operator)
+URL: https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/staff
 
+Save:
+{"act":"savestaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","staff.nm":"Kunal","staff.eml":"kunalk34563@data-engine.co",
+"staff.cntc":"7896325147","staff.type":"O","dtls":"{\"address\":\"Pune\",\"aadharno\":\"789652923012\"}","staff.pwd":"aa","gateid":"1"}
+
+
+Search:
+{"act":"srchstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}

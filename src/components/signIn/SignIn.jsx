@@ -46,6 +46,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
       if (USR_TYPE === "U") navigate("/dashboard");
       if (USR_TYPE === "A") navigate("/adminDashboard");
       if (USR_TYPE === "O") navigate("/operatorDashboard");
+      if (USR_TYPE === "M") navigate("/managerDashboard");
       toast.success("Login successful.");
       dispatch(stopLoading()); // Stop loading when sign-in is successful
     } catch (error) {
@@ -145,7 +146,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
           >
             <TextField
               margin="normal"
-              required
+              required={true}
               fullWidth
               id="email"
               label="Email Address"
@@ -155,7 +156,7 @@ export default function SignIn({ toggleForm, toggleForgotPassword }) {
             />
             <TextField
               margin="normal"
-              required
+              required={true}
               fullWidth
               name="password"
               label="Password"

@@ -41,6 +41,18 @@ const adminService = {
     }
   },
 
+  // Get gates for a zone
+  getAllGates: async (token) => {
+    try {
+      const requestData = { act: "srchgate", token: token };
+      const response = await axios.post(`${ADMIN_API_URL}/gate`, requestData);
+      return response.data; // Return gates data
+    } catch (error) {
+      console.error("Error fetching gates:", error); // Log error for debugging
+      throw new Error("Error fetching gates");
+    }
+  },
+
   // Save places
   savePlaces: async (placeName, token) => {
     try {
@@ -218,6 +230,32 @@ const adminService = {
     } catch (error) {
       console.error("Error fetching all details:", error); // Log error for debugging
       throw new Error("Error fetching all details");
+    }
+  },
+
+  // Add user
+  addUser: async (userData) => {
+    try {
+      const response = await axios.post(`${ADMIN_API_URL}/staff`, userData);
+      return response.data; // Return response data after adding user
+    } catch (error) {
+      console.error("Error adding user:", error); // Log error for debugging
+      throw new Error("Error adding user");
+    }
+  },
+
+  // Search user
+  searchUser: async (token) => {
+    try {
+      const requestData = {
+        act: "srchstaff",
+        token: token,
+      };
+      const response = await axios.post(`${ADMIN_API_URL}/staff`, requestData);
+      return response.data; // Return response data after searching user
+    } catch (error) {
+      console.error("Error searching user:", error); // Log error for debugging
+      throw new Error("Error searching user");
     }
   },
 };

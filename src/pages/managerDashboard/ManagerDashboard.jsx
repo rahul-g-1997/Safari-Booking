@@ -23,22 +23,13 @@ import {
   Tooltip,
 } from "@mui/material";
 import { logout } from "../../rtk/reducer/userReducer";
-import {
-  AddHoliday,
-  Copyright,
-  ManageLocations,
-  AddUser,
-  Reports,
-} from "../../components";
+
+import { Copyright } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import SummarizeIcon from "@mui/icons-material/Summarize";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import LoupeIcon from "@mui/icons-material/Loupe";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { toast } from "react-toastify";
-import style from "./adminDashboard.module.css";
+import style from "./managerDashboard.module.css";
 import theme from "../../theme";
 import Logo from "../../assets/tatr-logo.png";
 import Profile from "../profile/Profile";
@@ -100,15 +91,10 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function AdminDashboard() {
+export default function ManagerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [showManageLocations, setShowManageLocations] = useState(true);
-  const [showAddHoliday, setShowAddHoliday] = useState(false);
-  const [showAddUser, setShowAddUser] = useState(false);
-  const [showReports, setShowReports] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const isLogin = useSelector((state) => state.auth.status);
@@ -206,10 +192,6 @@ export default function AdminDashboard() {
                     <Typography
                       textAlign="center"
                       onClick={() => {
-                        setShowManageLocations(false);
-                        setShowAddHoliday(false);
-                        setShowAddUser(false);
-                        setShowReports(false);
                         setShowProfile(true);
                       }}
                     >
@@ -244,66 +226,6 @@ export default function AdminDashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
-                setShowManageLocations(true);
-                setShowAddHoliday(false);
-                setShowAddUser(false);
-                setShowReports(false);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <LoupeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Manage tourist places" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowManageLocations(false);
-                setShowAddHoliday(true);
-                setShowAddUser(false);
-                setShowReports(false);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <EditCalendarIcon />
-              </ListItemIcon>
-              <ListItemText primary="Add Holiday" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowManageLocations(false);
-                setShowAddHoliday(false);
-                setShowAddUser(true);
-                setShowReports(false);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <PersonAddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Add User" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowManageLocations(false);
-                setShowAddHoliday(false);
-                setShowAddUser(false);
-                setShowReports(true);
-                setShowProfile(false);
-              }}
-            >
-              <ListItemIcon>
-                <SummarizeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Reports" />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => {
-                setShowManageLocations(false);
-                setShowAddHoliday(false);
-                setShowAddUser(false);
-                setShowReports(false);
                 setShowProfile(true);
               }}
             >
@@ -338,45 +260,24 @@ export default function AdminDashboard() {
             </Box>
           ) : (
             <>
+              {" "}
               <Toolbar />
               <Container
-                maxWidth="xl"
+                maxWidth="100"
                 sx={{
-                  margin: "0 -15px",
-                  p: "20px",
+                  p: "30px",
                   width: "auto",
                   transition:
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 }}
               >
-                {showManageLocations && (
-                  <div className={style.container}>
-                    <ManageLocations />
-                    <Copyright sx={{ pt: 4 }} />
-                  </div>
-                )}
-                {showAddHoliday && (
-                  <div className={style.container}>
-                    <AddHoliday />
-                    <Copyright sx={{ pt: 4 }} />
-                  </div>
-                )}
-                {showAddUser && (
-                  <div className={style.container}>
-                    <AddUser />
-                    <Copyright sx={{ pt: 4 }} />
-                  </div>
-                )}
-                {showReports && (
-                  <div className={style.container}>
-                    <Reports />
-                    <Copyright sx={{ pt: 4 }} />
-                  </div>
-                )}
+                <div className={style.container}>
+                  <Copyright sx={{ pt: 4 }} />
+                </div>
+
                 {showProfile && (
                   <div className={style.container}>
                     <Profile />
-                    <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}
               </Container>
