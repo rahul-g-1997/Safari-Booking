@@ -35,6 +35,8 @@ export default function AddUser() {
   const [gates, setGates] = useState([]);
   const [users, setUsers] = useState([]);
   const [editUsers, setEditUsers] = useState(null);
+  const [deleteUsers, setDeleteUser] = useState(null);
+  const [initialSelectedGates, setInitialSelectedGates] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,49 +53,106 @@ export default function AddUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const gateIds = formData.selectedGates.map((gate) => gate.GATEID).join(",");
     const dtls = JSON.stringify({
       designation: formData.designation,
     });
 
-    const sendData = {
-      token: token,
-      act: "savestaff",
-      "staff.type": formData.userType,
-      "staff.nm": `${formData.firstName} ${formData.lastName}`,
-      "staff.eml": formData.email,
-      "staff.cntc": formData.mobileNo.replace(/\s+/g, ""),
-      "staff.pwd": formData.password,
-      gateid: gateIds,
-      dtls: dtls,
-    };
-    console.log(sendData);
-    try {
-      dispatch(startLoading());
-      const response = await admin.addUser(sendData);
-      if (response.Result === "OK") {
-        toast.success("Registration successful.");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          designation: "",
-          email: "",
-          mobileNo: "",
-          password: "",
-          userType: "",
-          selectedGates: [],
-        });
-      } else {
-        toast.warn(response.data.Msg);
-        throw new Error(response.data.Msg);
+    // Find newly added gates
+    const newSelectedGates = formData.selectedGates.filter(
+      (gate) =>
+        !initialSelectedGates.some(
+          (initialGate) => initialGate.GATEID === gate.GATEID
+        )
+    );
+    const newGateIds = newSelectedGates.map((gate) => gate.GATEID).join(",");
+
+    // Find unselected gates
+    const unselectedGates = initialSelectedGates.filter(
+      (initialGate) =>
+        !formData.selectedGates.some(
+          (gate) => gate.GATEID === initialGate.GATEID
+        )
+    );
+    const unselectedGateIds = unselectedGates
+      .map((gate) => gate.GATEID)
+      .join(",");
+
+    if (editUsers) {
+      const info = JSON.stringify({
+        "staff.cntc": formData.mobileNo.replace(/\s+/g, ""),
+        "staff.eml": formData.email,
+        "staff.type": formData.userType,
+        "staff.nm": `${formData.firstName} ${formData.lastName}`,
+        // dtls: dtls,
+      });
+
+      const sendUpdateData = {
+        token: token,
+        act: "updtstaff",
+        staffid: editUsers.STAFFID,
+        "usr.pwd": formData.password,
+        info: info,
+      };
+
+      if (newGateIds) {
+        sendUpdateData.gateid = newGateIds;
       }
-    } catch (error) {
-      console.error("Account creation error:", error);
-      toast.error("Failed to create account.");
-    } finally {
-      dispatch(stopLoading());
+
+      if (unselectedGateIds) {
+        sendUpdateData.unselectedgateid = unselectedGateIds;
+      }
+
+      try {
+        dispatch(startLoading());
+        console.log(sendUpdateData);
+        const response = await admin.updateUser(sendUpdateData);
+        if (response.Result === "OK") {
+          toast.success("User updated successfully");
+          resetForm();
+        } else {
+          toast.warn(response.data.Msg);
+          throw new Error(response.data.Msg);
+        }
+      } catch (error) {
+        console.error("Account update error:", error);
+        toast.error("Failed to update account.");
+      } finally {
+        dispatch(stopLoading());
+      }
+    } else {
+      const gateIds = formData.selectedGates
+        .map((gate) => gate.GATEID)
+        .join(",");
+      const sendData = {
+        token: token,
+        act: "savestaff",
+        "staff.type": formData.userType,
+        "staff.nm": `${formData.firstName} ${formData.lastName}`,
+        "staff.eml": formData.email,
+        "staff.cntc": formData.mobileNo.replace(/\s+/g, ""),
+        "staff.pwd": formData.password,
+        gateid: gateIds,
+        dtls: dtls,
+      };
+      try {
+        dispatch(startLoading());
+        const response = await admin.addUser(sendData);
+        if (response.Result === "OK") {
+          toast.success("Registration successful.");
+          resetForm();
+        } else {
+          toast.warn(response.data.Msg);
+          throw new Error(response.data.Msg);
+        }
+      } catch (error) {
+        console.error("Account creation error:", error);
+        toast.error("Failed to create account.");
+      } finally {
+        dispatch(stopLoading());
+      }
     }
   };
+
   const resetForm = () => {
     setFormData({
       firstName: "",
@@ -106,6 +165,7 @@ export default function AddUser() {
       selectedGates: [],
     });
     setEditUsers(null);
+    setInitialSelectedGates([]);
   };
 
   useEffect(() => {
@@ -115,14 +175,30 @@ export default function AddUser() {
         setGates(gatesData.Records);
       } catch (error) {
         console.error("Error fetching gates:", error);
-        // Handle error (e.g., display an error message)
       }
     };
 
     const fetchStaff = async () => {
       try {
         const gateUsers = await admin.searchUser(token);
-        setUsers(gateUsers.Records);
+        const usersMap = {};
+
+        gateUsers.Records.forEach((user) => {
+          const userId = user.STAFFID;
+          if (userId) {
+            if (usersMap[userId]) {
+              usersMap[userId].GATE_NM.push(user.GATE_NM);
+            } else {
+              usersMap[userId] = {
+                ...user,
+                GATE_NM: [user.GATE_NM],
+              };
+            }
+          }
+        });
+
+        const aggregatedUsers = Object.values(usersMap);
+        setUsers(aggregatedUsers);
       } catch (error) {
         console.error("Error fetching gates:", error);
       }
@@ -130,27 +206,33 @@ export default function AddUser() {
 
     fetchGates();
     fetchStaff();
-  }, [token]);
+  }, [token, deleteUsers]);
 
   useEffect(() => {
     if (editUsers) {
-      const { STAFF_NM, STAFF_EML, STAFF_CNTC, STAFF_TYPE, DTLS } = editUsers;
+      const { STAFF_NM, STAFF_EML, STAFF_CNTC, STAFF_TYPE, DTLS, GATE_NM } =
+        editUsers;
       const [firstName, lastName] = STAFF_NM.split(" ");
       const { designation } = JSON.parse(DTLS);
+
+      const selectedGates = gates.filter((gate) =>
+        GATE_NM.includes(gate.GATE_NM)
+      );
+
       setFormData({
         firstName: firstName || "",
         lastName: lastName || "",
         designation: designation || "",
         email: STAFF_EML || "",
         mobileNo: STAFF_CNTC || "",
-        password: "", // Assuming password should not be pre-filled for security reasons
+        password: "",
         userType: STAFF_TYPE || "",
-        selectedGates: [], // You may need to handle selected gates if it's part of the editUser data
+        selectedGates: selectedGates,
       });
-    }
-  }, [editUsers]);
 
-  console.log("setEditUsers", editUsers);
+      setInitialSelectedGates(selectedGates);
+    }
+  }, [editUsers, gates]);
 
   return (
     <Box>
@@ -252,7 +334,6 @@ export default function AddUser() {
                     value={formData.selectedGates}
                     onChange={(e) => handleSelectGates(e.target.value)}
                     label="Select Gates"
-                    required={true}
                     renderValue={(selected) =>
                       selected.map((gate) => gate.GATE_NM).join(", ")
                     }
@@ -306,7 +387,11 @@ export default function AddUser() {
 
         {/* Bottom: Table of already added operators */}
         <Grid item xs={12}>
-          <UserTable users={users} setEditUsers={setEditUsers} />
+          <UserTable
+            users={users}
+            setEditUsers={setEditUsers}
+            setDeleteUser={setDeleteUser}
+          />
         </Grid>
       </Grid>
     </Box>

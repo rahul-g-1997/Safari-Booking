@@ -10,6 +10,8 @@ import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import adminService from "../../services/admin";
+import { toast } from "react-toastify";
 
 const headers = [
   { id: "SR_NO", label: "Sr. No" },
@@ -22,8 +24,9 @@ const headers = [
   { id: "edit", label: "Edit User" },
   { id: "delete", label: "Delete User" },
 ];
+const token = localStorage.getItem("token");
 
-export default function UserTable({ users, setEditUsers }) {
+export default function UserTable({ users, setEditUsers, setDeleteUser }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -48,11 +51,22 @@ export default function UserTable({ users, setEditUsers }) {
   };
 
   const handleEdit = (user) => {
+    console.log(user);
     setEditUsers(user);
   };
 
-  const handleDelete = (user) => {
-    console.log("Delete user:", user);
+  const handleDelete = async (user) => {
+    try {
+      const staffId = user.STAFFID; // Adjust according to your user object structure
+      const response = await adminService.deleteUser(token, staffId);
+      console.log("User deleted successfully:", response);
+      setDeleteUser(user);
+      toast.success("User deleted successfully");
+      // You can also add any additional handling like updating the UI or notifying the user
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
   };
 
   return (
@@ -156,6 +170,7 @@ export default function UserTable({ users, setEditUsers }) {
                   >
                     {getDesignationFromDTLS(user.DTLS)}
                   </TableCell>
+
                   <TableCell
                     align="left"
                     sx={{
@@ -164,8 +179,17 @@ export default function UserTable({ users, setEditUsers }) {
                       padding: "8px",
                     }}
                   >
-                    {user.ASSIGNED_GATES || ""}
+                    {user.GATE_NM.reduce((acc, curr, index) => {
+                      if (index % 4 === 0 && index !== 0) {
+                        return [...acc, ",", <br key={index} />, curr];
+                      } else if (index !== 0) {
+                        return [...acc, ", ", curr];
+                      } else {
+                        return [...acc, curr];
+                      }
+                    }, [])}
                   </TableCell>
+
                   <TableCell
                     align="center"
                     sx={{

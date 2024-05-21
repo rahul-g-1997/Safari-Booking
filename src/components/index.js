@@ -11,6 +11,6 @@ export { default as BookingHistory } from "./bookingHistory/BookingHistory";
 export { default as BookingCalendar } from "./bookingCalendar/BookingCalendar";
 export { default as CircularLoader } from "./circularLoader/CircularLoader";
 export { default as ManageLocations } from "./manageLocations/ManageLocations";
-export { default as AddUser } from "./addGateManager/AddUser";
+export { default as AddUser } from "./addUser/AddUser";
 export { default as AddHoliday } from "./addHoliday/AddHoliday";
 export { default as Reports } from "./reports/Reports";

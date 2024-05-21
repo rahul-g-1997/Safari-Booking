@@ -244,6 +244,17 @@ const adminService = {
     }
   },
 
+  // Add user
+  updateUser: async (userData) => {
+    try {
+      const response = await axios.post(`${ADMIN_API_URL}/staff`, userData);
+      return response.data; // Return response data after adding user
+    } catch (error) {
+      console.error("Error adding user:", error); // Log error for debugging
+      throw new Error("Error adding user");
+    }
+  },
+
   // Search user
   searchUser: async (token) => {
     try {
@@ -256,6 +267,22 @@ const adminService = {
     } catch (error) {
       console.error("Error searching user:", error); // Log error for debugging
       throw new Error("Error searching user");
+    }
+  },
+
+  // Delete user
+  deleteUser: async (token, staffId) => {
+    try {
+      const requestData = {
+        act: "delstaff",
+        token: token,
+        "v.staffid": staffId,
+      };
+      const response = await axios.post(`${ADMIN_API_URL}/staff`, requestData);
+      return response.data; // Return response data after deleting user
+    } catch (error) {
+      console.error("Error deleting user:", error); // Log error for debugging
+      throw new Error("Error deleting user");
     }
   },
 };
