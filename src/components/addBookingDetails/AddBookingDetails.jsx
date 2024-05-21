@@ -308,7 +308,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Eco Tourist places: {place}
+              Eco Tourist places: {place.PLACE_NM}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -319,7 +319,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Zone: {zone}
+              Zone: {zone.ZONE_NM}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -330,7 +330,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Gate: {gate}
+              Gate: {gate.GATE_NM}
             </Paper>
           </Grid>
 

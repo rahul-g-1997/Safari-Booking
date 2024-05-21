@@ -55,7 +55,7 @@ export default function ConfirmDetails() {
     childrenDetails: childrenDetails,
   };
   console.log(bookingData);
-  
+
   const handleCheckboxChange = (event) => {
     // Check if the checkbox is not already checked
     if (!termsChecked) {
@@ -96,21 +96,21 @@ export default function ConfirmDetails() {
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Place: {place}
+            Place: {place.PLACE_NM}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Zone: {zone}
+            Zone: {zone.ZONE_NM}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Gate: {gate}
+            Gate: {gate.GATE_NM}
           </Paper>
         </Grid>
 

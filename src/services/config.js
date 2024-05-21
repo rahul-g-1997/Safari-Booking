@@ -110,15 +110,20 @@ const configService = {
   },
 
   // Get availability
-  getAvailability: async (zoneId, gateId, slot, fromDate, toDate) => {
+  getAvailability: async (
+    zoneId,
+    gateId,
+    formattedStartDate,
+    formattedEndDate
+  ) => {
     try {
       const requestData = {
         act: "getavildt",
         zoneid: zoneId,
         gateid: gateId,
-        slot: slot,
-        "date.from": fromDate,
-        "date.to": toDate,
+        slot: "Noon",
+        "date.from": formattedStartDate,
+        "date.to": formattedEndDate,
       };
       const response = await axios.post(`${API_URL}/getavaildt`, requestData);
       return response.data; // Return availability data

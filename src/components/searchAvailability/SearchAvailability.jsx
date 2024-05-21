@@ -56,31 +56,39 @@ export default function SanctuaryDetails({
   const [value, setValue] = useState([]);
   const [booked, setBooked] = useState();
 
-  const handleSearch = async (
-    placeId,
-    zoneId,
-    availableStartDate,
-    availableEndDate
-  ) => {
-    // Mark the function as async
+  const handleSearch = async () => {
     try {
-      const availability = await configService.getAvailability(
-        placeId,
-        zoneId,
-        "Noon", // Default slot value
-        availableStartDate,
-        availableEndDate
-      );
-
-      dispatch(setPlace(selectedPlaceName));
-      dispatch(setZone(selectedZoneName));
-      dispatch(setGate(selectedGateName));
-
-      dispatch(setVehicle(selectedVehicle === "G" ? "Gypsy" : "Private"));
-
+      const zoneId = selectedZone;
+      const gateId = selectGate;
+      const vehicleType = selectedVehicle === "G" ? "Gypsy" : "Private";
       const [startDate, endDate] = selectedDate;
-      dispatch(setStartDate(startDate.toISOString())); // Convert startDate to ISO string
-      dispatch(setEndDate(endDate.toISOString())); // Convert endDate to ISO string
+      // Format the start date
+      const formattedStartDate = dayjs(startDate).format("YYYY-MM-DD");
+
+      // Calculate the minimum end date (two days after the start date)
+      const minimumEndDate = dayjs(startDate).add(2, "day");
+
+      // Ensure the end date is at least two days after the start date
+      const finalEndDate = dayjs(endDate).isBefore(minimumEndDate)
+        ? minimumEndDate
+        : endDate;
+
+      // Format the end date
+      const formattedEndDate = dayjs(finalEndDate).format("YYYY-MM-DD");
+      const availability = await configService.getAvailability(
+        zoneId,
+        gateId,
+        formattedStartDate,
+        formattedEndDate
+      );
+      dispatch(
+        setPlace({ PLACE_ID: selectedPlace, PLACE_NM: selectedPlaceName })
+      );
+      dispatch(setZone({ ZONE_ID: selectedZone, ZONE_NAME: selectedZoneName }));
+      dispatch(setGate({ GATE_ID: selectGate, GATE_NM: selectedGateName }));
+      dispatch(setVehicle(vehicleType));
+      dispatch(setStartDate(startDate.toISOString()));
+      dispatch(setEndDate(endDate.toISOString()));
       setBooked(availability.Records);
       setShowGateTable(true);
     } catch (error) {
@@ -161,13 +169,6 @@ export default function SanctuaryDetails({
     setShowCalendar(!showCalendar);
   };
 
-  // Initialize state with current date for both elements
-
-  // useEffect to update value when selectedDate changes
-  useEffect(() => {
-    const formattedDates = selectedDate.map((date) => dayjs(date));
-    setValue(formattedDates);
-  }, [selectedDate]);
   // Add console.log for selected data
 
   const selectedPlaceName =
@@ -181,6 +182,12 @@ export default function SanctuaryDetails({
   const selectedGateName =
     gates.find((gate) => gate.GATEID === selectGate)?.GATE_NM ||
     "No Gate Selected";
+
+  // useEffect to update value when selectedDate changes
+  useEffect(() => {
+    const formattedDates = selectedDate.map((date) => dayjs(date));
+    setValue(formattedDates);
+  }, [selectedDate]);
 
   return (
     <Box>
@@ -289,11 +296,7 @@ export default function SanctuaryDetails({
         </Grid>
 
         <Grid item xs={12} md={1}>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => handleSearch("1", "2", "2024-04-28", "2024-04-30")}
-          >
+          <Button fullWidth variant="contained" onClick={() => handleSearch()}>
             Search
           </Button>
         </Grid>

@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import adminService from "../../services/admin";
+import dayjs from "dayjs";
 
 export default function GateAvailableTable({
   booked,
@@ -19,12 +20,8 @@ export default function GateAvailableTable({
 }) {
   const dispatch = useDispatch();
   const [holidays, setHolidays] = useState([]);
-  const [bookings, setBookings] = useState({
-    // Example booking data, replace with real data fetching
-    "29/05/2024": 1,
-    "30/05/2024": 2,
-    "01/06/2024": 4,
-  });
+  const [bookings, setBookings] = useState({});
+  console.log(booked);
 
   // Access the state from the Redux store
   const userBookingData = useSelector((state) => state.userBookingData);
@@ -85,6 +82,16 @@ export default function GateAvailableTable({
 
     fetchHolidays();
   }, []);
+
+  useEffect(() => {
+    // Transform booked data into a more usable format
+    const transformedBookings = booked.reduce((acc, curr) => {
+      const formattedDate = dayjs(curr.BOOKING_DATE).format("DD/MM/YYYY");
+      acc[formattedDate] = curr.NO_VHCLE;
+      return acc;
+    }, {});
+    setBookings(transformedBookings);
+  }, [booked]);
 
   // Array of three valid dates
   const dateArray = [startDateObject];
@@ -165,7 +172,7 @@ export default function GateAvailableTable({
                 align="center"
                 sx={{ border: "1px solid rgba(255, 255, 255, 0.5)" }}
               >
-                {gate}
+                {gate.GATE_NM}
               </TableCell>
               {dateArray.map((date, index) => {
                 const formattedDate = formatDate(date);
