@@ -121,7 +121,7 @@ const configService = {
         act: "getavildt",
         zoneid: zoneId,
         gateid: gateId,
-        slot: "Noon",
+        slotid: "noon",
         "date.from": formattedStartDate,
         "date.to": formattedEndDate,
       };

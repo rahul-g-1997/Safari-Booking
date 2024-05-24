@@ -14,3 +14,6 @@ export { default as ManageLocations } from "./manageLocations/ManageLocations";
 export { default as AddUser } from "./addUser/AddUser";
 export { default as AddHoliday } from "./addHoliday/AddHoliday";
 export { default as Reports } from "./reports/Reports";
+export { default as ConfirmEntry } from "./confirmEntry/ConfirmEntry";
+export { default as CompletSafari } from "./completSafari/CompletSafari";
+export { default as AddSlot } from "./addSlots/AddSlots";

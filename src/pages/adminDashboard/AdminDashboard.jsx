@@ -29,9 +29,11 @@ import {
   ManageLocations,
   AddUser,
   Reports,
+  AddSlot,
 } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
+import AlarmAddIcon from "@mui/icons-material/AlarmAdd";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -105,10 +107,10 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [showManageLocations, setShowManageLocations] = useState(true);
   const [showAddHoliday, setShowAddHoliday] = useState(false);
+  const [showAddSlot, setShowAddSlot] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
   const [showReports, setShowReports] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const isLogin = useSelector((state) => state.auth.status);
@@ -121,7 +123,6 @@ export default function AdminDashboard() {
       setFirstName(userRecord.USR_FNM);
     }
   }, [userData]);
-
   const logOut = () => {
     user.logout();
     dispatch(logout());
@@ -209,6 +210,7 @@ export default function AdminDashboard() {
                         setShowManageLocations(false);
                         setShowAddHoliday(false);
                         setShowAddUser(false);
+                        setShowAddSlot(false);
                         setShowReports(false);
                         setShowProfile(true);
                       }}
@@ -247,6 +249,7 @@ export default function AdminDashboard() {
                 setShowManageLocations(true);
                 setShowAddHoliday(false);
                 setShowAddUser(false);
+                setShowAddSlot(false);
                 setShowReports(false);
                 setShowProfile(false);
               }}
@@ -259,8 +262,24 @@ export default function AdminDashboard() {
             <ListItemButton
               onClick={() => {
                 setShowManageLocations(false);
+                setShowAddHoliday(false);
+                setShowAddUser(false);
+                setShowAddSlot(true);
+                setShowReports(false);
+                setShowProfile(false);
+              }}
+            >
+              <ListItemIcon>
+                <AlarmAddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add Slot" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                setShowManageLocations(false);
                 setShowAddHoliday(true);
                 setShowAddUser(false);
+                setShowAddSlot(false);
                 setShowReports(false);
                 setShowProfile(false);
               }}
@@ -275,6 +294,7 @@ export default function AdminDashboard() {
                 setShowManageLocations(false);
                 setShowAddHoliday(false);
                 setShowAddUser(true);
+                setShowAddSlot(false);
                 setShowReports(false);
                 setShowProfile(false);
               }}
@@ -289,6 +309,7 @@ export default function AdminDashboard() {
                 setShowManageLocations(false);
                 setShowAddHoliday(false);
                 setShowAddUser(false);
+                setShowAddSlot(false);
                 setShowReports(true);
                 setShowProfile(false);
               }}
@@ -303,6 +324,7 @@ export default function AdminDashboard() {
                 setShowManageLocations(false);
                 setShowAddHoliday(false);
                 setShowAddUser(false);
+                setShowAddSlot(false);
                 setShowReports(false);
                 setShowProfile(true);
               }}
@@ -352,6 +374,12 @@ export default function AdminDashboard() {
                 {showManageLocations && (
                   <div className={style.container}>
                     <ManageLocations />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
+                {showAddSlot && (
+                  <div className={style.container}>
+                    <AddSlot />
                     <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}

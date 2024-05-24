@@ -110,7 +110,6 @@ export default function SignUp({ toggleSignIn }) {
 
     try {
       dispatch(startLoading());
-      console.log(sendData);
       const response = await user.createAccount(sendData);
       if (response.data.Result == "OK") {
         toast.success("Registration successful.");

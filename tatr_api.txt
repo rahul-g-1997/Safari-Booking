@@ -142,6 +142,17 @@ URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/getall
 
 {"act":"getalldtls","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
+
+
+Save Slots
+URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/slot
+
+{"act":"saveslot","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","slot.nm":"Morning","timing":"6:00:00","capacity":"4"}
+
+{"act":"srchslot","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+
+
 Admin Save the staff(Like Manager,Operator)
 URL: https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/staff
 
@@ -152,3 +163,39 @@ Save:
 
 Search:
 {"act":"srchstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+
+Update for gate when we add numbers of gate.
+{"act":"updtstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"staff.cntc\":\"6932587410\",\"staff.eml\":\"kuldeep567@gmail.com\"}","gateid":"5,6","staffid":"8"}
+
+update when we want to delete selected gateid.
+{"act":"updtstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"staff.cntc\":\"6932587410\",\"staff.eml\":\"kuldeep567@gmail.com\"}","unselectedgateid":"5,6","staffid":"8"}
+
+
+Update when we want to change user password.
+{"act":"updtstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"staff.cntc\":\"6932587410\",\"staff.eml\":\"kuldeep567@gmail.com\"}","staffid":"8","usr.pwd":"abc"}
+
+
+Delete Record:
+{"act":"delstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","v.staffid":"7"}
+
+
+
+
+
+                                                      //---staff api---//
+
+
+
+URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/gates
+
+Operator and Manager Login.Generate Token.Then find No.of Gates under them.
+{"act":"getallgates","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjIsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTYyODQ3NjA1NzgiLCJVU1JfTk0iOiJPcGVyYXRvciBPcGVyYXRlIn0.fOUC8bkkSoXII_Iit92rHyWqeXPYBnBIFfrtfAw08Hg"}
+
+According to gateid booking id is shown.
+{"act":"getbookingid","gateid":"13"}
+
+
+URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/getbkngdtls
+Get all the booking data using booking no.
+{"act":"getbkngdtls","booking.no":"TATR2024PE20"}

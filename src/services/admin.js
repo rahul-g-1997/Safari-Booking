@@ -218,6 +218,47 @@ const adminService = {
     }
   },
 
+  // Add a new slot
+  addSlot: async (token, slotName, timing, capacity) => {
+    try {
+      const requestData = {
+        act: "saveslot",
+        token,
+        "slot.nm": slotName,
+        timing,
+        capacity,
+      };
+      const response = await axios.post(`${ADMIN_API_URL}/slot`, requestData);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error("Error adding slot");
+      }
+    } catch (error) {
+      console.error("Error adding slot:", error);
+      throw new Error("Error adding slot");
+    }
+  },
+
+  // Search for slots
+  searchSlot: async (token) => {
+    try {
+      const requestData = {
+        act: "srchslot",
+        token,
+      };
+      const response = await axios.post(`${ADMIN_API_URL}/slot`, requestData);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error("Error searching for slots");
+      }
+    } catch (error) {
+      console.error("Error searching for slots:", error);
+      throw new Error("Error searching for slots");
+    }
+  },
+
   // Get all details: places, zones, and gates
   getAllDetails: async (token) => {
     try {

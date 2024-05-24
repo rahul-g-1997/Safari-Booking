@@ -15,18 +15,14 @@ import { toast } from "react-toastify";
 
 const headers = [
   { id: "SR_NO", label: "Sr. No" },
-  { id: "STAFF_NM", label: "Name" },
-  { id: "STAFF_CNTC", label: "Contact" },
-  { id: "STAFF_EML", label: "Email" },
-  { id: "STAFF_TYPE", label: "User Type" },
-  { id: "DTLS", label: "Designation" },
-  { id: "ASSIGNED_GATES", label: "Assigned Gate's" },
-  { id: "edit", label: "Edit User" },
-  { id: "delete", label: "Delete User" },
+  { id: "SLOT_NM", label: "Slot Name" },
+  { id: "TIMING", label: "Timing" },
+  { id: "CAPACITY", label: "Capacity" },
+  { id: "ACTIONS", label: "Actions" },
 ];
 const token = localStorage.getItem("token");
 
-export default function UserTable({ users, setEditUsers, setDeleteUser }) {
+export default function SlotsTable({ slots }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -39,36 +35,23 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
     setPage(0);
   };
 
-  const getDesignationFromDTLS = (DTLS) => {
-    try {
-      const parsedDTLS = JSON.parse(DTLS);
-      return parsedDTLS.designation || "";
-    } catch (error) {
-      console.error("Error parsing DTLS:", error);
-      const match = DTLS.match(/\{"designation"\s*:\s*"([^"]+)"\}/);
-      return match ? match[1] : "";
-    }
+  const handleEdit = (slot) => {
+    console.log(slot);
+    // Add your edit functionality here
   };
 
-  const handleEdit = (user) => {
-    console.log(user);
-    setEditUsers(user);
-  };
-
-  const handleDelete = async (user) => {
+  const handleDelete = async (slot) => {
     try {
-      const staffId = user.STAFFID; // Adjust according to your user object structure
-      const response = await adminService.deleteUser(token, staffId);
+      const slotId = slot.SLOTID;
+      const response = await adminService.deleteSlot(token, slotId);
       if (response.Result === "OK") {
-        console.log("User deleted successfully:", response);
-        setDeleteUser(user);
-        toast.success("User deleted successfully");
+        console.log("Slot deleted successfully:", response);
+        // Add your delete functionality here
+        toast.success("Slot deleted successfully");
       }
-
-      // You can also add any additional handling like updating the UI or notifying the user
     } catch (error) {
-      console.error("Error deleting user:", error);
-      // Handle the error appropriately, e.g., show an error message to the user
+      console.error("Error deleting slot:", error);
+      toast.error("Error deleting slot");
     }
   };
 
@@ -105,10 +88,10 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
+            {slots
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user, index) => (
-                <TableRow key={index}>
+              .map((slot, index) => (
+                <TableRow key={slot.SLOTID}>
                   <TableCell
                     align="center"
                     sx={{
@@ -127,7 +110,7 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
                       padding: "8px",
                     }}
                   >
-                    {user.STAFF_NM}
+                    {slot.SLOT_NM}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -137,7 +120,7 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
                       padding: "8px",
                     }}
                   >
-                    {user.STAFF_CNTC}
+                    {slot.TIMING}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -147,50 +130,7 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
                       padding: "8px",
                     }}
                   >
-                    {user.STAFF_EML}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                      whiteSpace: "nowrap",
-                      padding: "8px",
-                    }}
-                  >
-                    {user.STAFF_TYPE === "O"
-                      ? "Operator"
-                      : user.STAFF_TYPE === "M"
-                      ? "Manager"
-                      : user.STAFF_TYPE}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                      whiteSpace: "nowrap",
-                      padding: "8px",
-                    }}
-                  >
-                    {getDesignationFromDTLS(user.DTLS)}
-                  </TableCell>
-
-                  <TableCell
-                    align="left"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                      whiteSpace: "nowrap",
-                      padding: "8px",
-                    }}
-                  >
-                    {user.GATE_NM.reduce((acc, curr, index) => {
-                      if (index % 4 === 0 && index !== 0) {
-                        return [...acc, ",", <br key={index} />, curr];
-                      } else if (index !== 0) {
-                        return [...acc, ", ", curr];
-                      } else {
-                        return [...acc, curr];
-                      }
-                    }, [])}
+                    {slot.CAPACITY}
                   </TableCell>
 
                   <TableCell
@@ -202,22 +142,13 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
                     }}
                   >
                     <IconButton
-                      onClick={() => handleEdit(user)}
+                      onClick={() => handleEdit(slot)}
                       sx={{ padding: "4px" }}
                     >
                       <EditIcon />
                     </IconButton>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
-                      whiteSpace: "nowrap",
-                      padding: "8px",
-                    }}
-                  >
                     <IconButton
-                      onClick={() => handleDelete(user)}
+                      onClick={() => handleDelete(slot)}
                       sx={{ padding: "4px" }}
                     >
                       <DeleteIcon />
@@ -231,7 +162,7 @@ export default function UserTable({ users, setEditUsers, setDeleteUser }) {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={users.length}
+        count={slots.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
