@@ -2,7 +2,10 @@ import axios from "axios";
 import conf from "../conf/conf";
 
 const API_URL = conf.user_backend_url; // API base URL
-
+const convertDateFormat = (date) => {
+  const [day, month, year] = date.split("/");
+  return `${year}-${month}-${day}`;
+};
 const configService = {
   // Get places
   getPlaces: async () => {
@@ -113,6 +116,7 @@ const configService = {
   getAvailability: async (
     zoneId,
     gateId,
+    slotId,
     formattedStartDate,
     formattedEndDate
   ) => {
@@ -121,11 +125,12 @@ const configService = {
         act: "getavildt",
         zoneid: zoneId,
         gateid: gateId,
-        slotid: "noon",
+        slotid: slotId,
         "date.from": formattedStartDate,
         "date.to": formattedEndDate,
       };
       const response = await axios.post(`${API_URL}/getavaildt`, requestData);
+      console.log(response);
       return response.data; // Return availability data
     } catch (error) {
       console.error("Error fetching gate availability:", error); // Log error for debugging
@@ -155,9 +160,9 @@ const configService = {
         "v.placeid": placeId,
         "v.zoneid": zoneId,
         "v.gateid": gateId,
-        "v.slot": slot,
-        "v.date.from": fromDate,
-        "v.date.to": toDate,
+        "v.slotid": slot,
+        "v.date.from": convertDateFormat(fromDate),
+        "v.date.to": convertDateFormat(toDate),
         "v.vhcle.type": vehicleType,
         "v.tourist.dtls": JSON.stringify(touristDetails),
         "v.tot.amt": totalAmount,
@@ -166,7 +171,12 @@ const configService = {
         token: token,
         app: app,
       };
-      const response = await axios.post(API_URL, requestData);
+      console.log(requestData);
+      const response = await axios.post(
+        `${API_URL}/booktckt
+`,
+        requestData
+      );
       return response.data; // Return response data
     } catch (error) {
       console.error("Error booking ticket:", error); // Log error for debugging

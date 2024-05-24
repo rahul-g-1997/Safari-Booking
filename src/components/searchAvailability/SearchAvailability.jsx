@@ -23,7 +23,9 @@ import {
   setStartDate,
   setEndDate,
   setZone,
+  setSlot,
 } from "../../rtk/reducer/userBookingDataReducer";
+import adminService from "../../services/admin";
 
 const SquareIcon = ({ backgroundColor }) => {
   return (
@@ -47,20 +49,24 @@ export default function SanctuaryDetails({
   const [places, setPlaces] = useState([]);
   const [zones, setZones] = useState([]);
   const [gates, setGates] = useState([]);
+  const [slots, setSlots] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
   const [selectedPlace, setSelectedPlace] = useState("");
   const [selectGate, setSelectedGate] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showGateTable, setShowGateTable] = useState(false);
   const [value, setValue] = useState([]);
   const [booked, setBooked] = useState();
+  const token = localStorage.getItem("token");
 
   const handleSearch = async () => {
     try {
       const zoneId = selectedZone;
       const gateId = selectGate;
-      const vehicleType = selectedVehicle === "G" ? "Gypsy" : "Private";
+      const slotId = selectedSlot;
+      const vehicleType = selectedVehicle ;
       const [startDate, endDate] = selectedDate;
       // Format the start date
       const formattedStartDate = dayjs(startDate).format("YYYY-MM-DD");
@@ -78,14 +84,22 @@ export default function SanctuaryDetails({
       const availability = await configService.getAvailability(
         zoneId,
         gateId,
+        slotId,
         formattedStartDate,
         formattedEndDate
       );
       dispatch(
         setPlace({ PLACE_ID: selectedPlace, PLACE_NM: selectedPlaceName })
       );
-      dispatch(setZone({ ZONE_ID: selectedZone, ZONE_NAME: selectedZoneName }));
+      dispatch(setZone({ ZONE_ID: selectedZone, ZONE_NM: selectedZoneName }));
       dispatch(setGate({ GATE_ID: selectGate, GATE_NM: selectedGateName }));
+      dispatch(
+        setSlot({
+          SLOT_ID: selectedSlot,
+          SLOT_NM: selectedSlotName,
+          SLOT_TM: slots.find((slot) => slot.SLOTID === selectedSlot)?.TIMING,
+        })
+      );
       dispatch(setVehicle(vehicleType));
       dispatch(setStartDate(startDate.toISOString()));
       dispatch(setEndDate(endDate.toISOString()));
@@ -108,6 +122,10 @@ export default function SanctuaryDetails({
 
   const handleGateChange = (event) => {
     setSelectedGate(event.target.value);
+  };
+
+  const handleSlotChange = (event) => {
+    setSelectedSlot(event.target.value);
   };
 
   useEffect(() => {
@@ -156,7 +174,21 @@ export default function SanctuaryDetails({
     }
 
     fetchGates(); // Call fetchGates function when selectedZone changes
-  }, [selectedZone]); // Dependency array to trigger effect when selectedZone changes
+  }, [selectedZone]);
+
+  useEffect(() => {
+    async function fetchSlots() {
+      try {
+        const slotsData = await adminService.searchSlot(token);
+        console.log(slotsData);
+        setSlots(slotsData.Records);
+      } catch (error) {
+        console.error("Error fetching gates:", error);
+      }
+    }
+
+    fetchSlots();
+  }, []);
 
   const [selectedDate, setSelectedDate] = useState([]);
   const handleDateSelect = (date) => {
@@ -182,6 +214,9 @@ export default function SanctuaryDetails({
   const selectedGateName =
     gates.find((gate) => gate.GATEID === selectGate)?.GATE_NM ||
     "No Gate Selected";
+  const selectedSlotName =
+    slots.find((slot) => slot.SLOTID === selectedSlot)?.SLOT_NM ||
+    "No Gate Selected";
 
   // useEffect to update value when selectedDate changes
   useEffect(() => {
@@ -192,7 +227,7 @@ export default function SanctuaryDetails({
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
           <TextField
             fullWidth
             label="Eco-Tourist-Places"
@@ -209,7 +244,7 @@ export default function SanctuaryDetails({
             ))}
           </TextField>
         </Grid>
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
           <TextField
             fullWidth
             label="Zone"
@@ -227,7 +262,7 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
           <TextField
             fullWidth
             label="Gate"
@@ -245,7 +280,7 @@ export default function SanctuaryDetails({
           </TextField>
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
           <TextField
             fullWidth
             label="Select vehicle"
@@ -255,12 +290,30 @@ export default function SanctuaryDetails({
             value={selectedVehicle}
             onChange={handleVehicleChange}
           >
-            <MenuItem value={"G"}>Gypsy</MenuItem>
-            <MenuItem value={"P"}>Private</MenuItem>
+            <MenuItem value={"g"}>Gypsy</MenuItem>
+            <MenuItem value={"p"}>Private</MenuItem>
           </TextField>
         </Grid>
 
-        <Grid item xs={12} md={3} mt={-1}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
+          <TextField
+            fullWidth
+            label="Select Slot"
+            select
+            size="small"
+            variant="outlined"
+            value={selectedSlot}
+            onChange={handleSlotChange}
+          >
+            {slots.map((slot) => (
+              <MenuItem key={slot.SLOTID} value={slot.SLOTID}>
+                {slot.SLOT_NM}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid item xs={12} sm={8} md={5} lg={4} mt={-1}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div style={{ position: "relative" }}>
               <DemoContainer components={["SingleInputDateRangeField"]}>
@@ -295,7 +348,7 @@ export default function SanctuaryDetails({
           </LocalizationProvider>
         </Grid>
 
-        <Grid item xs={12} md={1}>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
           <Button fullWidth variant="contained" onClick={() => handleSearch()}>
             Search
           </Button>

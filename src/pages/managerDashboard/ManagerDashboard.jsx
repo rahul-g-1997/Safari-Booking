@@ -24,10 +24,12 @@ import {
 } from "@mui/material";
 import { logout } from "../../rtk/reducer/userReducer";
 
-import { Copyright } from "../../components";
+import { CompletSafari, ConfirmEntry, Copyright } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { toast } from "react-toastify";
 import style from "./managerDashboard.module.css";
 import theme from "../../theme";
@@ -94,7 +96,10 @@ const Drawer = styled(MuiDrawer, {
 export default function ManagerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showConfirmEntry, setShowConfirmEntry] = useState(true);
+  const [showCompletSafari, setShowCompletSafari] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const isLogin = useSelector((state) => state.auth.status);
@@ -192,6 +197,8 @@ export default function ManagerDashboard() {
                     <Typography
                       textAlign="center"
                       onClick={() => {
+                        setShowConfirmEntry(false);
+                        setShowCompletSafari(false);
                         setShowProfile(true);
                       }}
                     >
@@ -226,6 +233,36 @@ export default function ManagerDashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
+                setShowConfirmEntry(true);
+                setShowCompletSafari(false);
+                setShowProfile(false);
+              }}
+            >
+              <ListItemIcon>
+                <NoCrashIcon />
+              </ListItemIcon>
+              <ListItemText primary="Confirm Entry" />
+            </ListItemButton>
+          </List>
+          <List component="nav">
+            <ListItemButton
+              onClick={() => {
+                setShowConfirmEntry(false);
+                setShowCompletSafari(true);
+                setShowProfile(false);
+              }}
+            >
+              <ListItemIcon>
+                <FactCheckIcon />
+              </ListItemIcon>
+              <ListItemText primary="Complet Safari" />
+            </ListItemButton>
+          </List>
+          <List component="nav">
+            <ListItemButton
+              onClick={() => {
+                setShowConfirmEntry(false);
+                setShowCompletSafari(false);
                 setShowProfile(true);
               }}
             >
@@ -263,21 +300,31 @@ export default function ManagerDashboard() {
               {" "}
               <Toolbar />
               <Container
-                maxWidth="100"
+                maxWidth="xl"
                 sx={{
-                  p: "30px",
+                  margin: "0 -15px",
+                  p: "20px",
                   width: "auto",
                   transition:
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 }}
               >
-                <div className={style.container}>
-                  <Copyright sx={{ pt: 4 }} />
-                </div>
-
+                {showConfirmEntry && (
+                  <div className={style.container}>
+                    <ConfirmEntry />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
+                {showCompletSafari && (
+                  <div className={style.container}>
+                    <CompletSafari />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
                 {showProfile && (
                   <div className={style.container}>
                     <Profile />
+                    <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}
               </Container>

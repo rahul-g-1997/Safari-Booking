@@ -53,15 +53,15 @@ For Gates:
 Note: Here we get the output for booking date with no. of vehicles booked.
 
 URL: https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/getavaildt
-{"act":"getavildt","zoneid":"1","gateid":"2","slot":"Noon","date.from":"2024-04-28","date.to":"2024-04-30"}
+{"act":"getavildt","zoneid":"1","gateid":"2","slotid":"1","date.from":"2024-04-28","date.to":"2024-04-30"}
 
 
 Book Tickets:
 
 URL: https://slfv91qoqb.execute-api.ap-south-1.amazonaws.com/dev/booktckt
-{"act":"booktckt","v.placeid":"1","v.zoneid":"1","v.gateid":"1","v.slot":"Noon","v.date.from":"2024-05-12","v.date.to":"2024-05-13",
-"v.vhcle.type":"g","v.tourist.dtls":"{\"address\":\"Pune\",\"aadharno\":\"345699923012\"}","v.tot.amt":"4000","v.open.time":"12:00:00","v.dtls":"{}",
-"token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","app":"tabk"}
+
+{"act":"booktckt","v.placeid":"2","v.zoneid":"11","v.gateid":"17","v.slotid":"1","v.date.from":"2024-05-28","v.date.to":"2024-05-28",
+"v.vhcle.type":"g","v.tourist.dtls":"{\"address\":\"Pune\",\"aadharno\":\"632587410000\"}","v.tot.amt":"4000","v.open.time":"10:00:00","v.dtls":"{}","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","app":"tabk"}
 
 Note:Save the tourist details in tourist.dtls json field.
 
@@ -151,9 +151,13 @@ URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/slot
 
 {"act":"srchslot","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
+{"act":"updtslot","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"capacity\":\"4\",\"timing\":\"1:30\"}","slotid":"2"}
+
+{"act":"delslot","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","slotid":"4"}
 
 
-Admin Save the staff(Like Manager,Operator)
+
+dmin Save the staff(Like Manager,Operator)
 URL: https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/staff
 
 Save:
@@ -173,7 +177,7 @@ update when we want to delete selected gateid.
 
 
 Update when we want to change user password.
-{"act":"updtstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"staff.cntc\":\"6932587410\",\"staff.eml\":\"kuldeep567@gmail.com\"}","staffid":"8","usr.pwd":"abc"}
+{"act":"updtstaff","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","info":"{\"staff.cntc\":\"6932587410\",\"staff.eml\":\"kuldeep567@gmail.com\"}","staffid":"8","usr.pwd":"abc","usr.type":"O"}
 
 
 Delete Record:
@@ -188,6 +192,9 @@ Delete Record:
 
 
 URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/gates
+
+Profile:
+{"act":"getstfprofile","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjIsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTY0NTg3NzI1MzciLCJVU1JfTk0iOiJTYWhpbCJ9.HobcIa5z9uLIYXQM3qji9JNX7Pj6-TQJozby4ik27gg"}
 
 Operator and Manager Login.Generate Token.Then find No.of Gates under them.
 {"act":"getallgates","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjIsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTYyODQ3NjA1NzgiLCJVU1JfTk0iOiJPcGVyYXRvciBPcGVyYXRlIn0.fOUC8bkkSoXII_Iit92rHyWqeXPYBnBIFfrtfAw08Hg"}

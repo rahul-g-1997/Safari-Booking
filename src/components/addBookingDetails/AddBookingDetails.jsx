@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
@@ -80,7 +79,7 @@ export default function AddBookingDetails({
   setShowAddBookingDetails,
 }) {
   const dispatch = useDispatch();
-  const [expanded, setExpanded] = React.useState("");
+  const [expanded, setExpanded] = useState("");
   const [numberOfPersons, setNumberOfPersons] = useState("");
   const [hasCamera, setHasCamera] = useState("");
   const [numberOfCameras, setNumberOfCameras] = useState("");
@@ -267,7 +266,6 @@ export default function AddBookingDetails({
 
   const userBookingData = useSelector((state) => state.userBookingData);
   const { place, zone, gate, vehicle, bookingDate, slot } = userBookingData;
-
   const handleConfirmDetails = () => {
     // Dispatch actions with the provided details
     dispatch(setNumberOfTourism(parseInt(numberOfPersons)));
@@ -295,6 +293,7 @@ export default function AddBookingDetails({
     setShowAddBookingDetails(false);
     setShowConfirmDetails(true);
   };
+  console.log(formData);
 
   return (
     <div>
@@ -354,7 +353,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Slot: {slot}
+              Slot: {slot.SLOT_NM}
             </Paper>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -365,7 +364,7 @@ export default function AddBookingDetails({
                 padding: 10,
               }}
             >
-              Vehicle Name: {vehicle}
+              Vehicle Name: {vehicle === "g" ? "Gipsy" : "Private "}
             </Paper>
           </Grid>
         </Grid>

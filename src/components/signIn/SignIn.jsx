@@ -28,7 +28,6 @@ import {
 import { toast } from "react-toastify";
 import user from "../../services/user";
 import "./SignIn.css";
-
 export default function SignIn({ toggleForm, toggleForgotPassword }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();

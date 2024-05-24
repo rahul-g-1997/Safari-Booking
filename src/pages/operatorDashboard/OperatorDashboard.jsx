@@ -24,10 +24,11 @@ import {
 } from "@mui/material";
 import { logout } from "../../rtk/reducer/userReducer";
 
-import { Copyright } from "../../components";
+import { Copyright, Reports } from "../../components";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SummarizeIcon from "@mui/icons-material/Summarize";
 import { toast } from "react-toastify";
 import style from "./operatorDashboard.module.css";
 import theme from "../../theme";
@@ -94,6 +95,7 @@ const Drawer = styled(MuiDrawer, {
 export default function OperatorDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showReports, setShowReports] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -192,6 +194,7 @@ export default function OperatorDashboard() {
                     <Typography
                       textAlign="center"
                       onClick={() => {
+                        setShowReports(false);
                         setShowProfile(true);
                       }}
                     >
@@ -226,6 +229,20 @@ export default function OperatorDashboard() {
           <List component="nav">
             <ListItemButton
               onClick={() => {
+                setShowReports(true);
+                setShowProfile(false);
+              }}
+            >
+              <ListItemIcon>
+                <SummarizeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Reports" />
+            </ListItemButton>
+          </List>
+          <List component="nav">
+            <ListItemButton
+              onClick={() => {
+                setShowReports(false);
                 setShowProfile(true);
               }}
             >
@@ -260,24 +277,27 @@ export default function OperatorDashboard() {
             </Box>
           ) : (
             <>
-              {" "}
               <Toolbar />
               <Container
-                maxWidth="100"
+                maxWidth="xl"
                 sx={{
-                  p: "30px",
+                  margin: "0 -15px",
+                  p: "20px",
                   width: "auto",
                   transition:
                     "margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 }}
               >
-                <div className={style.container}>
-                  <Copyright sx={{ pt: 4 }} />
-                </div>
-
+                {showReports && (
+                  <div className={style.container}>
+                    <Reports />
+                    <Copyright sx={{ pt: 4 }} />
+                  </div>
+                )}
                 {showProfile && (
                   <div className={style.container}>
                     <Profile />
+                    <Copyright sx={{ pt: 4 }} />
                   </div>
                 )}
               </Container>

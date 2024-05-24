@@ -6,10 +6,10 @@ const initialState = {
   zone: null,
   gate: null,
   vehicle: null,
+  slot: null,
   startDate: null,
   endDate: null,
   bookingDate: null,
-  slot: "Mornig",
   numberOfTourism: null,
   tourismDetails: [],
   contact: [],
@@ -33,6 +33,9 @@ const authSlice = createSlice({
     setGate: (state, action) => {
       state.gate = action.payload;
     },
+    setSlot: (state, action) => {
+      state.slot = action.payload;
+    },
     setVehicle: (state, action) => {
       state.vehicle = action.payload;
     },
@@ -44,9 +47,6 @@ const authSlice = createSlice({
     },
     setEndDate: (state, action) => {
       state.endDate = action.payload;
-    },
-    setSlot: (state, action) => {
-      state.slot = action.payload;
     },
     setNumberOfTourism: (state, action) => {
       state.numberOfTourism = action.payload;

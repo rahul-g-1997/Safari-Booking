@@ -17,11 +17,16 @@ import {
   TableContainer,
   Table,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import configService from "../../services/config";
+import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
+import { toast } from "react-toastify";
 
 export default function ConfirmDetails() {
+  const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
+
   const userBookingData = useSelector((state) => state.userBookingData);
   const {
     place,
@@ -38,23 +43,6 @@ export default function ConfirmDetails() {
     numberOfChildren,
     childrenDetails,
   } = userBookingData;
-
-  const bookingData = {
-    place: place,
-    zone: zone,
-    gate: gate,
-    bookingDate: bookingDate,
-    slot: slot,
-    vehicle: vehicle,
-    numberOfTourism: numberOfTourism,
-    tourismDetails: tourismDetails,
-    contact: contact,
-    numberOfCamera: numberOfCamera,
-    cameraDetails: cameraDetails,
-    numberOfChildren: numberOfChildren,
-    childrenDetails: childrenDetails,
-  };
-  console.log(bookingData);
 
   const handleCheckboxChange = (event) => {
     // Check if the checkbox is not already checked
@@ -86,6 +74,44 @@ export default function ConfirmDetails() {
     // Do something when the user disagrees
   };
 
+  const handleBooking = async () => {
+    try {
+      dispatch(startLoading());
+      const response = await configService.bookTicket({
+        placeId: place.PLACE_ID,
+        zoneId: zone.ZONE_ID,
+        gateId: gate.GATE_ID,
+        slot: slot.SLOT_ID,
+        fromDate: bookingDate,
+        toDate: bookingDate,
+        vehicleType: vehicle,
+        touristDetails: tourismDetails,
+        totalAmount: 4000,
+        openTime: slot.SLOT_TM,
+        details: {
+          contact: contact,
+          numberOfTourism: numberOfTourism,
+          numberOfChildren: numberOfChildren,
+          childrenDetails: childrenDetails,
+          numberOfCamera: numberOfCamera,
+          cameraDetails: cameraDetails,
+        }, // Additional details in JSON format
+        token: localStorage.getItem("token"),
+        app: "tabk",
+      });
+      if (response.Result === "OK") {
+        toast.success(response.Msg);
+      } else {
+        toast.error("Booking failed");
+        console.log(response.Msg);
+      }
+    } catch (error) {
+      console.error("Error booking ticket:", error);
+      // Handle error, maybe show an error message to the user
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
   return (
     <Box>
       <Typography variant="h5" gutterBottom item xs={12} textAlign="center">
@@ -126,14 +152,14 @@ export default function ConfirmDetails() {
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Slot: {slot}
+            Slot: {slot.SLOT_NM}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Paper
             style={{ backgroundColor: "#e0e0e0", borderRadius: 8, padding: 10 }}
           >
-            Vehicle Name: {vehicle}
+            Vehicle Name: {vehicle === "g" ? "Gipsy" : "Private "}
           </Paper>
         </Grid>
       </Grid>
@@ -324,7 +350,12 @@ export default function ConfirmDetails() {
           <Typography>Total Amount: 4750 </Typography>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary" disabled={!termsChecked}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!termsChecked}
+            onClick={handleBooking}
+          >
             Pay
           </Button>
         </Grid>
