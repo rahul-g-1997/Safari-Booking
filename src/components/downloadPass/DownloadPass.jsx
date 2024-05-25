@@ -1,6 +1,15 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BookingPass } from "../../react-pdf";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 export default function DownloadPass() {
+  const [open, setOpen] = React.useState(false);
   const bookingDetails = {
     bookingNumber: "MFD20246S2804",
     payeeName: "Ditsa Sen",
@@ -69,14 +78,44 @@ export default function DownloadPass() {
       },
     ],
   };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div>
-      <PDFDownloadLink
-        document={<BookingPass bookingDetails={bookingDetails} />}
-        fileName="document.pdf"
-      >
-        {({ loading }) => (loading ? "Loading document..." : "Download PDF")}
-      </PDFDownloadLink>
-    </div>
+    <React.Fragment>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open dialog
+      </Button>
+      <Dialog open={open} aria-labelledby="dialog-title">
+        <DialogTitle id="dialog-title">Booking Details</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Your Booking Number: {bookingDetails.bookingNumber}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <PDFDownloadLink
+            document={<BookingPass bookingDetails={bookingDetails} />}
+            fileName="document.pdf"
+          >
+            {({ loading }) =>
+              loading ? (
+                "Loading document..."
+              ) : (
+                <Button variant="contained" onClick={handleClose}>
+                  Download Pass
+                </Button>
+              )
+            }
+          </PDFDownloadLink>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 }
