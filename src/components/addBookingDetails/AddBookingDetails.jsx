@@ -293,7 +293,6 @@ export default function AddBookingDetails({
     setShowAddBookingDetails(false);
     setShowConfirmDetails(true);
   };
-  console.log(formData);
 
   return (
     <div>

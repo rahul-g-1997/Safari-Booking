@@ -93,9 +93,8 @@ export default function ConfirmDetails() {
           numberOfTourism: numberOfTourism,
           numberOfChildren: numberOfChildren,
           childrenDetails: childrenDetails,
-          numberOfCamera: numberOfCamera,
-          cameraDetails: cameraDetails,
-        }, // Additional details in JSON format
+        },
+        cameradtls: { Noofcam: numberOfCamera, cameraName: cameraDetails },
         token: localStorage.getItem("token"),
         app: "tabk",
       });

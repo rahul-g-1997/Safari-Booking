@@ -131,10 +131,13 @@ Note:When it is applied for place then zoneid =0 and when for zone placeid =0
 Save and search holidays.
 
 URL:https://kq33q4lj44.execute-api.ap-south-1.amazonaws.com/dev/holidays
-{"act":"saveholiday","date":"2024-05-23","remark":"BudhhaPoornima","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+{"act":"saveholiday","date.from":"2024-05-23","date.to":"2024-05-23","remark":"BudhhaPoornima","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
 
+{"act":"updtholiday","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","hldysid":"9","info":"{\"remark\":\"Eid\"}"}
 
 {"act":"srchholiday","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+{"act":"delholiday","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs","hldysid":"9"}
 
 Get all places,zones and gates.
 
@@ -206,3 +209,34 @@ According to gateid booking id is shown.
 URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/getbkngdtls
 Get all the booking data using booking no.
 {"act":"getbkngdtls","booking.no":"TATR2024PE20"}
+
+
+URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/cnfrmbooking (URL is same for 1) and 2))
+1)confirm entry when guideid and gypsyid confirm.( Gypsy code and guide code is present.)
+{"act":"cnfmentry","booking.no":"TATR2024Ga17","gypsy.cd":"S7236","guide.cd":"S1234","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjIsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTYyODQ3NjA1NzgiLCJVU1JfTk0iOiJPcGVyYXRvciBPcGVyYXRlIn0.fOUC8bkkSoXII_Iit92rHyWqeXPYBnBIFfrtfAw08Hg"}
+
+
+2)If Guide and Gypsies New Entry:(gpsynewentry,guidenewentry pass this two keywords as yes)
+{"act":"cnfmentry","gpsynewentry":"yes","booking.no":"TATR2024GA23","gypsy.cd":"D6565","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjIsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTYyODQ3NjA1NzgiLCJVU1JfTk0iOiJPcGVyYXRvciBPcGVyYXRlIn0.fOUC8bkkSoXII_Iit92rHyWqeXPYBnBIFfrtfAw08Hg",
+"owner.nm":"Abhi","gpsy.no":"MP22DS7211","gate.nm":"paoni","owner.dtls":"{\"Mobile\":\"8963200147\",\"aadharno\":\"789652998741\"}","bank.dtls":"{\"bankname\":\"HDFC\",\"IFSCcode\":\"HDFC69688\"}","round":"1",
+"rate":"500","date":"2024-05-25",
+"guidenewentry":"yes","guide.nm":"Kumar","guide.cd":"D1134","guide.dtls":"{\"address\":\"Nagpur\"}","gbank.dtls":"{\"BankName\":\"ICICI\",\"IFSC\":\"ICIC789612\"}","ground":"1","grate":"250"}
+
+
+3)Getting booking no.Whose status is STARTED.
+{"act":"getcnfmbkngid","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+
+4)Getting booking no.Whose status is FINISHED.
+{"act":"getfinishbkngid","token":"eyJhbGciOiJIUzI1NiJ9.eyJVSUQiOjEsIkFQUCI6InRhYmsiLCJpZGVudGl0eSI6IjE3MTQ5OTQ5MjkxNDUiLCJVU1JfTk0iOiJBZG1pbiBhZG1pbiJ9.y_VqgC4nni8hEFRsccWrEhWFXdxT1YN9w3lTFCyCBQs"}
+
+
+URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/gpsydtls
+GetAll Gypsy Details using gupsy code.
+{"act":"getallgypsies","gypsy.cd":"S7236"}
+
+
+URL:https://8g1v94k1u2.execute-api.ap-south-1.amazonaws.com/dev/guidedtls
+GetAll Guide Details using guide code.
+{"act":"getallguides","guide.cd":"G1234"}
+
