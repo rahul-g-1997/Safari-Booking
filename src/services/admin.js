@@ -218,6 +218,31 @@ const adminService = {
     }
   },
 
+  // Delete holiday
+  deleteHoliday: async (hldysid, token) => {
+    try {
+      const requestData = {
+        act: "delholiday",
+        token,
+        hldysid,
+      };
+      const response = await axios.post(
+        `${ADMIN_API_URL}/holidays`,
+        requestData
+      );
+
+      if (response.status === 200 && response.data.Result === "OK") {
+        return response.data; // Adjust based on the actual data structure
+      } else {
+        console.error("Unexpected response data:", response.data);
+        throw new Error(response.data.Msg || "Unexpected response data");
+      }
+    } catch (error) {
+      console.error("Error deleting holiday:", error); // Log error for debugging
+      throw new Error("Error deleting holiday");
+    }
+  },
+
   // Add a new slot
   addSlot: async (token, slotName, timing, capacity) => {
     try {

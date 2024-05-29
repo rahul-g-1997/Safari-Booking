@@ -26,6 +26,7 @@ export default function EcoTouristPlacesTable({ getall }) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   return (
     <Paper
       sx={{
@@ -61,8 +62,8 @@ export default function EcoTouristPlacesTable({ getall }) {
           <TableBody>
             {getall
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((place, index) => (
-                <TableRow key={index}>
+              .map((place, placeIndex) => (
+                <TableRow key={placeIndex}>
                   <TableCell
                     align="left"
                     sx={{
@@ -81,8 +82,8 @@ export default function EcoTouristPlacesTable({ getall }) {
                       padding: "8px",
                     }}
                   >
-                    {place.ZONES.map((zone) => (
-                      <div key={zone.ZONEID}>{zone.ZONE}</div>
+                    {place.ZONES.map((zone, zoneIndex) => (
+                      <div key={`${placeIndex}-${zoneIndex}`}>{zone.ZONE}</div>
                     ))}
                   </TableCell>
                   <TableCell
@@ -93,9 +94,11 @@ export default function EcoTouristPlacesTable({ getall }) {
                       padding: "8px",
                     }}
                   >
-                    {place.ZONES.map((zone) =>
-                      zone.GATES.map((gate) => (
-                        <div key={gate.GATEID}>{gate.GATE_NM}</div>
+                    {place.ZONES.map((zone, zoneIndex) =>
+                      zone.GATES.map((gate, gateIndex) => (
+                        <div key={`${placeIndex}-${zoneIndex}-${gateIndex}`}>
+                          {gate.GATE_NM}
+                        </div>
                       ))
                     )}
                   </TableCell>

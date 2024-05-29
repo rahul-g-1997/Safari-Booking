@@ -10,6 +10,7 @@ import admin from "../../services/admin";
 import { toast } from "react-toastify";
 import HolidayRecordsTable from "./HolidayRecordsTable";
 
+const token = localStorage.getItem("token");
 const SquareIcon = ({ backgroundColor }) => {
   return (
     <div
@@ -90,7 +91,6 @@ export default function AddHoliday() {
   useEffect(() => {
     const fetchHolidays = async () => {
       try {
-        const token = localStorage.getItem("token");
         const response = await admin.searchHoliday(token);
         setHolidayRecords(response.Records);
 
@@ -103,6 +103,19 @@ export default function AddHoliday() {
 
     fetchHolidays();
   }, [handleSaveHoliday]);
+
+ const deleteHolidays = async (hldysid) => {
+   try {
+     await admin.deleteHoliday(hldysid, localStorage.getItem("token"));
+     toast.success("Holiday deleted successfully");
+     // Refetch holidays after successful deletion
+     const response = await admin.searchHoliday(localStorage.getItem("token"));
+     setHolidayRecords(response.Records);
+   } catch (error) {
+     toast.error("Error deleting holiday");
+     console.error("Error deleting holidays:", error);
+   }
+ };
 
   return (
     <Box>
@@ -181,7 +194,10 @@ export default function AddHoliday() {
         <Divider />
         <Grid container spacing={2} margin={1}>
           <Grid item xs={12} sm={12} md={10} lg={10}>
-            <HolidayRecordsTable holidayRecords={holidayRecords} />
+            <HolidayRecordsTable
+              holidayRecords={holidayRecords}
+              deleteHolidays={deleteHolidays}
+            />
           </Grid>
         </Grid>
       </Grid>
