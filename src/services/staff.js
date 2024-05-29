@@ -226,6 +226,7 @@ const staffService = {
         "end.time": endTime,
         token,
       };
+      console.log(requestData)
       const response = await axios.post(
         `${STAFF_API_URL}/endtime`,
         requestData

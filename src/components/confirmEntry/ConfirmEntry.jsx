@@ -10,7 +10,10 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import staffService from "./../../services/staff";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 
+// Columns for DataGrid
 const columns = [
   { field: "id", headerName: "Sr.No.", width: 70 },
   { field: "name", headerName: "Name", width: 200 },
@@ -22,6 +25,9 @@ const columns = [
 ];
 
 const ConfirmEntry = () => {
+  const dispatch = useDispatch();
+
+  // State variables
   const [gates, setGates] = useState([]);
   const [selectedGate, setSelectedGate] = useState("");
   const [bookingNumbers, setBookingNumbers] = useState([]);
@@ -52,6 +58,7 @@ const ConfirmEntry = () => {
   const [showFinishEntry, setShowFinishEntry] = useState(false);
   const token = localStorage.getItem("token");
   const currentDate = new Date().toISOString().split("T")[0]; // Get current date in 'YYYY-MM-DD' format
+
   // Fetch gates on component mount
   useEffect(() => {
     const fetchGates = async () => {
@@ -63,7 +70,7 @@ const ConfirmEntry = () => {
       }
     };
     fetchGates();
-  }, [token]);
+  }, [dispatch, token]);
 
   // Fetch booking numbers when a gate is selected
   useEffect(() => {
@@ -73,7 +80,14 @@ const ConfirmEntry = () => {
           const bookingData = await staffService.getBookingIdByGateId(
             selectedGate
           );
-          setBookingNumbers(bookingData);
+          const filteredBookingNumbers = bookingData.filter(
+            (booking) =>
+              !finishedBookingIds.some(
+                (finishedBooking) =>
+                  finishedBooking.BOOKING_NO === booking.BOOKING_NO
+              )
+          );
+          setBookingNumbers(filteredBookingNumbers);
         } catch (error) {
           console.error("Error fetching booking numbers:", error);
         }
@@ -82,7 +96,7 @@ const ConfirmEntry = () => {
     } else {
       setBookingNumbers([]); // Clear booking numbers if no gate is selected
     }
-  }, [selectedGate]);
+  }, [selectedGate, finishedBookingIds]);
 
   // Fetch booking details when a booking number is selected
   useEffect(() => {
@@ -134,6 +148,7 @@ const ConfirmEntry = () => {
     ? JSON.parse(bookingDetailsByNumber[0].CAMERA_DTLS)
     : { Noofcam: "" };
   const cameraCharges = cameraDetails.Noofcam * 250;
+
   // Fetch Gypsy details when Gypsy code is entered
   const fetchGypsyDetails = async (gypsyCode) => {
     try {
@@ -172,30 +187,35 @@ const ConfirmEntry = () => {
     (gypsyDetails.RATE || gypsycharge) -
     (guideDetails.RATE || guidecharge);
 
+  // Handle confirming entry
   const handleConfirmEntry = async () => {
+    dispatch(startLoading());
     if (
       Object.keys(gypsyDetails).length !== 0 &&
       Object.keys(guideDetails).length !== 0
     ) {
       try {
         const response = await staffService.confirmEntry(
-          bookingNumbers[0].BOOKING_NO,
+          selectedBookingNumber,
           gypsyCode,
           guideCode,
           token
         );
         console.log("Entry confirmed successfully:", response);
         toast.success("Entry confirmed successfully");
+        fetchData();
       } catch (error) {
         console.error("Error confirming entry:", error);
         toast.error("Error confirming entry:");
+      } finally {
+        dispatch(stopLoading());
       }
     } else if (Object.keys(gypsyDetails).length !== 0) {
       console.error("Guide details are missing.");
       try {
         const requestData = {
           act: "cnfmentry",
-          "booking.no": bookingNumbers[0].BOOKING_NO,
+          "booking.no": selectedBookingNumber,
           "gypsy.cd": gypsyCode,
           token,
           date: currentDate,
@@ -221,9 +241,12 @@ const ConfirmEntry = () => {
         );
         console.log("Entry confirmed successfully:", response);
         toast.success("Entry confirmed successfully");
+        fetchData();
       } catch (error) {
         console.error("Error confirming entry:", error);
         toast.error("Error confirming entry");
+      } finally {
+        dispatch(stopLoading());
       }
     } else if (Object.keys(guideDetails).length !== 0) {
       console.error("Gypsy details are missing.");
@@ -231,7 +254,7 @@ const ConfirmEntry = () => {
         const requestData = {
           act: "cnfmentry",
           gpsynewentry: "yes",
-          "booking.no": bookingNumbers[0].BOOKING_NO,
+          "booking.no": selectedBookingNumber,
           "gypsy.cd": gypsyCode,
           token,
           "owner.nm": ownername,
@@ -257,16 +280,19 @@ const ConfirmEntry = () => {
         );
         console.log("Entry confirmed successfully:", response);
         toast.success("Entry confirmed successfully");
+        fetchData();
       } catch (error) {
         console.error("Error confirming entry:", error);
         toast.error("Error confirming entry");
+      } finally {
+        dispatch(stopLoading());
       }
     } else {
       try {
         const requestData = {
           act: "cnfmentry",
           gpsynewentry: "yes",
-          "booking.no": bookingNumbers[0].BOOKING_NO,
+          "booking.no": selectedBookingNumber,
           "gypsy.cd": gypsyCode,
           token,
           "owner.nm": ownername,
@@ -305,28 +331,47 @@ const ConfirmEntry = () => {
         );
         console.log("Entry confirmed successfully:", response);
         toast.success("Entry confirmed successfully");
+        fetchData();
       } catch (error) {
         console.error("Error confirming entry:", error);
         toast.error("Error confirming entry");
+      } finally {
+        dispatch(stopLoading());
       }
     }
   };
 
-  const handleFinishedBooking = async (bookingNumber, endTime, token) => {
+  const getCurrentDateTimeFormatted = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const date = now.getDate().toString().padStart(2, "0");
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+  };
+
+  // Handle finishing entry
+  const handleFinishedBooking = async () => {
+    dispatch(startLoading());
     try {
+      const endTime = getCurrentDateTimeFormatted(); // Get the current date and time formatted as YYYY-MM-DD HH:mm:ss
       const result = await staffService.endBookingTime(
-        bookingNumber,
+        selectedBookingNumber,
         endTime,
         token
       );
       console.log("Booking time ended successfully:", result);
       toast.success("Booking time ended successfully");
-
+      fetchData();
       // Perform any additional actions needed after successfully ending the booking time
     } catch (error) {
       console.error("Error in handleFinishedBooking:", error);
-      toast.error("Error in handleFinishedBooking");
+      toast.error("Error in handleFinishedBooking:");
       // Handle the error appropriately in your application
+    } finally {
+      dispatch(stopLoading());
     }
   };
 
@@ -335,13 +380,20 @@ const ConfirmEntry = () => {
     const fetchConfirmedBookingIds = async () => {
       try {
         const bookingData = await staffService.getConfirmedBookingIds();
-        setConfirmedBookingIds(bookingData);
+        const filteredConfirmedBookingIds = bookingData.filter(
+          (confirmedBooking) =>
+            !finishedBookingIds.some(
+              (finishedBooking) =>
+                finishedBooking.BOOKING_NO === confirmedBooking.BOOKING_NO
+            )
+        );
+        setConfirmedBookingIds(filteredConfirmedBookingIds);
       } catch (error) {
         console.error("Error fetching Confirmed booking numbers:", error);
       }
     };
     fetchConfirmedBookingIds();
-  }, [toast]);
+  }, [finishedBookingIds]);
 
   // Fetch finished booking numbers when a gate is selected
   useEffect(() => {
@@ -354,11 +406,57 @@ const ConfirmEntry = () => {
       }
     };
     fetchFinishedBookingIds();
-  }, [toast]);
+  });
 
-  console.log(bookingNumbers);
-  console.log(confirmedBookingIds);
-  console.log(finishedBookingIds);
+  useEffect(() => {
+    if (selectedBookingNumber) {
+      // Check if the selected booking number matches any confirmed booking ID
+      const isConfirmedBooking = confirmedBookingIds.some(
+        (confirmedBooking) =>
+          confirmedBooking.BOOKING_NO === selectedBookingNumber
+      );
+      if (isConfirmedBooking) {
+        setShowConfirmEntry(false);
+        setShowFinishEntry(true);
+      } else {
+        setShowConfirmEntry(true);
+        setShowFinishEntry(false);
+      }
+    } else {
+      // If no booking number is selected, reset both states
+      setShowConfirmEntry(true);
+      setShowFinishEntry(true);
+    }
+  }, [selectedBookingNumber, confirmedBookingIds]);
+
+  const fetchData = async () => {
+    try {
+      // Fetch gates
+      const gatesData = await staffService.getStaffGates(token);
+      setGates(gatesData);
+      setBookingDetailsByNumber([]);
+      // Fetch confirmed booking IDs
+      const confirmedBookingData = await staffService.getConfirmedBookingIds();
+      const filteredConfirmedBookingIds = confirmedBookingData.filter(
+        (confirmedBooking) =>
+          !finishedBookingIds.some(
+            (finishedBooking) =>
+              finishedBooking.BOOKING_NO === confirmedBooking.BOOKING_NO
+          )
+      );
+      setConfirmedBookingIds(filteredConfirmedBookingIds);
+
+      // Fetch finished booking IDs
+      const finishedBookingData = await staffService.getFinishedBookingIds();
+      setFinishedBookingIds(finishedBookingData);
+
+      // Any other data fetching logic...
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+ 
 
   return (
     <Box>
@@ -868,7 +966,17 @@ const ConfirmEntry = () => {
                   )}
                   {showFinishEntry && (
                     <>
-                      <Grid>showFinishEntry</Grid>
+                      <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 1, mb: 2 }}
+                          onClick={() => handleFinishedBooking()}
+                        >
+                          Exit Entry
+                        </Button>
+                      </Grid>
                     </>
                   )}
                 </Box>
