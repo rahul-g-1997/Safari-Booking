@@ -66,7 +66,7 @@ export default function SanctuaryDetails({
       const zoneId = selectedZone;
       const gateId = selectGate;
       const slotId = selectedSlot;
-      const vehicleType = selectedVehicle ;
+      const vehicleType = selectedVehicle;
       const [startDate, endDate] = selectedDate;
       // Format the start date
       const formattedStartDate = dayjs(startDate).format("YYYY-MM-DD");
@@ -180,7 +180,6 @@ export default function SanctuaryDetails({
     async function fetchSlots() {
       try {
         const slotsData = await adminService.searchSlot(token);
-        console.log(slotsData);
         setSlots(slotsData.Records);
       } catch (error) {
         console.error("Error fetching gates:", error);

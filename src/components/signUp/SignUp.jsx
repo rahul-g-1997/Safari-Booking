@@ -21,6 +21,10 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { startLoading, stopLoading } from "../../rtk/reducer/loaderReducer";
 import { useDispatch } from "react-redux";
 import { MuiTelInput } from "mui-tel-input";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 export default function SignUp({ toggleSignIn }) {
   const dispatch = useDispatch();
@@ -30,6 +34,7 @@ export default function SignUp({ toggleSignIn }) {
     lastName: "",
     email: "",
     mobileNumber: "",
+    state: "",
     password: "",
     confirmPassword: "",
     dob: "",
@@ -61,6 +66,7 @@ export default function SignUp({ toggleSignIn }) {
       "lastName",
       "email",
       "mobileNumber",
+      "state",
       "dob",
       "gender",
       "password",
@@ -96,16 +102,15 @@ export default function SignUp({ toggleSignIn }) {
     }
 
     const sendData = {
-      act: "register",
-      USR_TYPE: "U",
-      "usr.fnm": formData.firstName,
-      "usr.lnm": formData.lastName,
-      "usr.eml": formData.email,
-      "usr.cntc": formData.mobileNumber.replace(/\s+/g, ""),
-      dob: formData.dob,
-      gender: formData.gender.toUpperCase(),
-      dtls: "{}",
-      pswd: formData.password,
+      act: "visitor",
+      "v.usr.fnm": formData.firstName,
+      "v.usr.lnm": formData.lastName,
+      "v.usr.eml": formData.email,
+      "v.usr.cntc": formData.mobileNumber.replace(/\s+/g, ""),
+      "v.dob": formData.dob,
+      "v.gender": formData.gender.toUpperCase(),
+      "v.dtls": JSON.stringify({ state: formData.state }),
+      "v.usr.pwd": formData.password,
     };
 
     try {
@@ -118,6 +123,7 @@ export default function SignUp({ toggleSignIn }) {
           lastName: "",
           email: "",
           mobileNumber: "",
+          state: "",
           password: "",
           confirmPassword: "",
           dob: "",
@@ -151,6 +157,38 @@ export default function SignUp({ toggleSignIn }) {
   const isEmailEmpty = (email) => {
     return email.trim() === "";
   };
+
+  // List of Indian states
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -282,6 +320,28 @@ export default function SignUp({ toggleSignIn }) {
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth required>
+                  <InputLabel id="state-label">State</InputLabel>
+                  <Select
+                    labelId="state-label"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    label="State"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {indianStates.map((state) => (
+                      <MenuItem key={state} value={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
